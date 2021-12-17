@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <SurfaceView
+        android:id="@+id/surface_camera_preview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4" />
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:text="Start"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/button"/>
+
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:text="Front"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/buttonFront"/>
+  <Button
+       android:layout_width="80dp"
+       android:layout_height="40dp"
+       android:text="Next"
+       android:layout_gravity="center_horizontal"
+       android:id="@+id/buttonNext"/>
+    <!--
+   <Button
+       android:layout_width="80dp"
+       android:layout_height="40dp"
+       android:text="Back"
+       android:layout_gravity="center_horizontal"
+       android:id="@+id/buttonBack"/>
+       -->
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text=""
+        android:textSize="10sp" />
+
+</LinearLayout>
