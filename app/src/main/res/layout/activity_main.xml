@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#3A3A3A"
     tools:context=".MainActivity">
 
 
@@ -19,6 +20,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/back_bg" />
 
     <android.support.v7.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
@@ -33,6 +45,8 @@
             android:id="@+id/button"
             android:layout_width="80dp"
             android:layout_height="40dp"
+            android:background="@drawable/bg_for_button"
+            android:layout_marginEnd="8dp"
             android:layout_gravity="center_horizontal"
             android:text="Start" />
 
@@ -40,6 +54,8 @@
             android:id="@+id/buttonFront"
             android:layout_width="80dp"
             android:layout_height="40dp"
+            android:background="@drawable/bg_for_button"
+            android:layout_marginEnd="8dp"
             android:layout_gravity="center_horizontal"
             android:text="Front" />
 
@@ -47,6 +63,8 @@
             android:id="@+id/buttonNext"
             android:layout_width="80dp"
             android:layout_height="40dp"
+            android:background="@drawable/bg_for_button"
+            android:layout_marginEnd="8dp"
             android:layout_gravity="center_horizontal"
             android:text="Next" />
 
