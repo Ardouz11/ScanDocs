@@ -1,5 +1,4 @@
-package me.shuza.textrecognization
-
+package ocr.mobileVision.scanDocs
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -8,9 +7,11 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.vision.CameraSource
@@ -18,97 +19,136 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
+import ocr.mobileVision.scanDocs.R
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
-class ScanBack : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
-    private lateinit var tv_result: TextView
-    private lateinit var surface_camera_preview: SurfaceView
+    private lateinit var tvResult:TextView
+    private lateinit var surface_camera_preview:SurfaceView
     val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var button: Button
     private lateinit var buttonFront: Button
-    private lateinit var buttonBack: Button
     private lateinit var buttonNext: Button
+    private lateinit var imageView:ImageView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scan_back)
-        tv_result = findViewById(R.id.tv_result)
-        button = findViewById(R.id.button)
-        buttonBack = findViewById(R.id.buttonBack)
-        buttonNext = findViewById(R.id.buttonNext)
-        // buttonNext=findViewById(R.id.buttonNext)
+        setContentView(R.layout.activity_main)
+        tvResult=findViewById(R.id.tv_result)
+        button=findViewById(R.id.button)
+        buttonFront=findViewById(R.id.buttonFront)
+        buttonNext=findViewById(R.id.buttonNext)
+        imageView=findViewById(R.id.imageView)
+       // buttonNext=findViewById(R.id.buttonNext)
         /*  buttonBack=findViewById(R.id.buttonBack)
           buttonSim=findViewById(R.id.buttonSim)*/
-        surface_camera_preview = findViewById(R.id.surface_camera_preview)
+        surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
-        buttonBack.setOnClickListener {
+        buttonFront.setOnClickListener {
             val builder = AlertDialog.Builder(this)
-            builder.setTitle("Info of Back Side")
+            builder.setTitle("Info of Front Side")
             builder.setMessage(stringBuilder.toString())
-
-            builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-                Toast.makeText(
-                    applicationContext,
-                    android.R.string.yes, Toast.LENGTH_SHORT
-                ).show()
+            builder.setPositiveButton(android.R.string.yes) { _, _ ->
+                Toast.makeText(applicationContext,
+                    android.R.string.yes, Toast.LENGTH_SHORT).show()
             }
 
-            builder.setNegativeButton(android.R.string.no) { dialog, which ->
-                Toast.makeText(
-                    applicationContext,
-                    android.R.string.no, Toast.LENGTH_SHORT
-                ).show()
+            builder.setNegativeButton(android.R.string.no) { _, _ ->
+                Toast.makeText(applicationContext,
+                    android.R.string.no, Toast.LENGTH_SHORT).show()
             }
 
             builder.show()
         }
 
         buttonNext.setOnClickListener {
-            val intent = Intent(this, SimScan::class.java)
+            val intent = Intent(this, ScanBack::class.java)
             startActivity(intent)
         }
         button.setOnClickListener {
-
-            // startCameraSource()
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {}
 
-                override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
+                override fun  receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
 
                     if (items.size() <= 0) {
                         return
                     }
-
-                    tv_result.post {
-
+                    tvResult.post {
+                        var flagName = true
+                        var flagCin=true
+                        var flagDob=true
                         stringBuilder.setLength(0)
-                        for (i in 0 until items.size()) {
+                        for (i in 2 until items.size()) {
                             val item = items.valueAt(i)
-                            // Pattern of Sexe
-                            if (Pattern.matches("Sexe.*(M|F)", item.value)) {
+                            if(Pattern.matches("ROYAUM.*", item.value)
+                                ||Pattern.matches("CARTE.*", item.value)
+                                ||Pattern.matches("[a-z].*", item.value)
+                                ||Pattern.matches(".*[ä].*",item.value)
+                                ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;,<>?-].*", item.value)
+                            ){
+                                Log.i("matches","yes")
+                            }else {
+                                /*  This patterns for matching DOB  */
 
-                                stringBuilder.append(item.value.toString()+"\n")
-                            }
-                            if (Pattern.matches("M|F", item.value)) {
+                                    if(Pattern.matches("[0-9].*[0-9]",item.value)&&item.value.length>5){
+                                        if(flagDob){
+                                            if(!stringBuilder.contains("Date")){
+                                             flagDob=false
 
-                                stringBuilder.append("Sexe : ", item.value.toString().toUpperCase() + "\n")
-                            }
-                            // Pattern of address
+                                        stringBuilder.append("Date de naissance est : " +item.value + "\n")
+                                            Log.d("date","\n"+stringBuilder.toString())}
+                                    }else {
+                                            if(!stringBuilder.contains("Valide ")) {
+                                                flagDob = true
 
-                            if (Pattern.matches("Adresse.*", item.value)) {
-                                stringBuilder.append(item.value.toString().toUpperCase() + "\n")
+                                                stringBuilder.append("Valide à : " + item.value + "\n")
+                                                Log.d("date", "\n" + stringBuilder.toString())
+                                            }
+                                        }
+
+                                }
+
+
+                                /* This one for getting CIN */
+                                if(flagCin){
+                                    if(Pattern.matches("[A-Z].*[0-9].*",item.value)){
+                                        if(!stringBuilder.contains("CIN")){
+                                        stringBuilder.append("CIN est : " +item.value + "\n")
+                                        flagCin=false}
+                                    }}
+
+
+                                /* This one for getting LName and FName */
+                                if (Pattern.matches("[A-Z].*[A-Z]", item.value)&&item.value.toString().length>2) {
+                                    if(flagName) {
+                                        if(!stringBuilder.contains("Prenom")){
+                                        stringBuilder.append("Prenom est : " +item.value + "\n")
+                                        flagName=false}
+                                    }
+                                    else {
+                                        if(!stringBuilder.contains("Nom")){
+                                        stringBuilder.append("Nom est : " +item.value + "\n")
+                                        flagName=true}
+                                    }
+                                }
                             }
                         }
+                        //tvResult.text = stringBuilder.toString()
 
-                        //  tv_result.text = stringBuilder.toString()
                     }
+                   // mCameraSource.stop()
                 }
+
             })
         }
     }
@@ -134,6 +174,7 @@ class ScanBack : AppCompatActivity() {
 
         surface_camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
+
             }
 
             override fun surfaceDestroyed(p0: SurfaceHolder?) {
@@ -153,11 +194,13 @@ class ScanBack : AppCompatActivity() {
                 }
             }
         })
+
+
     }
 
     fun isCameraPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-            PackageManager.PERMISSION_GRANTED
+                PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestForPermission() {

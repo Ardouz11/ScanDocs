@@ -1,4 +1,4 @@
-package me.shuza.textrecognization
+package ocr.mobileVision.scanDocs
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -18,6 +18,7 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
+import ocr.mobileVision.scanDocs.R
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
