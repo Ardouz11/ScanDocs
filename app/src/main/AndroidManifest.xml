@@ -16,6 +16,15 @@
             android:name="ocr.mobileVision.scanDocs.ScanBack"
             android:exported="false" />
         <activity
+            android:name="ocr.mobileVision.scanDocs.ScanFrontSejour"
+            android:exported="false" />
+        <activity
+            android:name="ocr.mobileVision.scanDocs.ScanBackSejour"
+            android:exported="false" />
+        <activity
+            android:name="ocr.mobileVision.scanDocs.ScanFrontPassport"
+            android:exported="false" />
+        <activity
             android:name="ocr.mobileVision.scanDocs.SimScan"
             android:exported="false" />
         <activity android:name="ocr.mobileVision.scanDocs.MainActivity">

@@ -41,9 +41,6 @@ class SimScan : AppCompatActivity() {
         tv_result=findViewById(R.id.tv_result)
         button=findViewById(R.id.button)
         buttonSim=findViewById(R.id.buttonSim)
-        // buttonNext=findViewById(R.id.buttonNext)
-        /*  buttonBack=findViewById(R.id.buttonBack)
-          buttonSim=findViewById(R.id.buttonSim)*/
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
         buttonSim.setOnClickListener {
@@ -63,11 +60,6 @@ class SimScan : AppCompatActivity() {
 
             builder.show()
         }
-        /*
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, ScanBack::class.java)
-            startActivity(intent)
-        }*/
         button.setOnClickListener {
 
             //startCameraSource()
@@ -85,7 +77,7 @@ class SimScan : AppCompatActivity() {
 
 
                         stringBuilder.setLength(0)
-                        var flag_serial = true
+                        var flagSerial = true
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
 
@@ -98,8 +90,8 @@ class SimScan : AppCompatActivity() {
 
 
                                 }
-                                else if(flag_serial) {
-                                    flag_serial=false;
+                                else if(flagSerial) {
+                                    flagSerial=false;
                                     stringBuilder.append("Serial Number "+item.value.toString()+"\n");
 
                                 }

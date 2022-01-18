@@ -22,7 +22,7 @@ import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
-class ScanBack : AppCompatActivity() {
+class ScanBackSejour : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
@@ -35,11 +35,10 @@ class ScanBack : AppCompatActivity() {
     private lateinit var buttonNext: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scan_back)
+        setContentView(R.layout.activity_scan_back_sejour)
         tv_result = findViewById(R.id.tv_result)
         button = findViewById(R.id.button)
         buttonBack = findViewById(R.id.buttonBack)
-        buttonNext = findViewById(R.id.buttonNext)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         buttonBack.setOnClickListener {
@@ -64,10 +63,7 @@ class ScanBack : AppCompatActivity() {
             builder.show()
         }
 
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, SimScan::class.java)
-            startActivity(intent)
-        }
+
         button.setOnClickListener {
 
             // startCameraSource()
