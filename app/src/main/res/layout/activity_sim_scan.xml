@@ -17,6 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/back_bg"
         tools:ignore="MissingConstraints" />
     <android.support.v7.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
@@ -77,16 +78,5 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.69" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/back_bg" />
 
 </android.support.constraint.ConstraintLayout>

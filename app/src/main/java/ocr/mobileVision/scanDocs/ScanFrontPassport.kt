@@ -23,7 +23,7 @@ import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
 
-class MainActivity : AppCompatActivity() {
+class ScanFrontPassport : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
@@ -34,19 +34,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button: Button
     private lateinit var buttonFront: Button
     private lateinit var buttonNext: Button
-    private lateinit var buttonSejour: Button
-    private lateinit var buttonPassport: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_scan_front_passport)
         tvResult=findViewById(R.id.tv_result)
         button=findViewById(R.id.button)
         buttonFront=findViewById(R.id.buttonFront)
-        buttonNext=findViewById(R.id.buttonNext)
-        buttonSejour=findViewById(R.id.buttonSejour)
-        buttonPassport=findViewById(R.id.buttonPassport)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
         buttonFront.setOnClickListener {
@@ -66,18 +61,6 @@ class MainActivity : AppCompatActivity() {
             builder.show()
         }
 
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, ScanBack::class.java)
-            startActivity(intent)
-        }
-        buttonSejour.setOnClickListener {
-            val intent = Intent(this, ScanFrontSejour::class.java)
-            startActivity(intent)
-        }
-        buttonPassport.setOnClickListener {
-            val intent = Intent(this, ScanFrontPassport::class.java)
-            startActivity(intent)
-        }
         button.setOnClickListener {
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {}
@@ -89,17 +72,13 @@ class MainActivity : AppCompatActivity() {
                         return
                     }
                     tvResult.post {
-                        var flagName = true
                         var flagCin=true
-                        var flagDob=true
                         stringBuilder.setLength(0)
                         for (i in 2 until items.size()) {
                             val item = items.valueAt(i)
 
-                            if(Pattern.matches("ROYAUM.*", item.value)
-                                ||Pattern.matches("CARTE.*", item.value)
-                                ||Pattern.matches(".*NATIONA.*", item.value)
-                                ||Pattern.matches("[a-z].*", item.value)
+                            if(Pattern.matches("KINGD.*", item.value)
+                                ||Pattern.matches(".*MOROCCO", item.value)
                                 ||Pattern.matches(".*[ä].*",item.value)
                                 ||Pattern.matches("[à].*",item.value)
                                 ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;<>?-].*", item.value)
@@ -107,56 +86,39 @@ class MainActivity : AppCompatActivity() {
                                 Log.i("matches",item.value)
                             }
                             else {
-                                /*  This patterns for matching DOB  */
-                                    if(Pattern.matches("[0-9].*[0-9]",item.value)&&item.value.length>5){
-                                        if(flagDob){
-                                            if(!stringBuilder.contains("Date")){
-                                             flagDob=false
-                                        stringBuilder.append("Date de naissance est : " +item.value + "\n")
-                                            }
-                                    }else {
-                                            if(!stringBuilder.contains("Valable jusqu'au ")) {
-                                                flagDob = true
-                                                stringBuilder.append("Valable jusqu'au " + item.value + "\n")
-                                            }
+                                if(Pattern.matches("Nom/Surname*",item.value)){
+                                        if(!stringBuilder.contains("Nom")){
+                                            stringBuilder.append("Nom: " +items.valueAt(i+1) + "\n")
                                         }
-
                                 }
-                                /*
-                                if(Pattern.matches("à.*",item.value)){
-                                    if(!stringBuilder.contains("POB ")) {
-                                        stringBuilder.append("POB " + item.value.replace("à", ": ") + "\n")
+                                if(Pattern.matches("Prénoms/Given*",item.value)){
+                                    if(!stringBuilder.contains("Prenom")){
+                                        stringBuilder.append("Prenom: " +items.valueAt(i+1) + "\n")
                                     }
-                                }*/
-                              /*
-                                    */
-
-
-                                /* This one for getting CIN */
+                                }
+                                if(Pattern.matches("Sexe/Sex*",item.value)){
+                                    if(!stringBuilder.contains("Sexe")){
+                                        stringBuilder.append("Sexe: " +items.valueAt(i+3) + "\n")
+                                    }
+                                }
+                                if(Pattern.matches("Date de naissance/*",item.value)){
+                                    if(!stringBuilder.contains("DOB")){
+                                        stringBuilder.append("DOB: " +items.valueAt(i+3) + "\n")
+                                    }
+                                }
+                                if(Pattern.matches("Adresse/*",item.value)){
+                                    if(!stringBuilder.contains("Adresse")){
+                                        stringBuilder.append("Adresse: " +items.valueAt(i+2) + "\n")
+                                    }
+                                }
+                                /* This one for getting Passport Number */
                                 if(flagCin){
                                     if(Pattern.matches("[A-Z].*[0-9].*",item.value)){
-                                        if(!stringBuilder.contains("CIN")){
-                                        stringBuilder.append("CIN est : " +item.value + "\n")
+                                        if(!stringBuilder.contains("N de Passport est")){
+                                        stringBuilder.append("N de Passport est : " +item.value + "\n")
                                         flagCin=false
                                         }
                                     }}
-
-
-                                /* This one for getting LName and FName */
-                                if (Pattern.matches("[A-Z].*[A-Z]", item.value)&&item.value.toString().length>2) {
-                                    if(flagName) {
-                                        if(!stringBuilder.contains("Prenom")){
-                                        stringBuilder.append("Prenom est : " +item.value + "\n")
-                                        flagName=false
-                                        }
-                                    }
-                                    else {
-                                        if(!stringBuilder.contains("Nom")){
-                                        stringBuilder.append("Nom est : " +item.value + "\n")
-                                        flagName=true
-                                        }
-                                    }
-                                }
                             }
                         }
 

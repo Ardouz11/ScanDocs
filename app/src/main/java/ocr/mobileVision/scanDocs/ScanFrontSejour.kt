@@ -23,7 +23,7 @@ import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
 
-class MainActivity : AppCompatActivity() {
+class ScanFrontSejour : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
@@ -34,19 +34,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button: Button
     private lateinit var buttonFront: Button
     private lateinit var buttonNext: Button
-    private lateinit var buttonSejour: Button
-    private lateinit var buttonPassport: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_scan_front_sejour)
         tvResult=findViewById(R.id.tv_result)
         button=findViewById(R.id.button)
         buttonFront=findViewById(R.id.buttonFront)
         buttonNext=findViewById(R.id.buttonNext)
-        buttonSejour=findViewById(R.id.buttonSejour)
-        buttonPassport=findViewById(R.id.buttonPassport)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
         buttonFront.setOnClickListener {
@@ -67,15 +63,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonNext.setOnClickListener {
-            val intent = Intent(this, ScanBack::class.java)
-            startActivity(intent)
-        }
-        buttonSejour.setOnClickListener {
-            val intent = Intent(this, ScanFrontSejour::class.java)
-            startActivity(intent)
-        }
-        buttonPassport.setOnClickListener {
-            val intent = Intent(this, ScanFrontPassport::class.java)
+            val intent = Intent(this, ScanBackSejour::class.java)
             startActivity(intent)
         }
         button.setOnClickListener {
@@ -98,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 
                             if(Pattern.matches("ROYAUM.*", item.value)
                                 ||Pattern.matches("CARTE.*", item.value)
-                                ||Pattern.matches(".*NATIONA.*", item.value)
+                                ||Pattern.matches(".*IMMATRICULA.*", item.value)
                                 ||Pattern.matches("[a-z].*", item.value)
                                 ||Pattern.matches(".*[ä].*",item.value)
                                 ||Pattern.matches("[à].*",item.value)
@@ -114,21 +102,44 @@ class MainActivity : AppCompatActivity() {
                                              flagDob=false
                                         stringBuilder.append("Date de naissance est : " +item.value + "\n")
                                             }
-                                    }else {
-                                            if(!stringBuilder.contains("Valable jusqu'au ")) {
-                                                flagDob = true
-                                                stringBuilder.append("Valable jusqu'au " + item.value + "\n")
-                                            }
-                                        }
+                                    }
 
                                 }
+                                if(Pattern.matches("Valable du.*",item.value)){
+                                        if(!stringBuilder.contains("Valable du")){
+                                            stringBuilder.append("Valable du : " +items.valueAt(i+1) + "\n")
+                                        }
+
+
+                                }
+                                if(Pattern.matches("Au.*",item.value)){
+                                    if(!stringBuilder.contains("Valable jusqu'au")){
+                                        stringBuilder.append("Valable jusqu'au : " +items.valueAt(i+1) + "\n")
+                                    }
+
+
+                                }
+                                if(Pattern.matches("National.*",item.value)){
+                                    if(!stringBuilder.contains("Nationali")){
+                                        stringBuilder.append(item.value + "\n")
+                                    }
+
+
+                                }
+
                                 /*
                                 if(Pattern.matches("à.*",item.value)){
                                     if(!stringBuilder.contains("POB ")) {
                                         stringBuilder.append("POB " + item.value.replace("à", ": ") + "\n")
                                     }
                                 }*/
-                              /*
+                              /*  if(Pattern.matches("Vala.*[0-9]",item.value)){
+                                        if(!stringBuilder.contains("Valable jusqu'au")){
+                                            val words = item.value.split("\\W+".toRegex())
+                                            Log.d("words",words[-1])
+                                            stringBuilder.append("Valable jusqu'au " +words[3]+"."+words[4]+"."+words[5]+"\n")
+                                        }
+                                    }
                                     */
 
 
