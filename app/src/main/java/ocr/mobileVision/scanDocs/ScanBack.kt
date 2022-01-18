@@ -26,7 +26,7 @@ class ScanBack : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
-    private lateinit var tv_result: TextView
+    private lateinit var tvResult: TextView
     private lateinit var surface_camera_preview: SurfaceView
     val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
@@ -36,7 +36,7 @@ class ScanBack : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
-        tv_result = findViewById(R.id.tv_result)
+        tvResult = findViewById(R.id.tv_result)
         button = findViewById(R.id.button)
         buttonBack = findViewById(R.id.buttonBack)
         buttonNext = findViewById(R.id.buttonNext)
@@ -47,14 +47,14 @@ class ScanBack : AppCompatActivity() {
             builder.setTitle("Info of Back Side")
             builder.setMessage(stringBuilder.toString())
 
-            builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            builder.setPositiveButton(android.R.string.yes) { _, _ ->
                 Toast.makeText(
                     applicationContext,
                     android.R.string.yes, Toast.LENGTH_SHORT
                 ).show()
             }
 
-            builder.setNegativeButton(android.R.string.no) { dialog, which ->
+            builder.setNegativeButton(android.R.string.no) { _, _ ->
                 Toast.makeText(
                     applicationContext,
                     android.R.string.no, Toast.LENGTH_SHORT
@@ -81,17 +81,17 @@ class ScanBack : AppCompatActivity() {
                         return
                     }
 
-                    tv_result.post {
+                    tvResult.post {
 
                         stringBuilder.setLength(0)
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             // Pattern of Sexe
-                            if (Pattern.matches("Sexe.*(M|F)", item.value)) {
+                            if (Pattern.matches("Sexe.*[MF]", item.value)) {
 
                                 stringBuilder.append(item.value.toString()+"\n")
                             }
-                            if (Pattern.matches("M|F", item.value)) {
+                            if (Pattern.matches("[MF]", item.value)) {
 
                                 stringBuilder.append("Sexe : ", item.value.toString() + "\n")
                             }

@@ -2,7 +2,6 @@ package ocr.mobileVision.scanDocs
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -33,7 +32,6 @@ class ScanFrontPassport : AppCompatActivity() {
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var button: Button
     private lateinit var buttonFront: Button
-    private lateinit var buttonNext: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,52 +71,86 @@ class ScanFrontPassport : AppCompatActivity() {
                     }
                     tvResult.post {
                         var flagCin=true
+                        var flagName=true
                         stringBuilder.setLength(0)
                         for (i in 2 until items.size()) {
                             val item = items.valueAt(i)
-
                             if(Pattern.matches("KINGD.*", item.value)
                                 ||Pattern.matches(".*MOROCCO", item.value)
+                                ||Pattern.matches("ROYAU.*", item.value)
+                                ||Pattern.matches(".*MAROC", item.value)
                                 ||Pattern.matches(".*[ä].*",item.value)
                                 ||Pattern.matches("[à].*",item.value)
-                                ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;<>?-].*", item.value)
+                                ||Pattern.matches("[a-z].*",item.value)
+                                ||Pattern.matches("MAR",item.value)
+                                ||Pattern.matches("PASSEP.*",item.value)
+                                ||Pattern.matches(".*[~!@#'\$%^&*()_+{}\\[\\]:;<>?-].*", item.value)
                             ){
                                 Log.i("matches",item.value)
                             }
                             else {
-                                if(Pattern.matches("Nom/Surname*",item.value)){
+                               /* if (Pattern.matches("[A-Z].*[A-Z]", item.value)&&item.value.toString().length>2) {
+                                    if(flagName) {
+                                        if(!stringBuilder.contains("Prenom")){
+                                            stringBuilder.append("Prenom est : " +item.value + "\n")
+                                            flagName=false
+                                        }
+                                    }
+                                    else {
                                         if(!stringBuilder.contains("Nom")){
-                                            stringBuilder.append("Nom: " +items.valueAt(i+1) + "\n")
+                                            stringBuilder.append("Nom est : " +item.value + "\n")
+                                            flagName=true
                                         }
-                                }
-                                if(Pattern.matches("Prénoms/Given*",item.value)){
-                                    if(!stringBuilder.contains("Prenom")){
-                                        stringBuilder.append("Prenom: " +items.valueAt(i+1) + "\n")
                                     }
-                                }
-                                if(Pattern.matches("Sexe/Sex*",item.value)){
-                                    if(!stringBuilder.contains("Sexe")){
-                                        stringBuilder.append("Sexe: " +items.valueAt(i+3) + "\n")
-                                    }
-                                }
-                                if(Pattern.matches("Date de naissance/*",item.value)){
-                                    if(!stringBuilder.contains("DOB")){
-                                        stringBuilder.append("DOB: " +items.valueAt(i+3) + "\n")
-                                    }
-                                }
-                                if(Pattern.matches("Adresse/*",item.value)){
-                                    if(!stringBuilder.contains("Adresse")){
-                                        stringBuilder.append("Adresse: " +items.valueAt(i+2) + "\n")
-                                    }
-                                }
-                                /* This one for getting Passport Number */
-                                if(flagCin){
-                                    if(Pattern.matches("[A-Z].*[0-9].*",item.value)){
-                                        if(!stringBuilder.contains("N de Passport est")){
-                                        stringBuilder.append("N de Passport est : " +item.value + "\n")
-                                        flagCin=false
+                                }*/
+                                if (Pattern.matches("[A-Z].*[A-Z]", item.value)&&item.value.toString().length>2) {
+                                    if(flagName) {
+                                        if(!stringBuilder.contains("Nom")){
+                                            stringBuilder.append("Nom est : " +item.value + "\n")
+                                            flagName=false
                                         }
-                                    }}
+                                    }
+                                    else {
+                                        if(!stringBuilder.contains("Prenom")){
+                                            stringBuilder.append("Prenom est : " +item.value + "\n")
+                                            flagName=true
+                                        }
+                                    }
+                                }
+                                if (Pattern.matches("[MF]", item.value)) {
+                                    if (!stringBuilder.contains("Sexe")) {
+                                        stringBuilder.append("Sexe: " + item.value+ "\n")
+                                       /* if (!stringBuilder.contains("DOB")) {
+                                            stringBuilder.append("DOB: " + items.valueAt(i + 1).value + "\n")
+                                        }*/
+                                    }
+                                }
+
+                                /* This one for getting CIN and Passport Number */
+
+                                if (Pattern.matches("[A-Z].*[0-9]\\d$", item.value)) {
+                                    if (flagCin) {
+                                        if (!stringBuilder.contains("Passport")) {
+                                            stringBuilder.append("Passport : " + item.value + "\n")
+                                            flagCin = false
+                                        }
+                                    }
+                                else {
+                                    if (!stringBuilder.contains("CIN")) {
+                                        stringBuilder.append("CIN : " + item.value + "\n")
+                                       /* if (!stringBuilder.contains("Date d'expiration")) {
+                                            stringBuilder.append("Date d'expiration: " + items.valueAt(i + 1).value + "\n")
+                                        }*/
+                                        flagCin = true
+                                    }
+                                }
+                            }
+                                if (Pattern.matches("[A-Z].*\\s.*[0-9].*", item.value)){
+                                    if (!stringBuilder.contains("Adresse")) {
+                                        stringBuilder.append("Adresse : " + item.value + "\n")
+                                    }
+                                }
+
                             }
                         }
 

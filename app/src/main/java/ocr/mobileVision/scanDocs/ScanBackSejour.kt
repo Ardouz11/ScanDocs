@@ -3,7 +3,6 @@ package ocr.mobileVision.scanDocs
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -32,7 +31,6 @@ class ScanBackSejour : AppCompatActivity() {
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var button: Button
     private lateinit var buttonBack: Button
-    private lateinit var buttonNext: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back_sejour)
@@ -83,11 +81,11 @@ class ScanBackSejour : AppCompatActivity() {
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             // Pattern of Sexe
-                            if (Pattern.matches("Sexe.*(M|F)", item.value)) {
+                            if (Pattern.matches("Sexe.*[MF]", item.value)) {
 
                                 stringBuilder.append(item.value.toString()+"\n")
                             }
-                            if (Pattern.matches("M|F", item.value)) {
+                            if (Pattern.matches("[MF]", item.value)) {
 
                                 stringBuilder.append("Sexe : ", item.value.toString() + "\n")
                             }
