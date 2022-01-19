@@ -90,9 +90,19 @@ class ScanFrontPassport : AppCompatActivity() {
                             else {
                                 if(Pattern.matches("P<.*",item.value)){
                                     if(!stringBuilder.contains("Nom")){
-                                        var list=item.value.toString().split("<")
-                                        stringBuilder.append("Nom: " +list[1].replace("MAR","").toUpperCase()+ "\n")
-                                        stringBuilder.append("Prenom: " +list[3].toUpperCase()+ "\n")
+                                        var pLineOne = Pattern.compile("[A-Z]+")
+                                        var mLineOne: Matcher = pLineOne.matcher(item.value)
+                                        var allMatchesLineOne: ArrayList<String> = ArrayList()
+                                        while (mLineOne.find()) {
+                                            allMatchesLineOne.add(mLineOne.group())
+                                        }
+                                        Log.d("list1",allMatchesLineOne.toString())
+                                        var string=StringBuilder()
+                                        stringBuilder.append("Prenom: " +allMatchesLineOne.last().toUpperCase()+ "\n")
+                                        for(i in 1 until allMatchesLineOne.size-1){
+                                            string.append(allMatchesLineOne[i].replace("MAR","")+" ")
+                                        }
+                                        stringBuilder.append("Nom: $string\n")
                                         var p = Pattern.compile("[A-Z]+|\\d+")
                                         var m: Matcher = p.matcher(items.valueAt(i+1).value)
                                         var allMatches: ArrayList<String> = ArrayList()
