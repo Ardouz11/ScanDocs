@@ -19,6 +19,7 @@ import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
@@ -74,11 +75,10 @@ class ScanFrontPassport : AppCompatActivity() {
                     tvResult.post {
                         var flagCin=true
                         stringBuilder.setLength(0)
-                        for (i in 2 until items.size()) {
+                        for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             if(Pattern.matches("KINGD.*", item.value)
                                 ||Pattern.matches(".*MOROCCO", item.value)
-                                ||Pattern.matches("MAR", item.value)
                                 ||Pattern.matches("PASSEPORT.*", item.value)
                                 ||Pattern.matches(".*[ä].*",item.value)
                                 ||Pattern.matches("[à].*",item.value)
@@ -88,24 +88,27 @@ class ScanFrontPassport : AppCompatActivity() {
                                 Log.i("matches",item.value)
                             }
                             else {
-
-                                if(Pattern.matches("Adresse/*",item.value)){
-                                    if(!stringBuilder.contains("Adresse")){
-                                        stringBuilder.append("Adresse: " +items.valueAt(i+2) + "\n")
-                                    }
-                                }
                                 if(Pattern.matches("P<.*",item.value)){
                                     if(!stringBuilder.contains("Nom")){
                                         var list=item.value.toString().split("<")
                                         stringBuilder.append("Nom: " +list[1].replace("MAR","").toUpperCase()+ "\n")
                                         stringBuilder.append("Prenom: " +list[3].toUpperCase()+ "\n")
+                                        var p = Pattern.compile("[A-Z]+|\\d+")
+                                        var m: Matcher = p.matcher(items.valueAt(i+1).value)
+                                        var allMatches: ArrayList<String> = ArrayList()
+                                        while (m.find()) {
+                                            allMatches.add(m.group())
+                                        }
+                                        Log.d("test",allMatches.toString())
+                                        stringBuilder.append("Passport : " +allMatches[0]+allMatches[1].dropLast(1)+"\n")
+                                        stringBuilder.append("DOB YY/MM/DD: " +allMatches[3].dropLast(1)+"\n")
+                                        stringBuilder.append("Sexe : " +allMatches[4]+"\n")
+                                        stringBuilder.append("END Of Val YY/MM/DD : " +allMatches[5].dropLast(1)+"\n")
+                                        stringBuilder.append("CIN : " +allMatches[6]+allMatches[7]+"\n")
                                     }
                                 }
-                                if (Pattern.matches("[MF]", item.value)) {
 
-                                    stringBuilder.append("Sexe : ", item.value.toString() + "\n")
-                                }
-                                /* This one for getting CIN */
+                                /* This one for getting CIN
 
                                     if(Pattern.matches("[A-Z].*[0-9].*\\d$",item.value)&& item.value.length<12){
                                         if(flagCin){
@@ -118,7 +121,7 @@ class ScanFrontPassport : AppCompatActivity() {
                                             stringBuilder.append("CIN est : " +item.value + "\n")
                                             flagCin=true
                                         }}
-                                    }
+                                    */
                             }
                         }
 
