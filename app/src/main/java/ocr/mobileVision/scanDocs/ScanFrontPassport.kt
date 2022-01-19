@@ -89,7 +89,6 @@ class ScanFrontPassport : AppCompatActivity() {
                             }
                             else {
                                 if(Pattern.matches("P<.*",item.value)){
-                                    if(!stringBuilder.contains("Nom")){
                                         var pLineOne = Pattern.compile("[A-Z]+")
                                         var mLineOne: Matcher = pLineOne.matcher(item.value)
                                         var allMatchesLineOne: ArrayList<String> = ArrayList()
@@ -137,7 +136,7 @@ class ScanFrontPassport : AppCompatActivity() {
 
                     }
                    // mCameraSource.stop()
-                }
+
 
             })
         }
