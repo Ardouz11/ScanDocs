@@ -101,6 +101,10 @@ class ScanFrontPassport : AppCompatActivity() {
                                         stringBuilder.append("Prenom: " +list[3].toUpperCase()+ "\n")
                                     }
                                 }
+                                if (Pattern.matches("[MF]", item.value)) {
+
+                                    stringBuilder.append("Sexe : ", item.value.toString() + "\n")
+                                }
                                 /* This one for getting CIN */
 
                                     if(Pattern.matches("[A-Z].*[0-9].*\\d$",item.value)&& item.value.length<12){

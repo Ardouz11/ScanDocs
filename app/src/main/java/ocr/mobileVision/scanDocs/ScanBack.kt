@@ -87,11 +87,11 @@ class ScanBack : AppCompatActivity() {
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             // Pattern of Sexe
-                            if (Pattern.matches("Sexe.*(M|F)", item.value)) {
+                            if (Pattern.matches("Sexe.*[MF]", item.value)) {
 
                                 stringBuilder.append(item.value.toString()+"\n")
                             }
-                            if (Pattern.matches("M|F", item.value)) {
+                            if (Pattern.matches("[MF]", item.value)) {
 
                                 stringBuilder.append("Sexe : ", item.value.toString() + "\n")
                             }
