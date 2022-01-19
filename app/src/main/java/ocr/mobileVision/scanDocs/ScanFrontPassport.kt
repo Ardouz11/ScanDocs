@@ -76,49 +76,31 @@ class ScanFrontPassport : AppCompatActivity() {
                         stringBuilder.setLength(0)
                         for (i in 2 until items.size()) {
                             val item = items.valueAt(i)
-
                             if(Pattern.matches("KINGD.*", item.value)
                                 ||Pattern.matches(".*MOROCCO", item.value)
+                                ||Pattern.matches("MAR", item.value)
+                                ||Pattern.matches("PASSEPORT.*", item.value)
                                 ||Pattern.matches(".*[ä].*",item.value)
                                 ||Pattern.matches("[à].*",item.value)
-                                ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;<>?-].*", item.value)
+                                ||Pattern.matches("[a-z].*",item.value)
+                                ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;>?-].*", item.value)
                             ){
                                 Log.i("matches",item.value)
                             }
                             else {
-                                if(Pattern.matches("Nom/Surname*",item.value)){
-                                        if(!stringBuilder.contains("Nom")){
-                                            stringBuilder.append("Nom: " +items.valueAt(i+1) + "\n")
-                                        }
-                                }
-                                if(Pattern.matches("Prénoms/Given*",item.value)){
-                                    if(!stringBuilder.contains("Prenom")){
-                                        stringBuilder.append("Prenom: " +items.valueAt(i+1) + "\n")
-                                    }
-                                }
-                                if(Pattern.matches("Sexe/Sex*",item.value)){
-                                    if(!stringBuilder.contains("Sexe")){
-                                        stringBuilder.append("Sexe: " +items.valueAt(i+3) + "\n")
-                                    }
-                                }
-                                if(Pattern.matches("Date de naissance/*",item.value)){
-                                    if(!stringBuilder.contains("DOB")){
-                                        stringBuilder.append("DOB: " +items.valueAt(i+3) + "\n")
-                                    }
-                                }
+
                                 if(Pattern.matches("Adresse/*",item.value)){
                                     if(!stringBuilder.contains("Adresse")){
                                         stringBuilder.append("Adresse: " +items.valueAt(i+2) + "\n")
                                     }
                                 }
-                                /* This one for getting Passport Number */
-                                if(flagCin){
-                                    if(Pattern.matches("[A-Z].*[0-9].*",item.value)){
-                                        if(!stringBuilder.contains("N de Passport est")){
-                                        stringBuilder.append("N de Passport est : " +item.value + "\n")
-                                        flagCin=false
-                                        }
-                                    }}
+                                if(Pattern.matches("P<.*",item.value)){
+                                    if(!stringBuilder.contains("nom")){
+                                        var list=item.value.toString().split("<")
+                                        stringBuilder.append("nom: " +list[1].replace("MAR","")+ "\n")
+                                        stringBuilder.append("prenom: " +list[3]+ "\n")
+                                    }
+                                }
                             }
                         }
 
