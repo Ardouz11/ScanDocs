@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                         var flagCin=true
                         var flagDob=true
                         stringBuilder.setLength(0)
-                        for (i in 2 until items.size()) {
+                        for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
 
                             if(Pattern.matches("ROYAUM.*", item.value)
