@@ -95,12 +95,26 @@ class ScanFrontPassport : AppCompatActivity() {
                                     }
                                 }
                                 if(Pattern.matches("P<.*",item.value)){
-                                    if(!stringBuilder.contains("nom")){
+                                    if(!stringBuilder.contains("Nom")){
                                         var list=item.value.toString().split("<")
-                                        stringBuilder.append("nom: " +list[1].replace("MAR","")+ "\n")
-                                        stringBuilder.append("prenom: " +list[3]+ "\n")
+                                        stringBuilder.append("Nom: " +list[1].replace("MAR","").toUpperCase()+ "\n")
+                                        stringBuilder.append("Prenom: " +list[3].toUpperCase()+ "\n")
                                     }
                                 }
+                                /* This one for getting CIN */
+
+                                    if(Pattern.matches("[A-Z].*[0-9].*\\d$",item.value)&& item.value.length<12){
+                                        if(flagCin){
+                                        if(!stringBuilder.contains("Pass")){
+                                            stringBuilder.append("Pass est : " +item.value + "\n")
+                                            flagCin=false
+                                        }
+                                    }else{
+                                        if(!stringBuilder.contains("CIN")){
+                                            stringBuilder.append("CIN est : " +item.value + "\n")
+                                            flagCin=true
+                                        }}
+                                    }
                             }
                         }
 
