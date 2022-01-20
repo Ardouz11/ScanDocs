@@ -102,13 +102,12 @@ class ScanFrontPassport : AppCompatActivity() {
                                             string.append(allMatchesLineOne[i].replace("MAR","")+" ")
                                         }
                                         stringBuilder.append("Nom: $string\n")
-                                        var p = Pattern.compile("[A-Z]+|\\d+")
-                                        var m: Matcher = p.matcher(items.valueAt(i+1).value)
+                                        var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
+                                        var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i+1).value)
                                         var allMatches: ArrayList<String> = ArrayList()
-                                        while (m.find()) {
-                                            allMatches.add(m.group())
+                                        while (mLineTwo.find()) {
+                                            allMatches.add(mLineTwo.group())
                                         }
-                                        Log.d("test",allMatches.toString())
                                         stringBuilder.append("Passport : " +allMatches[0]+allMatches[1].dropLast(1)+"\n")
                                         stringBuilder.append("DOB YY/MM/DD: " +allMatches[3].dropLast(1)+"\n")
                                         stringBuilder.append("Sexe : " +allMatches[4]+"\n")

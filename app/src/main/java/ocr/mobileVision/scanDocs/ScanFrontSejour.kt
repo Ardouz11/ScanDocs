@@ -87,7 +87,6 @@ class ScanFrontSejour : AppCompatActivity() {
                             if(Pattern.matches("ROYAUM.*", item.value)
                                 ||Pattern.matches("CARTE.*", item.value)
                                 ||Pattern.matches(".*IMMATRICULA.*", item.value)
-                                ||Pattern.matches("[a-z].*", item.value)
                                 ||Pattern.matches(".*[ä].*",item.value)
                                 ||Pattern.matches("[à].*",item.value)
                                 ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;<>?-].*", item.value)
@@ -107,24 +106,20 @@ class ScanFrontSejour : AppCompatActivity() {
                                 }
                                 if(Pattern.matches("Valable du.*",item.value)){
                                         if(!stringBuilder.contains("Valable du")){
-                                            stringBuilder.append("Valable du : " +items.valueAt(i+1) + "\n")
+                                            stringBuilder.append("Valable du : " +items.valueAt(i+1).value + "\n")
                                         }
 
 
                                 }
-                                if(Pattern.matches("Au.*",item.value)){
+                                if(Pattern.matches("au.*",item.value)){
                                     if(!stringBuilder.contains("Valable jusqu'au")){
-                                        stringBuilder.append("Valable jusqu'au : " +items.valueAt(i+1) + "\n")
+                                        stringBuilder.append("Valable jusqu'au : " +items.valueAt(i+1).value + "\n")
                                     }
-
-
                                 }
                                 if(Pattern.matches("National.*",item.value)){
                                     if(!stringBuilder.contains("Nationali")){
                                         stringBuilder.append(item.value + "\n")
                                     }
-
-
                                 }
 
                                 /*
