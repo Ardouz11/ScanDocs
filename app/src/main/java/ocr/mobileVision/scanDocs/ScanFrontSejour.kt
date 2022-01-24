@@ -87,6 +87,7 @@ class ScanFrontSejour : AppCompatActivity() {
                             if(Pattern.matches("ROYAUM.*", item.value)
                                 ||Pattern.matches("CARTE.*", item.value)
                                 ||Pattern.matches(".*IMMATRICULA.*", item.value)
+                                ||Pattern.matches(".*MAROC.*", item.value)
                                 ||Pattern.matches(".*[ä].*",item.value)
                                 ||Pattern.matches("[à].*",item.value)
                                 ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;<>?-].*", item.value)

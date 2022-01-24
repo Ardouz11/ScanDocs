@@ -35,7 +35,7 @@ class ScanFrontPassport : AppCompatActivity() {
     private lateinit var button: Button
     private lateinit var buttonFront: Button
     private lateinit var buttonNext: Button
-
+    private var aliasCountry="MAR"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +88,11 @@ class ScanFrontPassport : AppCompatActivity() {
                                 Log.i("matches",item.value)
                             }
                             else {
+                              /*  if(Pattern.matches("([A-Z]){3}",item.value)){
+                                    aliasCountry=item.value
+                                }*/
                                 if(Pattern.matches("P<.*",item.value)){
+                                       // item.value.replace("<"," ")
                                         var pLineOne = Pattern.compile("[A-Z]+")
                                         var mLineOne: Matcher = pLineOne.matcher(item.value)
                                         var allMatchesLineOne: ArrayList<String> = ArrayList()
@@ -99,7 +103,7 @@ class ScanFrontPassport : AppCompatActivity() {
                                         var string=StringBuilder()
                                         stringBuilder.append("Prenom: " +allMatchesLineOne.last().toUpperCase()+ "\n")
                                         for(i in 1 until allMatchesLineOne.size-1){
-                                            string.append(allMatchesLineOne[i].replace("MAR","")+" ")
+                                            string.append(allMatchesLineOne[i].replace(aliasCountry,"")+" ")
                                         }
                                         stringBuilder.append("Nom: $string\n")
                                         var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
