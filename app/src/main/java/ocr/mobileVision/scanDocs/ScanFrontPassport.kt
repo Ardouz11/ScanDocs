@@ -72,7 +72,6 @@ class ScanFrontPassport : AppCompatActivity() {
                         return
                     }
                     tvResult.post {
-                        var flagCin=true
                         stringBuilder.setLength(0)
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
@@ -100,7 +99,7 @@ class ScanFrontPassport : AppCompatActivity() {
                                         }
 
                                         var string=StringBuilder()
-                                        stringBuilder.append("Prenom: " +allMatchesLineOne.last().toUpperCase()+ "\n")
+                                        stringBuilder.append("Prenom: " +allMatchesLineOne.last()+ "\n")
                                         allMatchesLineOne[1]=allMatchesLineOne[1].drop(3)
                                         Log.d("list1",allMatchesLineOne.toString())
                                         for(i in 1 until allMatchesLineOne.size-1){
@@ -114,11 +113,11 @@ class ScanFrontPassport : AppCompatActivity() {
                                         while (mLineTwo.find()) {
                                             allMatches.add(mLineTwo.group())
                                         }
-=
+
                                     stringBuilder.append("Passport : " +allMatches[0]+allMatches[1].dropLast(1)+"\n")
-                                        stringBuilder.append("DOB YY/MM/DD: " +allMatches[3].dropLast(1)+"\n")
-                                        stringBuilder.append("Sexe : " +allMatches[4]+"\n")
-                                        stringBuilder.append("END Of Val YY/MM/DD : " +allMatches[5].dropLast(1)+"\n")
+                                        stringBuilder.append("DOB YY/MM/DD: " +allMatches[3].take(6)+"\n")
+                                        stringBuilder.append("Sexe : " +allMatches[4].takeLast(1)+"\n")
+                                        stringBuilder.append("END Of Val YY/MM/DD : " +allMatches[5].take(6)+"\n")
                                         if(allMatches.size>7) {
                                             stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
                                         }
