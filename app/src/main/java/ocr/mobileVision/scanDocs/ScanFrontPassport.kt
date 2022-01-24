@@ -36,7 +36,6 @@ class ScanFrontPassport : AppCompatActivity() {
     private lateinit var buttonFront: Button
     private lateinit var buttonNext: Button
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_front_passport)
@@ -88,23 +87,42 @@ class ScanFrontPassport : AppCompatActivity() {
                                 Log.i("matches",item.value)
                             }
                             else {
+                              /*  if(Pattern.matches("([A-Z]){3}",item.value)){
+                                    aliasCountry=item.value
+                                }*/
                                 if(Pattern.matches("P<.*",item.value)){
-                                    if(!stringBuilder.contains("Nom")){
-                                        var list=item.value.toString().split("<")
-                                        stringBuilder.append("Nom: " +list[1].replace("MAR","").toUpperCase()+ "\n")
-                                        stringBuilder.append("Prenom: " +list[3].toUpperCase()+ "\n")
-                                        var p = Pattern.compile("[A-Z]+|\\d+")
-                                        var m: Matcher = p.matcher(items.valueAt(i+1).value)
-                                        var allMatches: ArrayList<String> = ArrayList()
-                                        while (m.find()) {
-                                            allMatches.add(m.group())
+                                       // item.value.replace("<"," ")
+                                        var pLineOne = Pattern.compile("[A-Z]+")
+                                        var mLineOne: Matcher = pLineOne.matcher(item.value)
+                                        var allMatchesLineOne: ArrayList<String> = ArrayList()
+                                        while (mLineOne.find()) {
+                                            allMatchesLineOne.add(mLineOne.group())
                                         }
-                                        Log.d("test",allMatches.toString())
-                                        stringBuilder.append("Passport : " +allMatches[0]+allMatches[1].dropLast(1)+"\n")
+
+                                        var string=StringBuilder()
+                                        stringBuilder.append("Prenom: " +allMatchesLineOne.last().toUpperCase()+ "\n")
+                                        allMatchesLineOne[1]=allMatchesLineOne[1].drop(3)
+                                        Log.d("list1",allMatchesLineOne.toString())
+                                        for(i in 1 until allMatchesLineOne.size-1){
+
+                                            string.append(allMatchesLineOne[i]+" ")
+                                        }
+                                        stringBuilder.append("Nom: $string\n")
+                                        var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
+                                        var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i+1).value)
+                                        var allMatches: ArrayList<String> = ArrayList()
+                                        while (mLineTwo.find()) {
+                                            allMatches.add(mLineTwo.group())
+                                        }
+                                    Log.d("list1",allMatches.toString())
+
+                                    stringBuilder.append("Passport : " +allMatches[0]+allMatches[1].dropLast(1)+"\n")
                                         stringBuilder.append("DOB YY/MM/DD: " +allMatches[3].dropLast(1)+"\n")
                                         stringBuilder.append("Sexe : " +allMatches[4]+"\n")
                                         stringBuilder.append("END Of Val YY/MM/DD : " +allMatches[5].dropLast(1)+"\n")
-                                        stringBuilder.append("CIN : " +allMatches[6]+allMatches[7]+"\n")
+                                        if(allMatches.size>7) {
+                                            stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
+                                        }
                                     }
                                 }
 
@@ -127,7 +145,7 @@ class ScanFrontPassport : AppCompatActivity() {
 
                     }
                    // mCameraSource.stop()
-                }
+
 
             })
         }
