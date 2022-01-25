@@ -67,7 +67,6 @@ class ScanFrontPassport : AppCompatActivity() {
 
                 override fun  receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
-
                     if (items.size() <= 0) {
                         return
                     }
@@ -75,12 +74,12 @@ class ScanFrontPassport : AppCompatActivity() {
                         stringBuilder.setLength(0)
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
+                            if(Pattern.matches("Domi.*",item.value)){
+                                Log.i("test",item.value)
+                                stringBuilder.append("Adresse : " +items.valueAt(i+1).value+" "+items.valueAt(i+2).value+"\n")
 
-                              /*  if(Pattern.matches("([A-Z]){3}",item.value)){
-                                    aliasCountry=item.value
-                                }*/
-                                if(Pattern.matches("P<.*",item.value)){
-                                       // item.value.replace("<"," ")
+                            }
+                            if(Pattern.matches("P<.*",item.value)){
                                         var pLineOne = Pattern.compile("[A-Z]+")
                                         var mLineOne: Matcher = pLineOne.matcher(item.value)
                                         var allMatchesLineOne: ArrayList<String> = ArrayList()
@@ -113,21 +112,6 @@ class ScanFrontPassport : AppCompatActivity() {
                                         }
                                     }
                                 }
-
-                                /* This one for getting CIN
-
-                                    if(Pattern.matches("[A-Z].*[0-9].*\\d$",item.value)&& item.value.length<12){
-                                        if(flagCin){
-                                        if(!stringBuilder.contains("Pass")){
-                                            stringBuilder.append("Pass est : " +item.value + "\n")
-                                            flagCin=false
-                                        }
-                                    }else{
-                                        if(!stringBuilder.contains("CIN")){
-                                            stringBuilder.append("CIN est : " +item.value + "\n")
-                                            flagCin=true
-                                        }}
-                                    */
                             }
                         }
 

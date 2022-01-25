@@ -41,10 +41,11 @@ class ScanBack : AppCompatActivity() {
         buttonBack = findViewById(R.id.buttonBack)
         buttonNext = findViewById(R.id.buttonNext)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
+        val extras = intent.extras
         startCameraSource()
         buttonBack.setOnClickListener {
             val builder = AlertDialog.Builder(this)
-            builder.setTitle("Info of Back Side")
+            builder.setTitle("Info of Both Sides")
             builder.setMessage(stringBuilder.toString())
 
             builder.setPositiveButton(android.R.string.yes) { dialog, which ->
@@ -82,8 +83,12 @@ class ScanBack : AppCompatActivity() {
                     }
 
                     tv_result.post {
-
                         stringBuilder.setLength(0)
+                        if (extras != null) {
+                        val value = extras.getString("frontData")
+                        stringBuilder.append(value)
+                    }
+
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             // Pattern of Sexe
@@ -98,7 +103,7 @@ class ScanBack : AppCompatActivity() {
                             // Pattern of address
 
                             if (Pattern.matches("Adresse.*", item.value)) {
-                                stringBuilder.append(item.value.toString() + "\n")
+                                stringBuilder.append(item.value.toString().toUpperCase() + "\n")
                             }
                         }
                     }

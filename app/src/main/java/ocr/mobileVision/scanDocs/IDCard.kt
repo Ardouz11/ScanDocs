@@ -30,6 +30,7 @@ class IDCard : AppCompatActivity() {
     private lateinit var tvResult:TextView
     private lateinit var surface_camera_preview:SurfaceView
     val stringBuilder = StringBuilder()
+    var string:String=""
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var button: Button
     private lateinit var buttonFront: Button
@@ -43,11 +44,11 @@ class IDCard : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         tvResult=findViewById(R.id.tv_result)
         button=findViewById(R.id.button)
-        buttonFront=findViewById(R.id.buttonFront)
+       // buttonFront=findViewById(R.id.buttonFront)
         buttonNext=findViewById(R.id.buttonNext)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
-        buttonFront.setOnClickListener {
+       /* buttonFront.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Info of Front Side")
             builder.setMessage(stringBuilder.toString())
@@ -62,13 +63,16 @@ class IDCard : AppCompatActivity() {
             }
 
             builder.show()
-        }
+
+        }*/
 
         buttonNext.setOnClickListener {
             val intent = Intent(this, ScanBack::class.java)
+            intent.putExtra("frontData",string)
             startActivity(intent)
         }
         button.setOnClickListener {
+
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {}
 
@@ -85,7 +89,6 @@ class IDCard : AppCompatActivity() {
                         stringBuilder.setLength(0)
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-
                             if(Pattern.matches("ROYAUM.*", item.value)
                                 ||Pattern.matches("CARTE.*", item.value)
                                 ||Pattern.matches(".*NATIONA.*", item.value)
@@ -112,16 +115,6 @@ class IDCard : AppCompatActivity() {
                                         }
 
                                 }
-                                /*
-                                if(Pattern.matches("à.*",item.value)){
-                                    if(!stringBuilder.contains("POB ")) {
-                                        stringBuilder.append("POB " + item.value.replace("à", ": ") + "\n")
-                                    }
-                                }*/
-                              /*
-                                    */
-
-
                                 /* This one for getting CIN */
                                 if(flagCin){
                                     if(Pattern.matches("[A-Z].*[0-9].*",item.value)){
@@ -130,7 +123,6 @@ class IDCard : AppCompatActivity() {
                                         flagCin=false
                                         }
                                     }}
-
 
                                 /* This one for getting LName and FName */
                                 if (Pattern.matches("[A-Z].*[A-Z]", item.value)&&item.value.toString().length>2) {
@@ -149,12 +141,15 @@ class IDCard : AppCompatActivity() {
                                 }
                             }
                         }
+                        string=stringBuilder.toString()
 
                     }
+
                    // mCameraSource.stop()
                 }
 
             })
+
         }
     }
 

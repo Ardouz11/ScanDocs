@@ -48,6 +48,23 @@
         android:id="@+id/buttonSim"/>
 
     </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompatTwo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sim Card"
+            android:textSize="20dp"
+            android:textColor="#c0c0c0"
+            />
+    </android.support.v7.widget.LinearLayoutCompat>
     <!--  <Button
        android:layout_width="80dp"
        android:layout_height="40dp"

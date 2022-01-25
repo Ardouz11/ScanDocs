@@ -9,6 +9,7 @@
     tools:context=".IDCard">
 
 
+
     <SurfaceView
         android:id="@+id/surface_camera_preview"
         android:layout_width="match_parent"
@@ -26,7 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline">
@@ -41,7 +41,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Start" />
 
-        <Button
+      <!--  <Button
             android:id="@+id/buttonFront"
             android:layout_width="70dp"
             android:layout_height="40dp"
@@ -50,6 +50,8 @@
             android:layout_marginEnd="8dp"
             android:layout_gravity="center_horizontal"
             android:text="Front" />
+            -->
+
 
         <Button
             android:id="@+id/buttonNext"
@@ -63,15 +65,23 @@
 
 
     </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompatTwo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
-    <!--
-   <Button
-       android:layout_width="80dp"
-       android:layout_height="40dp"
-       android:text="Back"
-       android:layout_gravity="center_horizontal"
-       android:id="@+id/buttonBack"/>
-       -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Front Side ID Card"
+            android:textSize="20dp"
+            android:textColor="#c0c0c0"
+            />
+</android.support.v7.widget.LinearLayoutCompat>
     <TextView
         android:id="@+id/tv_result"
         android:layout_width="match_parent"
@@ -82,13 +92,22 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
+    <!--
+   <Button
+       android:layout_width="80dp"
+       android:layout_height="40dp"
+       android:text="Back"
+       android:layout_gravity="center_horizontal"
+       android:id="@+id/buttonBack"/>
+       -->
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.69" />
+        app:layout_constraintGuide_percent="0.69"
+        />
 
 
 
