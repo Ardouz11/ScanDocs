@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#3A3A3A"
+    android:background="#63357e"
     tools:context=".SimScan">
 
     <SurfaceView
@@ -33,6 +33,7 @@
         android:layout_height="40dp"
         android:layout_marginRight="16dp"
         android:text="Start"
+        android:textColor="#c0c0c0"
         android:background="@drawable/bg_for_button"
         android:layout_gravity="center_horizontal"
         android:id="@+id/button"/>
@@ -41,6 +42,7 @@
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:text="Sim"
+        android:textColor="#c0c0c0"
         android:background="@drawable/bg_for_button"
         android:layout_gravity="center_horizontal"
         android:id="@+id/buttonSim"/>

@@ -75,17 +75,7 @@ class ScanFrontPassport : AppCompatActivity() {
                         stringBuilder.setLength(0)
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            if(Pattern.matches("KINGD.*", item.value)
-                                ||Pattern.matches(".*MOROCCO", item.value)
-                                ||Pattern.matches("PASSEPORT.*", item.value)
-                                ||Pattern.matches(".*[ä].*",item.value)
-                                ||Pattern.matches("[à].*",item.value)
-                                ||Pattern.matches("[a-z].*",item.value)
-                                ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;>?-].*", item.value)
-                            ){
-                                Log.i("matches",item.value)
-                            }
-                            else {
+
                               /*  if(Pattern.matches("([A-Z]){3}",item.value)){
                                     aliasCountry=item.value
                                 }*/
@@ -141,7 +131,7 @@ class ScanFrontPassport : AppCompatActivity() {
                             }
                         }
 
-                    }
+
                    // mCameraSource.stop()
 
 

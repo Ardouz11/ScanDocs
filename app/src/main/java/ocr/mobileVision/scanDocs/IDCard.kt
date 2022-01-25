@@ -23,7 +23,7 @@ import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
 
-class MainActivity : AppCompatActivity() {
+class IDCard : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
@@ -45,8 +45,6 @@ class MainActivity : AppCompatActivity() {
         button=findViewById(R.id.button)
         buttonFront=findViewById(R.id.buttonFront)
         buttonNext=findViewById(R.id.buttonNext)
-        buttonSejour=findViewById(R.id.buttonSejour)
-        buttonPassport=findViewById(R.id.buttonPassport)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
         buttonFront.setOnClickListener {
@@ -68,14 +66,6 @@ class MainActivity : AppCompatActivity() {
 
         buttonNext.setOnClickListener {
             val intent = Intent(this, ScanBack::class.java)
-            startActivity(intent)
-        }
-        buttonSejour.setOnClickListener {
-            val intent = Intent(this, ScanFrontSejour::class.java)
-            startActivity(intent)
-        }
-        buttonPassport.setOnClickListener {
-            val intent = Intent(this, ScanFrontPassport::class.java)
             startActivity(intent)
         }
         button.setOnClickListener {

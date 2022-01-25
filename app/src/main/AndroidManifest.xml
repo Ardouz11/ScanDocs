@@ -27,7 +27,10 @@
         <activity
             android:name="ocr.mobileVision.scanDocs.SimScan"
             android:exported="false" />
-        <activity android:name="ocr.mobileVision.scanDocs.MainActivity">
+        <activity
+            android:name="ocr.mobileVision.scanDocs.IDCard"
+            android:exported="false" />
+        <activity android:name="ocr.mobileVision.scanDocs.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
