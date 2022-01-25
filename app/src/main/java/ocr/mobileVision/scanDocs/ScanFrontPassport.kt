@@ -67,31 +67,19 @@ class ScanFrontPassport : AppCompatActivity() {
 
                 override fun  receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
-
                     if (items.size() <= 0) {
                         return
                     }
                     tvResult.post {
-                        var flagCin=true
                         stringBuilder.setLength(0)
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            if(Pattern.matches("KINGD.*", item.value)
-                                ||Pattern.matches(".*MOROCCO", item.value)
-                                ||Pattern.matches("PASSEPORT.*", item.value)
-                                ||Pattern.matches(".*[ä].*",item.value)
-                                ||Pattern.matches("[à].*",item.value)
-                                ||Pattern.matches("[a-z].*",item.value)
-                                ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;>?-].*", item.value)
-                            ){
-                                Log.i("matches",item.value)
+                            if(Pattern.matches("Domi.*",item.value)){
+                                Log.i("test",item.value)
+                                stringBuilder.append("Adresse : " +items.valueAt(i+1).value+" "+items.valueAt(i+2).value+"\n")
+
                             }
-                            else {
-                              /*  if(Pattern.matches("([A-Z]){3}",item.value)){
-                                    aliasCountry=item.value
-                                }*/
-                                if(Pattern.matches("P<.*",item.value)){
-                                       // item.value.replace("<"," ")
+                            if(Pattern.matches("P<.*",item.value)){
                                         var pLineOne = Pattern.compile("[A-Z]+")
                                         var mLineOne: Matcher = pLineOne.matcher(item.value)
                                         var allMatchesLineOne: ArrayList<String> = ArrayList()
@@ -100,7 +88,7 @@ class ScanFrontPassport : AppCompatActivity() {
                                         }
 
                                         var string=StringBuilder()
-                                        stringBuilder.append("Prenom: " +allMatchesLineOne.last().toUpperCase()+ "\n")
+                                        stringBuilder.append("Prenom: " +allMatchesLineOne.last()+ "\n")
                                         allMatchesLineOne[1]=allMatchesLineOne[1].drop(3)
                                         Log.d("list1",allMatchesLineOne.toString())
                                         for(i in 1 until allMatchesLineOne.size-1){
@@ -114,35 +102,20 @@ class ScanFrontPassport : AppCompatActivity() {
                                         while (mLineTwo.find()) {
                                             allMatches.add(mLineTwo.group())
                                         }
-=
+
                                     stringBuilder.append("Passport : " +allMatches[0]+allMatches[1].dropLast(1)+"\n")
-                                        stringBuilder.append("DOB YY/MM/DD: " +allMatches[3].dropLast(1)+"\n")
-                                        stringBuilder.append("Sexe : " +allMatches[4]+"\n")
-                                        stringBuilder.append("END Of Val YY/MM/DD : " +allMatches[5].dropLast(1)+"\n")
+                                        stringBuilder.append("DOB YY/MM/DD: " +allMatches[3].take(6)+"\n")
+                                        stringBuilder.append("Sexe : " +allMatches[4].takeLast(1)+"\n")
+                                        stringBuilder.append("END Of Val YY/MM/DD : " +allMatches[5].take(6)+"\n")
                                         if(allMatches.size>7) {
                                             stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
                                         }
                                     }
                                 }
-
-                                /* This one for getting CIN
-
-                                    if(Pattern.matches("[A-Z].*[0-9].*\\d$",item.value)&& item.value.length<12){
-                                        if(flagCin){
-                                        if(!stringBuilder.contains("Pass")){
-                                            stringBuilder.append("Pass est : " +item.value + "\n")
-                                            flagCin=false
-                                        }
-                                    }else{
-                                        if(!stringBuilder.contains("CIN")){
-                                            stringBuilder.append("CIN est : " +item.value + "\n")
-                                            flagCin=true
-                                        }}
-                                    */
                             }
                         }
 
-                    }
+
                    // mCameraSource.stop()
 
 

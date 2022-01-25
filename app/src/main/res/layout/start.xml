@@ -6,20 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#63357e"
-    tools:context=".ScanFrontPassport">
-
-    <SurfaceView
-        android:id="@+id/surface_camera_preview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/back_bg"
-        tools:ignore="MissingConstraints" />
-
+    tools:context=".StartActivity">
 
     <android.support.v7.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
@@ -31,43 +18,37 @@
         app:layout_constraintTop_toTopOf="@+id/guideline">
 
         <Button
-            android:id="@+id/button"
-            android:layout_width="80dp"
+            android:id="@+id/buttonIdCard"
+            android:layout_width="70dp"
             android:layout_height="40dp"
-            android:textColor="#c0c0c0"
-            android:layout_gravity="center_horizontal"
             android:background="@drawable/bg_for_button"
             android:layout_marginEnd="8dp"
-            android:text="Start" />
+            android:layout_gravity="center_horizontal"
+            android:text="IDCard"
+            android:textColor="#c0c0c0"/>
 
         <Button
-            android:id="@+id/buttonFront"
+            android:id="@+id/buttonPassport"
             android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_for_button"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#c0c0c0"
+            android:text="Passport" />
+        <Button
+            android:id="@+id/buttonSejour"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:background="@drawable/bg_for_button"
             android:layout_marginEnd="8dp"
             android:textColor="#c0c0c0"
             android:layout_gravity="center_horizontal"
-            android:text="Front" />
+            android:text="Sejour" />
 
 
     </android.support.v7.widget.LinearLayoutCompat>
-    <android.support.v7.widget.LinearLayoutCompat
-        android:id="@+id/linearLayoutCompatTwo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Front Side Passport"
-            android:textSize="20dp"
-            android:textColor="#c0c0c0"
-            />
-    </android.support.v7.widget.LinearLayoutCompat>
+
     <!--
    <Button
        android:layout_width="80dp"
@@ -93,7 +74,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.69" />
-
 
 
 
