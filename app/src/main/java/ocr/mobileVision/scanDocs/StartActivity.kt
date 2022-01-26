@@ -18,7 +18,7 @@ class StartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start)
 
-        buttonIdCard = findViewById(R.id.buttonIdCard)
+       buttonIdCard = findViewById(R.id.buttonIdCard)
         buttonSejour = findViewById(R.id.buttonSejour)
         buttonPassport = findViewById(R.id.buttonPassport)
         buttonIdCard.setOnClickListener {

@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.vision.CameraSource
@@ -37,15 +38,17 @@ class IDCard : AppCompatActivity() {
     private lateinit var buttonNext: Button
     private lateinit var buttonSejour: Button
     private lateinit var buttonPassport: Button
+    private lateinit var start:ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         tvResult=findViewById(R.id.tv_result)
-        button=findViewById(R.id.button)
+      //  button=findViewById(R.id.button)
+        start=findViewById(R.id.capture)
        // buttonFront=findViewById(R.id.buttonFront)
-        buttonNext=findViewById(R.id.buttonNext)
+       // buttonNext=findViewById(R.id.buttonNext)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
        /* buttonFront.setOnClickListener {
@@ -64,15 +67,15 @@ class IDCard : AppCompatActivity() {
 
             builder.show()
 
-        }*/
+        }
 
         buttonNext.setOnClickListener {
             val intent = Intent(this, ScanBack::class.java)
             intent.putExtra("frontData",string)
             startActivity(intent)
-        }
-        button.setOnClickListener {
-
+        }*/
+        start.setOnClickListener {
+            val intent = Intent(this, ScanBack::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {}
 
@@ -142,6 +145,10 @@ class IDCard : AppCompatActivity() {
                             }
                         }
                         string=stringBuilder.toString()
+                        mCameraSource.stop()
+                        intent.putExtra("frontData",string)
+                        startActivity(intent)
+
 
                     }
 

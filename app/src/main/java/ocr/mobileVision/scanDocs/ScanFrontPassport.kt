@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.vision.CameraSource
@@ -39,18 +40,21 @@ class ScanFrontPassport : AppCompatActivity() {
     private lateinit var button: Button
     private lateinit var buttonFront: Button
     private lateinit var buttonNext: Button
+    private lateinit var start: ImageView
+
     val pattern = Pattern.compile("[^A-Z0-9 ]")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_front_passport)
         tvResult=findViewById(R.id.tv_result)
-        button=findViewById(R.id.button)
-        buttonFront=findViewById(R.id.buttonFront)
-        buttonNext=findViewById(R.id.buttonNext)
+        start=findViewById(R.id.capture)
+        /*  button=findViewById(R.id.button)
+          buttonFront=findViewById(R.id.buttonFront)
+          buttonNext=findViewById(R.id.buttonNext)*/
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
-        buttonFront.setOnClickListener {
+      /*  buttonFront.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Info of Front Side")
             builder.setMessage(stringBuilder.toString())
@@ -72,7 +76,10 @@ class ScanFrontPassport : AppCompatActivity() {
             startActivity(intent)
         }
 
-        button.setOnClickListener {
+       */
+
+        start.setOnClickListener {
+            val intent = Intent(this, ScanAdressPassport::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {}
 
@@ -119,6 +126,9 @@ class ScanFrontPassport : AppCompatActivity() {
                                     }
                                 }
                         string=stringBuilder.toString()
+                        mCameraSource.stop()
+                        intent.putExtra("MRZData",string)
+                        startActivity(intent)
                             }
                         }
 
