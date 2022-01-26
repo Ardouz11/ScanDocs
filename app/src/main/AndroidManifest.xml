@@ -25,6 +25,9 @@
             android:name="ocr.mobileVision.scanDocs.ScanFrontPassport"
             android:exported="false" />
         <activity
+            android:name="ocr.mobileVision.scanDocs.ScanAdressPassport"
+            android:exported="false" />
+        <activity
             android:name="ocr.mobileVision.scanDocs.SimScan"
             android:exported="false" />
         <activity

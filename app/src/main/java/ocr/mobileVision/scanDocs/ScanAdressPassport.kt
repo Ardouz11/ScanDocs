@@ -27,14 +27,14 @@ import kotlin.properties.Delegates
 
 
 
-class ScanFrontPassport : AppCompatActivity() {
+class ScanAdressPassport : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult:TextView
     private lateinit var surface_camera_preview:SurfaceView
     val stringBuilder = StringBuilder()
-    var string:String=""
+    val stringBuilderTwo = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var button: Button
     private lateinit var buttonFront: Button
@@ -43,13 +43,13 @@ class ScanFrontPassport : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scan_front_passport)
+        setContentView(R.layout.activity_scan_adress_passport)
         tvResult=findViewById(R.id.tv_result)
         button=findViewById(R.id.button)
         buttonFront=findViewById(R.id.buttonFront)
-        buttonNext=findViewById(R.id.buttonNext)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
+        val extras = intent.extras
         buttonFront.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Info of Front Side")
@@ -66,11 +66,6 @@ class ScanFrontPassport : AppCompatActivity() {
 
             builder.show()
         }
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, ScanAdressPassport::class.java)
-            intent.putExtra("MRZData",string)
-            startActivity(intent)
-        }
 
         button.setOnClickListener {
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
@@ -83,42 +78,20 @@ class ScanFrontPassport : AppCompatActivity() {
                     }
                     tvResult.post {
                         stringBuilder.setLength(0)
+                        if (extras != null) {
+                            val value = extras.getString("MRZData")
+                            stringBuilder.append(value)
+                        }
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            if(Pattern.matches("P<.*",item.value)){
-                                        var pLineOne = Pattern.compile("[A-Z]+")
-                                        var mLineOne: Matcher = pLineOne.matcher(item.value)
-                                        var allMatchesLineOne: ArrayList<String> = ArrayList()
-                                        while (mLineOne.find()) {
-                                            allMatchesLineOne.add(mLineOne.group())
-                                        }
+                            if(Pattern.matches("^[A-Z0-9 ]+\$",item.value)&&item.value.split(" ").size>4){
+                                var matcher = pattern.matcher(items.valueAt(i+1).value)
+                                var str=matcher.replaceAll("")
+                                Log.i("test",item.value+" "+str.substringBefore("MAR "))
+                                stringBuilder.append("Adresse : " +item.value+" "+str.substringBefore("MAR ")+"\n")
+                            }
 
-                                        var string=StringBuilder()
-                                        stringBuilder.append("Prenom: " +allMatchesLineOne.last()+ "\n")
-                                        allMatchesLineOne[1]=allMatchesLineOne[1].drop(3)
-                                        Log.d("list1",allMatchesLineOne.toString())
-                                        for(i in 1 until allMatchesLineOne.size-1){
-
-                                            string.append(allMatchesLineOne[i]+" ")
-                                        }
-                                        stringBuilder.append("Nom: $string\n")
-                                        var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
-                                        var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i+1).value)
-                                        var allMatches: ArrayList<String> = ArrayList()
-                                        while (mLineTwo.find()) {
-                                            allMatches.add(mLineTwo.group())
-                                        }
-
-                                    stringBuilder.append("Passport : " +allMatches[0]+allMatches[1].dropLast(1)+"\n")
-                                        stringBuilder.append("DOB YY/MM/DD: " +allMatches[3].take(6)+"\n")
-                                        stringBuilder.append("Sexe : " +allMatches[4].takeLast(1)+"\n")
-                                        stringBuilder.append("END Of Val YY/MM/DD : " +allMatches[5].take(6)+"\n")
-                                        if(allMatches.size>7) {
-                                            stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
-                                        }
-                                    }
                                 }
-                        string=stringBuilder.toString()
                             }
                         }
 
