@@ -87,7 +87,6 @@ class ScanAdressPassport : AppCompatActivity() {
                             if(Pattern.matches("^[A-Z0-9 ]+\$",item.value)&&item.value.split(" ").size>4){
                                 var matcher = pattern.matcher(items.valueAt(i+1).value)
                                 var str=matcher.replaceAll("")
-                                Log.i("test",item.value+" "+str.substringBefore("MAR "))
                                 stringBuilder.append("Adresse : " +item.value+" "+str.substringBefore("MAR ")+"\n")
                             }
 
