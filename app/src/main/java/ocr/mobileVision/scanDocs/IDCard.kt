@@ -94,6 +94,7 @@ class IDCard : AppCompatActivity() {
                             val item = items.valueAt(i)
                             if(Pattern.matches("ROYAUM.*", item.value)
                                 ||Pattern.matches("CARTE.*", item.value)
+                                ||Pattern.matches(".*MAROC", item.value)
                                 ||Pattern.matches(".*NATIONA.*", item.value)
                                 ||Pattern.matches("[a-z].*", item.value)
                                 ||Pattern.matches(".*[ä].*",item.value)
@@ -120,7 +121,7 @@ class IDCard : AppCompatActivity() {
                                 }
                                 /* This one for getting CIN */
                                 if(flagCin){
-                                    if(Pattern.matches("[A-Z].*[0-9].*",item.value)){
+                                    if(Pattern.matches("^[A-Z]+[0-9]+",item.value)){
                                         if(!stringBuilder.contains("CIN")){
                                         stringBuilder.append("CIN est : " +item.value + "\n")
                                         flagCin=false
