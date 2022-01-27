@@ -17,7 +17,6 @@ class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start)
-
        buttonIdCard = findViewById(R.id.buttonIdCard)
         buttonSejour = findViewById(R.id.buttonSejour)
         buttonPassport = findViewById(R.id.buttonPassport)

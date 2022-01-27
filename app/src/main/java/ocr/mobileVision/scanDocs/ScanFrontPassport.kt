@@ -49,35 +49,8 @@ class ScanFrontPassport : AppCompatActivity() {
         setContentView(R.layout.activity_scan_front_passport)
         tvResult=findViewById(R.id.tv_result)
         start=findViewById(R.id.capture)
-        /*  button=findViewById(R.id.button)
-          buttonFront=findViewById(R.id.buttonFront)
-          buttonNext=findViewById(R.id.buttonNext)*/
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
-      /*  buttonFront.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Info of Front Side")
-            builder.setMessage(stringBuilder.toString())
-            builder.setPositiveButton(android.R.string.yes) { _, _ ->
-                Toast.makeText(applicationContext,
-                    android.R.string.yes, Toast.LENGTH_SHORT).show()
-            }
-
-            builder.setNegativeButton(android.R.string.no) { _, _ ->
-                Toast.makeText(applicationContext,
-                    android.R.string.no, Toast.LENGTH_SHORT).show()
-            }
-
-            builder.show()
-        }
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, ScanAdressPassport::class.java)
-            intent.putExtra("MRZData",string)
-            startActivity(intent)
-        }
-
-       */
-
         start.setOnClickListener {
             val intent = Intent(this, ScanAdressPassport::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
@@ -131,11 +104,6 @@ class ScanFrontPassport : AppCompatActivity() {
                         startActivity(intent)
                             }
                         }
-
-
-                   // mCameraSource.stop()
-
-
             })
         }
     }

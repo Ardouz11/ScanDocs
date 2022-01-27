@@ -33,11 +33,6 @@ class IDCard : AppCompatActivity() {
     val stringBuilder = StringBuilder()
     var string:String=""
     private val PERMISSION_REQUEST_CAMERA = 100
-    private lateinit var button: Button
-    private lateinit var buttonFront: Button
-    private lateinit var buttonNext: Button
-    private lateinit var buttonSejour: Button
-    private lateinit var buttonPassport: Button
     private lateinit var start:ImageView
 
 
@@ -45,39 +40,18 @@ class IDCard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         tvResult=findViewById(R.id.tv_result)
-      //  button=findViewById(R.id.button)
         start=findViewById(R.id.capture)
-       // buttonFront=findViewById(R.id.buttonFront)
-       // buttonNext=findViewById(R.id.buttonNext)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
-       /* buttonFront.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Info of Front Side")
-            builder.setMessage(stringBuilder.toString())
-            builder.setPositiveButton(android.R.string.yes) { _, _ ->
-                Toast.makeText(applicationContext,
-                    android.R.string.yes, Toast.LENGTH_SHORT).show()
-            }
-
-            builder.setNegativeButton(android.R.string.no) { _, _ ->
-                Toast.makeText(applicationContext,
-                    android.R.string.no, Toast.LENGTH_SHORT).show()
-            }
-
-            builder.show()
-
-        }
-
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, ScanBack::class.java)
-            intent.putExtra("frontData",string)
-            startActivity(intent)
-        }*/
         start.setOnClickListener {
             val intent = Intent(this, ScanBack::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
-                override fun release() {}
+                override fun release() {
+                    string=stringBuilder.toString()
+                    mCameraSource.stop()
+                    intent.putExtra("frontData",string)
+                    startActivity(intent)
+                }
 
                 override fun  receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
@@ -145,18 +119,15 @@ class IDCard : AppCompatActivity() {
                                 }
                             }
                         }
-                        string=stringBuilder.toString()
-                        mCameraSource.stop()
-                        intent.putExtra("frontData",string)
-                        startActivity(intent)
-
+                        release()
 
                     }
 
+
                    // mCameraSource.stop()
                 }
-
             })
+
 
         }
     }

@@ -9,17 +9,22 @@ import android.widget.TextView
 class DataExtracted : AppCompatActivity() {
 
 
-    private lateinit var tv_result: TextView
-
+    private lateinit var tvResult: TextView
+    private lateinit var buttonBack: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.data_extracted)
-        tv_result = findViewById(R.id.tv_result)
+        tvResult = findViewById(R.id.tv_result)
+        buttonBack=findViewById(R.id.buttonBack)
         val extras = intent.extras
         if (extras != null) {
             val value = extras.getString("dataCIN")
-            tv_result.setText(value)
+            tvResult.text = value
+        }
+        buttonBack.setOnClickListener {
+            val intent = Intent(this, StartActivity::class.java)
+            startActivity(intent)
         }
 
     }

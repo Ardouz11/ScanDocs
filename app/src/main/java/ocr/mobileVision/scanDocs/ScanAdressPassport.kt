@@ -36,9 +36,6 @@ class ScanAdressPassport : AppCompatActivity() {
     private lateinit var surface_camera_preview:SurfaceView
     val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
-    private lateinit var button: Button
-    private lateinit var buttonFront: Button
-    private lateinit var buttonNext: Button
     var string:String=""
     val pattern = Pattern.compile("[^A-Z0-9 ]")
     private lateinit var start: ImageView
@@ -47,29 +44,10 @@ class ScanAdressPassport : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_adress_passport)
         tvResult=findViewById(R.id.tv_result)
-      /*  button=findViewById(R.id.button)
-        buttonFront=findViewById(R.id.buttonFront)*/
         start=findViewById(R.id.capture)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
         val extras = intent.extras
-     /*   buttonFront.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Info of Front Side")
-            builder.setMessage(stringBuilder.toString())
-            builder.setPositiveButton(android.R.string.yes) { _, _ ->
-                Toast.makeText(applicationContext,
-                    android.R.string.yes, Toast.LENGTH_SHORT).show()
-            }
-
-            builder.setNegativeButton(android.R.string.no) { _, _ ->
-                Toast.makeText(applicationContext,
-                    android.R.string.no, Toast.LENGTH_SHORT).show()
-            }
-
-            builder.show()
-        }*/
-
         start.setOnClickListener {
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
