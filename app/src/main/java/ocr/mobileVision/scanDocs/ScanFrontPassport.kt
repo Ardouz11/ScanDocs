@@ -93,9 +93,9 @@ class ScanFrontPassport : AppCompatActivity() {
 
                                 stringBuilder.append("Passport : " + allMatches[0] + allMatches[1].dropLast(1) + "\n")
                                 stringBuilder.append("Nationality: " + allMatches[2] + "\n")
-                                stringBuilder.append("DOB : " + allMatches[3].take(2) + "/" + allMatches[3].take(4).takeLast(2) + "/" + allMatches[3].take(6).takeLast(2) + "\n")
+                                stringBuilder.append("DOB : " +allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/" + allMatches[3].take(2) + "\n")
                                 stringBuilder.append("Sexe : " + allMatches[4].takeLast(1) + "\n")
-                                stringBuilder.append("END Of Val : " + allMatches[5].take(2) + "/" + allMatches[5].take(4).takeLast(2) + "/" + allMatches[5].take(6).takeLast(2) + "\n")
+                                stringBuilder.append("END Of Val : " + allMatches[5].take(6).takeLast(2) +"/" + allMatches[5].take(4).takeLast(2) + "/" + allMatches[5].take(2) +  "\n")
                                 if (allMatches.size> 7) {
                                     stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
                                 }
