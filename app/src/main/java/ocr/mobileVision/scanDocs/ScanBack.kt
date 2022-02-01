@@ -2,19 +2,17 @@ package ocr.mobileVision.scanDocs
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Button
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
@@ -33,24 +31,34 @@ class ScanBack : AppCompatActivity() {
     val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var start: ImageView
-    var string:String=""
+    var string: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
+
+        var anim: LottieAnimationView
+        var viewBg: View
+
+        anim = findViewById(R.id.animationView)
+        viewBg = findViewById(R.id.bg_onLoad)
+        anim.visibility = View.GONE
+        viewBg.visibility = View.GONE
+
         tv_result = findViewById(R.id.tv_result)
-        start=findViewById(R.id.capture)
+        start = findViewById(R.id.capture)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         val extras = intent.extras
-        val actionBar: ActionBar = supportActionBar!!
-        actionBar.setSubtitle(" ID Card")
         startCameraSource()
         start.setOnClickListener {
+            anim.visibility = View.VISIBLE
+            viewBg.visibility = View.VISIBLE
+
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    string=stringBuilder.toString()
+                    string = stringBuilder.toString()
                     mCameraSource.stop()
-                    intent.putExtra("dataCIN",string)
+                    intent.putExtra("dataCIN", string)
                     startActivity(intent)
                 }
 
@@ -64,16 +72,16 @@ class ScanBack : AppCompatActivity() {
                     tv_result.post {
                         stringBuilder.setLength(0)
                         if (extras != null) {
-                        val value = extras.getString("frontData")
-                        stringBuilder.append(value)
-                    }
+                            val value = extras.getString("frontData")
+                            stringBuilder.append(value)
+                        }
 
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             // Pattern of Sexe
                             if (Pattern.matches("Sexe.*[MF]", item.value)) {
 
-                                stringBuilder.append(item.value.toString()+"\n")
+                                stringBuilder.append(item.value.toString() + "\n")
                             }
                             if (Pattern.matches("[MF]", item.value)) {
 
@@ -85,14 +93,23 @@ class ScanBack : AppCompatActivity() {
                                 stringBuilder.append(item.value.toString().toUpperCase() + "\n")
                             }
                         }
-                       release()
-
+                        release()
                     }
-
                 }
             })
-
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        var anim: LottieAnimationView
+        var viewBg: View
+
+        anim = findViewById(R.id.animationView)
+        viewBg = findViewById(R.id.bg_onLoad)
+        anim.visibility = View.GONE
+        viewBg.visibility = View.GONE
     }
 
     private fun startCameraSource() {

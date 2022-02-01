@@ -1,20 +1,18 @@
 package ocr.mobileVision.scanDocs
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
@@ -25,18 +23,14 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
-
-
-
-
 class ScanFrontPassport : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
-    private lateinit var tvResult:TextView
-    private lateinit var surface_camera_preview:SurfaceView
+    private lateinit var tvResult: TextView
+    private lateinit var surface_camera_preview: SurfaceView
     val stringBuilder = StringBuilder()
-    var string:String=""
+    var string: String = ""
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var button: Button
     private lateinit var buttonFront: Button
@@ -48,18 +42,16 @@ class ScanFrontPassport : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_front_passport)
-        tvResult=findViewById(R.id.tv_result)
-        start=findViewById(R.id.capture)
-        surface_camera_preview=findViewById(R.id.surface_camera_preview)
+        tvResult = findViewById(R.id.tv_result)
+        start = findViewById(R.id.capture)
+        surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
-        val actionBar: ActionBar = supportActionBar!!
-        actionBar.setSubtitle(" Passport")
         start.setOnClickListener {
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {}
 
-                override fun  receiveDetections(detections: Detector.Detections<TextBlock>) {
+                override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
                     if (items.size() <= 0) {
                         return
@@ -68,53 +60,53 @@ class ScanFrontPassport : AppCompatActivity() {
                         stringBuilder.setLength(0)
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            if(Pattern.matches("P<.*",item.value)){
-                                        var pLineOne = Pattern.compile("[A-Z]+")
-                                        var mLineOne: Matcher = pLineOne.matcher(item.value)
-                                        var allMatchesLineOne: ArrayList<String> = ArrayList()
-                                        while (mLineOne.find()) {
-                                            allMatchesLineOne.add(mLineOne.group())
-                                        }
+                            if (Pattern.matches("P<.*", item.value)) {
+                                var pLineOne = Pattern.compile("[A-Z]+")
+                                var mLineOne: Matcher = pLineOne.matcher(item.value)
+                                var allMatchesLineOne: ArrayList<String> = ArrayList()
+                                while (mLineOne.find()) {
+                                    allMatchesLineOne.add(mLineOne.group())
+                                }
 
-                                        var string=StringBuilder()
+                                var string = StringBuilder()
                                 if (allMatchesLineOne.last() === "K") {
-                                    stringBuilder.append("Prenom: " +allMatchesLineOne[allMatchesLineOne.size-1]+ "\n")
-                                    for(i in 1 until allMatchesLineOne.size-2){
+                                    stringBuilder.append("Prenom: " + allMatchesLineOne[allMatchesLineOne.size - 1] + "\n")
+                                    for (i in 1 until allMatchesLineOne.size - 2) {
 
-                                        string.append(allMatchesLineOne[i]+" ")
+                                        string.append(allMatchesLineOne[i] + " ")
                                     }
                                 }
-                                        stringBuilder.append("Prenom: " +allMatchesLineOne.last()+ "\n")
-                                        allMatchesLineOne[1]=allMatchesLineOne[1].drop(3)
-                                        Log.d("list1",allMatchesLineOne.toString())
-                                        for(i in 1 until allMatchesLineOne.size-1){
+                                stringBuilder.append("Prenom: " + allMatchesLineOne.last() + "\n")
+                                allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
+                                Log.d("list1", allMatchesLineOne.toString())
+                                for (i in 1 until allMatchesLineOne.size - 1) {
 
-                                            string.append(allMatchesLineOne[i]+" ")
-                                        }
-                                        stringBuilder.append("Nom: $string\n")
-                                        var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
-                                        var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i+1).value)
-                                        var allMatches: ArrayList<String> = ArrayList()
-                                        while (mLineTwo.find()) {
-                                            allMatches.add(mLineTwo.group())
-                                        }
-
-                                    stringBuilder.append("Passport : " +allMatches[0]+allMatches[1].dropLast(1)+"\n")
-                                stringBuilder.append("Nationality: " +allMatches[2]+"\n")
-                                        stringBuilder.append("DOB : " +allMatches[3].take(2)+"/"+allMatches[3].take(4).takeLast(2)+"/"+allMatches[3].take(6).takeLast(2)+"\n")
-                                        stringBuilder.append("Sexe : " +allMatches[4].takeLast(1)+"\n")
-                                        stringBuilder.append("END Of Val : " +allMatches[5].take(2)+"/"+allMatches[5].take(4).takeLast(2)+"/"+allMatches[5].take(6).takeLast(2)+"\n")
-                                        if(allMatches.size>7) {
-                                            stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
-                                        }
-                                    }
+                                    string.append(allMatchesLineOne[i] + " ")
                                 }
-                        string=stringBuilder.toString()
-                        mCameraSource.stop()
-                        intent.putExtra("dataCIN",string)
-                        startActivity(intent)
+                                stringBuilder.append("Nom: $string\n")
+                                var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
+                                var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i + 1).value)
+                                var allMatches: ArrayList<String> = ArrayList()
+                                while (mLineTwo.find()) {
+                                    allMatches.add(mLineTwo.group())
+                                }
+
+                                stringBuilder.append("Passport : " + allMatches[0] + allMatches[1].dropLast(1) + "\n")
+                                stringBuilder.append("Nationality: " + allMatches[2] + "\n")
+                                stringBuilder.append("DOB : " + allMatches[3].take(2) + "/" + allMatches[3].take(4).takeLast(2) + "/" + allMatches[3].take(6).takeLast(2) + "\n")
+                                stringBuilder.append("Sexe : " + allMatches[4].takeLast(1) + "\n")
+                                stringBuilder.append("END Of Val : " + allMatches[5].take(2) + "/" + allMatches[5].take(4).takeLast(2) + "/" + allMatches[5].take(6).takeLast(2) + "\n")
+                                if (allMatches.size> 7) {
+                                    stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
+                                }
                             }
                         }
+                        string = stringBuilder.toString()
+                        mCameraSource.stop()
+                        intent.putExtra("dataCIN", string)
+                        startActivity(intent)
+                    }
+                }
             })
         }
     }
@@ -140,7 +132,6 @@ class ScanFrontPassport : AppCompatActivity() {
 
         surface_camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun surfaceDestroyed(p0: SurfaceHolder?) {
@@ -160,13 +151,11 @@ class ScanFrontPassport : AppCompatActivity() {
                 }
             }
         })
-
-
     }
 
     fun isCameraPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-                PackageManager.PERMISSION_GRANTED
+            PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestForPermission() {
