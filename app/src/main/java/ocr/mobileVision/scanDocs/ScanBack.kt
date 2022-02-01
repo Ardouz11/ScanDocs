@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -40,6 +41,8 @@ class ScanBack : AppCompatActivity() {
         start=findViewById(R.id.capture)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         val extras = intent.extras
+        val actionBar: ActionBar = supportActionBar!!
+        actionBar.setSubtitle(" ID Card")
         startCameraSource()
         start.setOnClickListener {
             val intent = Intent(this, DataExtracted::class.java)

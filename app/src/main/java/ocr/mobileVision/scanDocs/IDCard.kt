@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceHolder
@@ -33,6 +34,7 @@ class IDCard : AppCompatActivity() {
     val stringBuilder = StringBuilder()
     var string:String=""
     private val PERMISSION_REQUEST_CAMERA = 100
+
     private lateinit var start:ImageView
 
 
@@ -42,6 +44,8 @@ class IDCard : AppCompatActivity() {
         tvResult=findViewById(R.id.tv_result)
         start=findViewById(R.id.capture)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
+        val actionBar: ActionBar = supportActionBar!!
+        actionBar.setSubtitle(" ID Card")
         startCameraSource()
         start.setOnClickListener {
             val intent = Intent(this, ScanBack::class.java)
@@ -79,31 +83,32 @@ class IDCard : AppCompatActivity() {
                             }
                             else {
                                 /*  This patterns for matching DOB  */
-                                    if(Pattern.matches("[0-9].*[0-9]",item.value)&&item.value.length>5){
-                                        if(flagDob){
+                                    if(Pattern.matches("[0-9].*[0-9]",item.value)&&item.value.length>5&&i<7){
+                                       // if(flagDob){
                                             if(!stringBuilder.contains("Date")){
-                                             flagDob=false
+                                          //   flagDob=false
                                         stringBuilder.append("Date de naissance est : " +item.value + "\n")
                                             }
-                                    }else {
-                                            if(!stringBuilder.contains("Valable jusqu'au ")) {
-                                                flagDob = true
-                                                stringBuilder.append("Valable jusqu'au " + item.value + "\n")
-                                            }
-                                        }
+                                        /*      }else {
+                                                      if(!stringBuilder.contains("Valable jusqu'au ")) {
+                                                          flagDob = true
+                                                          stringBuilder.append("Valable jusqu'au " + item.value + "\n")
+                                                      }
+                                                  }*/
 
                                 }
-                                /* This one for getting CIN */
-                                if(flagCin){
+                                /* This one for getting CIN
+                                if(flagCin){*/
                                     if(Pattern.matches("^[A-Z]+[0-9]+",item.value)){
                                         if(!stringBuilder.contains("CIN")){
-                                        stringBuilder.append("CIN est : " +item.value + "\n")
-                                        flagCin=false
+                                        stringBuilder.append("CIN :" +item.value + "\n")
+                                       // flagCin=false
                                         }
-                                    }}
+                                    }
+                            //}
 
                                 /* This one for getting LName and FName */
-                                if (Pattern.matches("[A-Z].*[A-Z]", item.value)&&item.value.toString().length>2) {
+                                if (Pattern.matches("^[A-Z]+", item.value)&&item.value.toString().length>2) {
                                     if(flagName) {
                                         if(!stringBuilder.contains("Prenom")){
                                         stringBuilder.append("Prenom est : " +item.value + "\n")

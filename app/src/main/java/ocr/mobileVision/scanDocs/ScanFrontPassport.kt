@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceHolder
@@ -51,8 +52,10 @@ class ScanFrontPassport : AppCompatActivity() {
         start=findViewById(R.id.capture)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
         startCameraSource()
+        val actionBar: ActionBar = supportActionBar!!
+        actionBar.setSubtitle(" Passport")
         start.setOnClickListener {
-            val intent = Intent(this, ScanAdressPassport::class.java)
+            val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {}
 
@@ -74,6 +77,13 @@ class ScanFrontPassport : AppCompatActivity() {
                                         }
 
                                         var string=StringBuilder()
+                                if (allMatchesLineOne.last() === "K") {
+                                    stringBuilder.append("Prenom: " +allMatchesLineOne[allMatchesLineOne.size-1]+ "\n")
+                                    for(i in 1 until allMatchesLineOne.size-2){
+
+                                        string.append(allMatchesLineOne[i]+" ")
+                                    }
+                                }
                                         stringBuilder.append("Prenom: " +allMatchesLineOne.last()+ "\n")
                                         allMatchesLineOne[1]=allMatchesLineOne[1].drop(3)
                                         Log.d("list1",allMatchesLineOne.toString())
@@ -90,9 +100,10 @@ class ScanFrontPassport : AppCompatActivity() {
                                         }
 
                                     stringBuilder.append("Passport : " +allMatches[0]+allMatches[1].dropLast(1)+"\n")
-                                        stringBuilder.append("DOB YY/MM/DD: " +allMatches[3].take(6)+"\n")
+                                stringBuilder.append("Nationality: " +allMatches[2]+"\n")
+                                        stringBuilder.append("DOB : " +allMatches[3].take(2)+"/"+allMatches[3].take(4).takeLast(2)+"/"+allMatches[3].take(6).takeLast(2)+"\n")
                                         stringBuilder.append("Sexe : " +allMatches[4].takeLast(1)+"\n")
-                                        stringBuilder.append("END Of Val YY/MM/DD : " +allMatches[5].take(6)+"\n")
+                                        stringBuilder.append("END Of Val : " +allMatches[5].take(2)+"/"+allMatches[5].take(4).takeLast(2)+"/"+allMatches[5].take(6).takeLast(2)+"\n")
                                         if(allMatches.size>7) {
                                             stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
                                         }
@@ -100,7 +111,7 @@ class ScanFrontPassport : AppCompatActivity() {
                                 }
                         string=stringBuilder.toString()
                         mCameraSource.stop()
-                        intent.putExtra("MRZData",string)
+                        intent.putExtra("dataCIN",string)
                         startActivity(intent)
                             }
                         }

@@ -12,8 +12,6 @@ class StartActivity : AppCompatActivity() {
     private lateinit var buttonIdCard: Button
     private lateinit var buttonSejour: Button
     private lateinit var buttonPassport: Button
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start)
