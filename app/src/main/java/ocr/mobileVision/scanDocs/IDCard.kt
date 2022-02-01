@@ -6,11 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.vision.CameraSource
@@ -32,49 +34,28 @@ class IDCard : AppCompatActivity() {
     val stringBuilder = StringBuilder()
     var string:String=""
     private val PERMISSION_REQUEST_CAMERA = 100
-    private lateinit var button: Button
-    private lateinit var buttonFront: Button
-    private lateinit var buttonNext: Button
-    private lateinit var buttonSejour: Button
-    private lateinit var buttonPassport: Button
+
+    private lateinit var start:ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         tvResult=findViewById(R.id.tv_result)
-        button=findViewById(R.id.button)
-       // buttonFront=findViewById(R.id.buttonFront)
-        buttonNext=findViewById(R.id.buttonNext)
+        start=findViewById(R.id.capture)
         surface_camera_preview=findViewById(R.id.surface_camera_preview)
+        val actionBar: ActionBar = supportActionBar!!
+        actionBar.setSubtitle(" ID Card")
         startCameraSource()
-       /* buttonFront.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Info of Front Side")
-            builder.setMessage(stringBuilder.toString())
-            builder.setPositiveButton(android.R.string.yes) { _, _ ->
-                Toast.makeText(applicationContext,
-                    android.R.string.yes, Toast.LENGTH_SHORT).show()
-            }
-
-            builder.setNegativeButton(android.R.string.no) { _, _ ->
-                Toast.makeText(applicationContext,
-                    android.R.string.no, Toast.LENGTH_SHORT).show()
-            }
-
-            builder.show()
-
-        }*/
-
-        buttonNext.setOnClickListener {
+        start.setOnClickListener {
             val intent = Intent(this, ScanBack::class.java)
-            intent.putExtra("frontData",string)
-            startActivity(intent)
-        }
-        button.setOnClickListener {
-
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
-                override fun release() {}
+                override fun release() {
+                    string=stringBuilder.toString()
+                    mCameraSource.stop()
+                    intent.putExtra("frontData",string)
+                    startActivity(intent)
+                }
 
                 override fun  receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
@@ -91,6 +72,7 @@ class IDCard : AppCompatActivity() {
                             val item = items.valueAt(i)
                             if(Pattern.matches("ROYAUM.*", item.value)
                                 ||Pattern.matches("CARTE.*", item.value)
+                                ||Pattern.matches(".*MAROC", item.value)
                                 ||Pattern.matches(".*NATIONA.*", item.value)
                                 ||Pattern.matches("[a-z].*", item.value)
                                 ||Pattern.matches(".*[ä].*",item.value)
@@ -101,31 +83,32 @@ class IDCard : AppCompatActivity() {
                             }
                             else {
                                 /*  This patterns for matching DOB  */
-                                    if(Pattern.matches("[0-9].*[0-9]",item.value)&&item.value.length>5){
-                                        if(flagDob){
+                                    if(Pattern.matches("[0-9].*[0-9]",item.value)&&item.value.length>5&&i<7){
+                                       // if(flagDob){
                                             if(!stringBuilder.contains("Date")){
-                                             flagDob=false
+                                          //   flagDob=false
                                         stringBuilder.append("Date de naissance est : " +item.value + "\n")
                                             }
-                                    }else {
-                                            if(!stringBuilder.contains("Valable jusqu'au ")) {
-                                                flagDob = true
-                                                stringBuilder.append("Valable jusqu'au " + item.value + "\n")
-                                            }
-                                        }
+                                        /*      }else {
+                                                      if(!stringBuilder.contains("Valable jusqu'au ")) {
+                                                          flagDob = true
+                                                          stringBuilder.append("Valable jusqu'au " + item.value + "\n")
+                                                      }
+                                                  }*/
 
                                 }
-                                /* This one for getting CIN */
-                                if(flagCin){
-                                    if(Pattern.matches("[A-Z].*[0-9].*",item.value)){
+                                /* This one for getting CIN
+                                if(flagCin){*/
+                                    if(Pattern.matches("^[A-Z]+[0-9]+",item.value)){
                                         if(!stringBuilder.contains("CIN")){
-                                        stringBuilder.append("CIN est : " +item.value + "\n")
-                                        flagCin=false
+                                        stringBuilder.append("CIN :" +item.value + "\n")
+                                       // flagCin=false
                                         }
-                                    }}
+                                    }
+                            //}
 
                                 /* This one for getting LName and FName */
-                                if (Pattern.matches("[A-Z].*[A-Z]", item.value)&&item.value.toString().length>2) {
+                                if (Pattern.matches("^[A-Z]+", item.value)&&item.value.toString().length>2) {
                                     if(flagName) {
                                         if(!stringBuilder.contains("Prenom")){
                                         stringBuilder.append("Prenom est : " +item.value + "\n")
@@ -141,14 +124,15 @@ class IDCard : AppCompatActivity() {
                                 }
                             }
                         }
-                        string=stringBuilder.toString()
+                        release()
 
                     }
 
+
                    // mCameraSource.stop()
                 }
-
             })
+
 
         }
     }

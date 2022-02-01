@@ -12,13 +12,10 @@ class StartActivity : AppCompatActivity() {
     private lateinit var buttonIdCard: Button
     private lateinit var buttonSejour: Button
     private lateinit var buttonPassport: Button
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start)
-
-        buttonIdCard = findViewById(R.id.buttonIdCard)
+       buttonIdCard = findViewById(R.id.buttonIdCard)
         buttonSejour = findViewById(R.id.buttonSejour)
         buttonPassport = findViewById(R.id.buttonPassport)
         buttonIdCard.setOnClickListener {

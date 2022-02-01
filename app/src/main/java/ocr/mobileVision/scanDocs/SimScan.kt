@@ -32,9 +32,7 @@ class SimScan : AppCompatActivity() {
     val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var button: Button;
-    private lateinit var buttonFront: Button;
     private lateinit var buttonSim: Button;
-    private lateinit var buttonNext: Button;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sim_scan)

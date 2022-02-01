@@ -7,10 +7,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.vision.CameraSource
@@ -30,50 +32,27 @@ class ScanBack : AppCompatActivity() {
     private lateinit var surface_camera_preview: SurfaceView
     val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
-    private lateinit var button: Button
-    private lateinit var buttonBack: Button
-    private lateinit var buttonNext: Button
+    private lateinit var start: ImageView
+    var string:String=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
         tv_result = findViewById(R.id.tv_result)
-        button = findViewById(R.id.button)
-        buttonBack = findViewById(R.id.buttonBack)
-        buttonNext = findViewById(R.id.buttonNext)
+        start=findViewById(R.id.capture)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         val extras = intent.extras
+        val actionBar: ActionBar = supportActionBar!!
+        actionBar.setSubtitle(" ID Card")
         startCameraSource()
-        buttonBack.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Info of Both Sides")
-            builder.setMessage(stringBuilder.toString())
-
-            builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-                Toast.makeText(
-                    applicationContext,
-                    android.R.string.yes, Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            builder.setNegativeButton(android.R.string.no) { dialog, which ->
-                Toast.makeText(
-                    applicationContext,
-                    android.R.string.no, Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            builder.show()
-        }
-
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, SimScan::class.java)
-            startActivity(intent)
-        }
-        button.setOnClickListener {
-
-            // startCameraSource()
+        start.setOnClickListener {
+            val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
-                override fun release() {}
+                override fun release() {
+                    string=stringBuilder.toString()
+                    mCameraSource.stop()
+                    intent.putExtra("dataCIN",string)
+                    startActivity(intent)
+                }
 
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
@@ -106,9 +85,13 @@ class ScanBack : AppCompatActivity() {
                                 stringBuilder.append(item.value.toString().toUpperCase() + "\n")
                             }
                         }
+                       release()
+
                     }
+
                 }
             })
+
         }
     }
 

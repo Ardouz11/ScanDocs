@@ -62,11 +62,7 @@ class ScanBackSejour : AppCompatActivity() {
 
             builder.show()
         }
-
-
         button.setOnClickListener {
-
-            // startCameraSource()
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {}
 

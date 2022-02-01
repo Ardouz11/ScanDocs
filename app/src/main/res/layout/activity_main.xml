@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#63357e"
+    android:background="#3A3A3A"
     tools:context=".IDCard">
 
 
@@ -20,7 +20,111 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/back_bg"
-        tools:ignore="MissingConstraints" />
+        />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/cl1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingStart="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline">
+
+        <ImageView
+            android:id="@+id/img1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_position"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginEnd="21dp"
+            android:text="Positionnez votre pièce d'identité de façon alignée et cadrez très bien votre carte"
+            android:textColor="#c0c0c0"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img1"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/cl2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl1"
+        android:paddingStart="40dp"
+        android:layout_marginTop="33dp"
+        app:layout_constraintTop_toTopOf="@+id/cl1"
+        android:layout_marginBottom="10dp">
+        <ImageView
+            android:id="@+id/img2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_grid_img"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/img2"
+            android:text="Mettez votre carte d'identité sur un fond noir ou de couleur foncée"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="12sp"
+            android:textColor="#c0c0c0"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="21dp"
+
+            />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/cl3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl2"
+        android:paddingStart="40dp"
+        android:layout_marginTop="33dp"
+        app:layout_constraintTop_toTopOf="@+id/cl2"
+        >
+        <ImageView
+            android:id="@+id/img3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_cam_instruction"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/img3"
+            android:text="Lors de la prise de la photo éviter de secouez vos mains pour avoir une image claire et nette"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="12sp"
+            android:textColor="#c0c0c0"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="21dp"
+
+            />
+    </android.support.v7.widget.LinearLayoutCompat>
 
     <android.support.v7.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
@@ -29,42 +133,22 @@
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline">
+        app:layout_constraintTop_toTopOf="@+id/cl3"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="0dp">
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:textColor="#c0c0c0"
-            android:background="@drawable/bg_for_button"
-            android:layout_marginEnd="8dp"
-            android:layout_gravity="center_horizontal"
-            android:text="Start" />
-
-      <!--  <Button
-            android:id="@+id/buttonFront"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:textColor="#c0c0c0"
-            android:background="@drawable/bg_for_button"
-            android:layout_marginEnd="8dp"
-            android:layout_gravity="center_horizontal"
-            android:text="Front" />
-            -->
-
-
-        <Button
-            android:id="@+id/buttonNext"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_for_button"
-            android:layout_marginEnd="8dp"
-            android:textColor="#c0c0c0"
-            android:layout_gravity="center_horizontal"
-            android:text="Next" />
-
+        <ImageView
+            android:id="@+id/capture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_capture"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.v7.widget.LinearLayoutCompat>
+
     <android.support.v7.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompatTwo"
         android:layout_width="match_parent"
@@ -82,16 +166,7 @@
             android:textColor="#c0c0c0"
             />
 </android.support.v7.widget.LinearLayoutCompat>
-    <TextView
-        android:id="@+id/tv_result"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text=""
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
+
     <!--
    <Button
        android:layout_width="80dp"
@@ -109,6 +184,16 @@
         app:layout_constraintGuide_percent="0.69"
         />
 
-
+    -->
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text=""
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
 
 </android.support.constraint.ConstraintLayout>
