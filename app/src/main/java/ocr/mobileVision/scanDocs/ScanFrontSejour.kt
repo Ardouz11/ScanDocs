@@ -5,14 +5,14 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
@@ -143,7 +143,7 @@ class ScanFrontSejour : AppCompatActivity() {
                                             stringBuilder.append("CIN est : " + item.value + "\n")
                                             flagCin = false
                                         }
-                                    } 
+                                    }
                                 }
 
                                 /* This one for getting LName and FName */
