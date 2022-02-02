@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.vision.CameraSource
@@ -30,47 +31,24 @@ class ScanFrontSejour : AppCompatActivity() {
     private lateinit var surface_camera_preview: SurfaceView
     val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
-    private lateinit var button: Button
-    private lateinit var buttonFront: Button
-    private lateinit var buttonNext: Button
+    private lateinit var start: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_front_sejour)
         tvResult = findViewById(R.id.tv_result)
-        button = findViewById(R.id.button)
-        buttonFront = findViewById(R.id.buttonFront)
-        buttonNext = findViewById(R.id.buttonNext)
+        start = findViewById(R.id.capture)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
-        buttonFront.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Info of Front Side")
-            builder.setMessage(stringBuilder.toString())
-            builder.setPositiveButton(android.R.string.yes) { _, _ ->
-                Toast.makeText(
-                    applicationContext,
-                    android.R.string.yes, Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            builder.setNegativeButton(android.R.string.no) { _, _ ->
-                Toast.makeText(
-                    applicationContext,
-                    android.R.string.no, Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            builder.show()
-        }
-
-        buttonNext.setOnClickListener {
+        start.setOnClickListener {
             val intent = Intent(this, ScanBackSejour::class.java)
-            startActivity(intent)
-        }
-        button.setOnClickListener {
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
-                override fun release() {}
+                override fun release() {
+                    string = stringBuilder.toString()
+                    mCameraSource.stop()
+                    intent.putExtra("frontData", string)
+                    startActivity(intent)
+                }
 
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
@@ -162,6 +140,7 @@ class ScanFrontSejour : AppCompatActivity() {
                                 }
                             }
                         }
+                        release()
                     }
                     // mCameraSource.stop()
                 }
