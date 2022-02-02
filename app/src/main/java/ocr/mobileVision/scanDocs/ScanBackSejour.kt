@@ -22,7 +22,7 @@ import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
-class ScanBack : AppCompatActivity() {
+class ScanBackSejour : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()

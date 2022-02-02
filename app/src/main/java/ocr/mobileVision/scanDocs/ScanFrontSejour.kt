@@ -1,19 +1,18 @@
 package ocr.mobileVision.scanDocs
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Button
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
@@ -30,6 +29,7 @@ class ScanFrontSejour : AppCompatActivity() {
     private lateinit var tvResult: TextView
     private lateinit var surface_camera_preview: SurfaceView
     val stringBuilder = StringBuilder()
+    var string: String = ""
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var start: ImageView
 
@@ -38,9 +38,21 @@ class ScanFrontSejour : AppCompatActivity() {
         setContentView(R.layout.activity_scan_front_sejour)
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
+
+        var anim: LottieAnimationView
+        var viewBg: View
+
+        anim = findViewById(R.id.animationView)
+        viewBg = findViewById(R.id.bg_onLoad)
+        anim.visibility = View.GONE
+        viewBg.visibility = View.GONE
+
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         start.setOnClickListener {
+            anim.visibility = View.VISIBLE
+            viewBg.visibility = View.VISIBLE
+
             val intent = Intent(this, ScanBackSejour::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
