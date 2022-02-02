@@ -4,15 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
@@ -44,9 +45,21 @@ class ScanFrontPassport : AppCompatActivity() {
         setContentView(R.layout.activity_scan_front_passport)
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
+
+        var anim: LottieAnimationView
+        var viewBg: View
+
+        anim = findViewById(R.id.animationView)
+        viewBg = findViewById(R.id.bg_onLoad)
+        anim.visibility = View.GONE
+        viewBg.visibility = View.GONE
+
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         start.setOnClickListener {
+            anim.visibility = View.VISIBLE
+            viewBg.visibility = View.VISIBLE
+
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {}
@@ -93,9 +106,9 @@ class ScanFrontPassport : AppCompatActivity() {
 
                                 stringBuilder.append("Passport : " + allMatches[0] + allMatches[1].dropLast(1) + "\n")
                                 stringBuilder.append("Nationality: " + allMatches[2] + "\n")
-                                stringBuilder.append("DOB : " +allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/" + allMatches[3].take(2) + "\n")
+                                stringBuilder.append("DOB : " + allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/" + allMatches[3].take(2) + "\n")
                                 stringBuilder.append("Sexe : " + allMatches[4].takeLast(1) + "\n")
-                                stringBuilder.append("END Of Val : " + allMatches[5].take(6).takeLast(2) +"/" + allMatches[5].take(4).takeLast(2) + "/" + allMatches[5].take(2) +  "\n")
+                                stringBuilder.append("END Of Val : " + allMatches[5].take(6).takeLast(2) + "/" + allMatches[5].take(4).takeLast(2) + "/" + allMatches[5].take(2) + "\n")
                                 if (allMatches.size> 7) {
                                     stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
                                 }
@@ -109,6 +122,10 @@ class ScanFrontPassport : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     private fun startCameraSource() {
