@@ -80,10 +80,10 @@ class ScanBack : AppCompatActivity() {
 
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            Log.d("items",item.value)
                              if (Pattern.matches("^[A-Z][A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
                                  val match=item.value.replace(" ","")
                                  Log.d("test", match)
+                                 Log.d("test", hashMap.toString())
                                  var pLineOne = Pattern.compile("[A-Z]+|\\d+")
                                  var mLineOne: Matcher = pLineOne.matcher(match)
                                  var allMatchesLineOne: ArrayList<String> = ArrayList()
@@ -91,8 +91,13 @@ class ScanBack : AppCompatActivity() {
                                      allMatchesLineOne.add(mLineOne.group())
                                  }
                                  Log.d("test", allMatchesLineOne.toString())
-                                 hashMap.put("CIN " , allMatchesLineOne[4] + allMatchesLineOne[5] )
-                                 hashMap.put("Prenom ", allMatchesLineOne.last() )
+                                 if(hashMap.get("CIN")!=allMatchesLineOne[4] + allMatchesLineOne[5]){
+                                     hashMap.put("CIN" , allMatchesLineOne[4] + allMatchesLineOne[5] )
+                                 }
+                                 if(hashMap.get("Prenom")!=allMatchesLineOne.last()){
+                                     hashMap.put("Prenom", allMatchesLineOne.last() )
+                                 }
+
                                  if(!hashMap.containsKey("Sexe")){
                                      hashMap.put("Sexe",allMatchesLineOne[7].takeLast(1))
                                  }
@@ -101,7 +106,10 @@ class ScanBack : AppCompatActivity() {
 
                                      string.append(allMatchesLineOne[i] + " ")
                                  }
-                                 hashMap.put("Nom",string.toString())
+                                 if(hashMap.get("Nom")!=string.toString()){
+                                     hashMap.put("Nom",string.toString())
+                                 }
+
                                  if(allMatchesLineOne[6].take(2).toInt()<40){
                                      hashMap.put("DOB" , allMatchesLineOne[6].take(6).takeLast(2) + "/" + allMatchesLineOne[6].take(4).takeLast(2) + "/20" + allMatchesLineOne[6].take(2))
                                  }
@@ -109,7 +117,7 @@ class ScanBack : AppCompatActivity() {
                                      hashMap.put("DOB" , allMatchesLineOne[6].take(6).takeLast(2) + "/" + allMatchesLineOne[6].take(4).takeLast(2) + "/19" + allMatchesLineOne[6].take(2) )
 
                                  }
-                                 hashMap.put("END Of Val" , allMatchesLineOne[8].take(6).takeLast(2) + "/" + allMatchesLineOne[8].take(4).takeLast(2) + "/20" + allMatchesLineOne[8].take(2))
+                                // hashMap.put("END Of Val" , allMatchesLineOne[8].take(6).takeLast(2) + "/" + allMatchesLineOne[8].take(4).takeLast(2) + "/20" + allMatchesLineOne[8].take(2))
 
                                  /*    stringBuilder.append("CIN : " + allMatchesLineOne[allMatchesLineOne.size-1]+allMatchesLineOne.last()  + "\n")
                                    allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
