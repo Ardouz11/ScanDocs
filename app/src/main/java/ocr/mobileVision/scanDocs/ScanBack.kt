@@ -81,9 +81,7 @@ class ScanBack : AppCompatActivity() {
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                              if (Pattern.matches("^[A-Z][A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
-                                 val match=item.value.replace(" ","")
-                                 Log.d("test", match)
-                                 Log.d("test", hashMap.toString())
+                                 val match=item.value.replace(" ","").drop(15)
                                  var pLineOne = Pattern.compile("[A-Z]+|\\d+")
                                  var mLineOne: Matcher = pLineOne.matcher(match)
                                  var allMatchesLineOne: ArrayList<String> = ArrayList()
@@ -91,18 +89,18 @@ class ScanBack : AppCompatActivity() {
                                      allMatchesLineOne.add(mLineOne.group())
                                  }
                                  Log.d("test", allMatchesLineOne.toString())
-                                 if(hashMap.get("CIN")!=allMatchesLineOne[4] + allMatchesLineOne[5]){
-                                     hashMap.put("CIN" , allMatchesLineOne[4] + allMatchesLineOne[5] )
+                                 if(hashMap.get("CIN")!=allMatchesLineOne[0] + allMatchesLineOne[1]){
+                                     hashMap.put("CIN" , allMatchesLineOne[0] + allMatchesLineOne[1] )
                                  }
                                  if(hashMap.get("Prenom")!=allMatchesLineOne.last()){
                                      hashMap.put("Prenom", allMatchesLineOne.last() )
                                  }
 
                                  if(!hashMap.containsKey("Sexe")){
-                                     hashMap.put("Sexe",allMatchesLineOne[7].takeLast(1))
+                                     hashMap.put("Sexe",allMatchesLineOne[3].takeLast(1))
                                  }
                                  var string = StringBuilder()
-                                 for (i in 11 until allMatchesLineOne.size - 1) {
+                                 for (i in 7 until allMatchesLineOne.size - 1) {
 
                                      string.append(allMatchesLineOne[i] + " ")
                                  }
@@ -110,11 +108,11 @@ class ScanBack : AppCompatActivity() {
                                      hashMap.put("Nom",string.toString())
                                  }
 
-                                 if(allMatchesLineOne[6].take(2).toInt()<40){
-                                     hashMap.put("DOB" , allMatchesLineOne[6].take(6).takeLast(2) + "/" + allMatchesLineOne[6].take(4).takeLast(2) + "/20" + allMatchesLineOne[6].take(2))
+                                 if(allMatchesLineOne[2].take(2).toInt()<40){
+                                     hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2))
                                  }
                                  else{
-                                     hashMap.put("DOB" , allMatchesLineOne[6].take(6).takeLast(2) + "/" + allMatchesLineOne[6].take(4).takeLast(2) + "/19" + allMatchesLineOne[6].take(2) )
+                                     hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2) )
 
                                  }
                                 // hashMap.put("END Of Val" , allMatchesLineOne[8].take(6).takeLast(2) + "/" + allMatchesLineOne[8].take(4).takeLast(2) + "/20" + allMatchesLineOne[8].take(2))
@@ -155,7 +153,7 @@ class ScanBack : AppCompatActivity() {
                              */ }
                                 if(!hashMap.containsKey("Sexe")){
                                 if (Pattern.matches("Sexe.*[MF]", item.value)) {
-                                    hashMap.put("Sexe",item.value)
+                                    hashMap.put("Sexe",item.value.replace("Sexe",""))
                                 }
                                 if (Pattern.matches("[MF]", item.value)) {
                                     hashMap.put("Sexe",item.value)
