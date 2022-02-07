@@ -1,20 +1,18 @@
 package ocr.mobileVision.scanDocs
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Button
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
@@ -23,41 +21,54 @@ import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
+import android.content.pm.ApplicationInfo
+
+
 
 
 class IDCard : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
-    private lateinit var tvResult:TextView
-    private lateinit var surface_camera_preview:SurfaceView
-    val stringBuilder = StringBuilder()
-    var string:String=""
+    private lateinit var tvResult: TextView
+    private lateinit var surface_camera_preview: SurfaceView
+    val hashMap=HashMap<String,String>()
     private val PERMISSION_REQUEST_CAMERA = 100
 
-    private lateinit var start:ImageView
-
+    private lateinit var start: ImageView
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        tvResult=findViewById(R.id.tv_result)
-        start=findViewById(R.id.capture)
-        surface_camera_preview=findViewById(R.id.surface_camera_preview)
-        val actionBar: ActionBar = supportActionBar!!
-        actionBar.setSubtitle(" ID Card")
+
+        var anim: LottieAnimationView
+        var viewBg: View
+
+        anim = findViewById(R.id.animationView)
+        viewBg = findViewById(R.id.bg_onLoad)
+        anim.visibility = View.GONE
+        viewBg.visibility = View.GONE
+
+        tvResult = findViewById(R.id.tv_result)
+        start = findViewById(R.id.capture)
+        surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         start.setOnClickListener {
+            anim.visibility = View.VISIBLE
+            viewBg.visibility = View.VISIBLE
+            val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
+            val bundle = ai.metaData
+            val regex = bundle.getString("regexIDCard")
             val intent = Intent(this, ScanBack::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    string=stringBuilder.toString()
                     mCameraSource.stop()
-                    intent.putExtra("frontData",string)
+                    intent.putExtra("frontData", hashMap)
                     startActivity(intent)
                 }
 
-                override fun  receiveDetections(detections: Detector.Detections<TextBlock>) {
+                override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
 
                     if (items.size() <= 0) {
@@ -65,76 +76,57 @@ class IDCard : AppCompatActivity() {
                     }
                     tvResult.post {
                         var flagName = true
-                        var flagCin=true
-                        var flagDob=true
-                        stringBuilder.setLength(0)
+                        hashMap.clear()
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            if(Pattern.matches("ROYAUM.*", item.value)
-                                ||Pattern.matches("CARTE.*", item.value)
-                                ||Pattern.matches(".*MAROC", item.value)
-                                ||Pattern.matches(".*NATIONA.*", item.value)
-                                ||Pattern.matches("[a-z].*", item.value)
-                                ||Pattern.matches(".*[ä].*",item.value)
-                                ||Pattern.matches("[à].*",item.value)
-                                ||Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;<>?-].*", item.value)
-                            ){
-                                Log.i("matches",item.value)
-                            }
-                            else {
-                                /*  This patterns for matching DOB  */
-                                    if(Pattern.matches("[0-9].*[0-9]",item.value)&&item.value.length>5&&i<7){
-                                       // if(flagDob){
-                                            if(!stringBuilder.contains("Date")){
-                                          //   flagDob=false
-                                        stringBuilder.append("Date de naissance est : " +item.value + "\n")
+                            if (regex != null) {
+                                if (Pattern.matches(regex.toRegex().toString(), item.value)) {
+                                    Log.i("matches", item.value)
+                                } else {
+                                    if (Pattern.matches("[0-9].*[0-9]", item.value) && item.value.length> 5 && i <7) {
+                                        if (!hashMap.containsKey("DOB")) {
+                                            hashMap.put("DOB",item.value)
+                                        }
+                                    }
+                                    if (Pattern.matches("^[A-Z]+[0-9]+", item.value)) {
+                                        if (!hashMap.containsKey("CIN")) {
+                                            hashMap.put("CIN",item.value)
+                                        }
+                                    }
+                                    if (Pattern.matches("^[A-Z]+", item.value) && item.value.toString().length> 2) {
+                                        if (flagName) {
+                                            if (!hashMap.containsKey("Prenom")) {
+                                                hashMap.put("Prenom",item.value)
+                                                flagName = false
                                             }
-                                        /*      }else {
-                                                      if(!stringBuilder.contains("Valable jusqu'au ")) {
-                                                          flagDob = true
-                                                          stringBuilder.append("Valable jusqu'au " + item.value + "\n")
-                                                      }
-                                                  }*/
-
-                                }
-                                /* This one for getting CIN
-                                if(flagCin){*/
-                                    if(Pattern.matches("^[A-Z]+[0-9]+",item.value)){
-                                        if(!stringBuilder.contains("CIN")){
-                                        stringBuilder.append("CIN :" +item.value + "\n")
-                                       // flagCin=false
-                                        }
-                                    }
-                            //}
-
-                                /* This one for getting LName and FName */
-                                if (Pattern.matches("^[A-Z]+", item.value)&&item.value.toString().length>2) {
-                                    if(flagName) {
-                                        if(!stringBuilder.contains("Prenom")){
-                                        stringBuilder.append("Prenom est : " +item.value + "\n")
-                                        flagName=false
-                                        }
-                                    }
-                                    else {
-                                        if(!stringBuilder.contains("Nom")){
-                                        stringBuilder.append("Nom est : " +item.value + "\n")
-                                        flagName=true
+                                        } else {
+                                            if (!hashMap.containsKey("Nom")) {
+                                                hashMap.put("Nom",item.value)
+                                                flagName = true
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                         release()
-
                     }
 
-
-                   // mCameraSource.stop()
                 }
             })
-
-
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        var anim: LottieAnimationView
+        var viewBg: View
+
+        anim = findViewById(R.id.animationView)
+        viewBg = findViewById(R.id.bg_onLoad)
+        anim.visibility = View.GONE
+        viewBg.visibility = View.GONE
     }
 
     private fun startCameraSource() {
@@ -158,7 +150,6 @@ class IDCard : AppCompatActivity() {
 
         surface_camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun surfaceDestroyed(p0: SurfaceHolder?) {
@@ -178,13 +169,11 @@ class IDCard : AppCompatActivity() {
                 }
             }
         })
-
-
     }
 
     fun isCameraPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-                PackageManager.PERMISSION_GRANTED
+            PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestForPermission() {

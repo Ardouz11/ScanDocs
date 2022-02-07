@@ -2,23 +2,25 @@ package ocr.mobileVision.scanDocs
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Button
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
@@ -30,41 +32,37 @@ class ScanBackSejour : AppCompatActivity() {
     private lateinit var surface_camera_preview: SurfaceView
     val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
-    private lateinit var button: Button
-    private lateinit var buttonBack: Button
-    private lateinit var buttonNext: Button
+    private lateinit var start: ImageView
+    var string: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back_sejour)
+
+        var anim: LottieAnimationView
+        var viewBg: View
+
+        anim = findViewById(R.id.animationView)
+        viewBg = findViewById(R.id.bg_onLoad)
+        anim.visibility = View.GONE
+        viewBg.visibility = View.GONE
+
         tv_result = findViewById(R.id.tv_result)
-        button = findViewById(R.id.button)
-        buttonBack = findViewById(R.id.buttonBack)
+        start = findViewById(R.id.capture)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
+        val extras = intent.extras
         startCameraSource()
-        buttonBack.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Info of Back Side")
-            builder.setMessage(stringBuilder.toString())
+        start.setOnClickListener {
+            anim.visibility = View.VISIBLE
+            viewBg.visibility = View.VISIBLE
 
-            builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-                Toast.makeText(
-                    applicationContext,
-                    android.R.string.yes, Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            builder.setNegativeButton(android.R.string.no) { dialog, which ->
-                Toast.makeText(
-                    applicationContext,
-                    android.R.string.no, Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            builder.show()
-        }
-        button.setOnClickListener {
+            val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
-                override fun release() {}
+                override fun release() {
+                    string = stringBuilder.toString()
+                    mCameraSource.stop()
+                    intent.putExtra("dataCIN", string)
+                    startActivity(intent)
+                }
 
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
@@ -74,14 +72,18 @@ class ScanBackSejour : AppCompatActivity() {
                     }
 
                     tv_result.post {
-
                         stringBuilder.setLength(0)
+                        if (extras != null) {
+                            val value = extras.getString("frontData")
+                            stringBuilder.append(value)
+                        }
+
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             // Pattern of Sexe
                             if (Pattern.matches("Sexe.*[MF]", item.value)) {
 
-                                stringBuilder.append(item.value.toString()+"\n")
+                                stringBuilder.append(item.value.toString() + "\n")
                             }
                             if (Pattern.matches("[MF]", item.value)) {
 
@@ -90,13 +92,26 @@ class ScanBackSejour : AppCompatActivity() {
                             // Pattern of address
 
                             if (Pattern.matches("Adresse.*", item.value)) {
-                                stringBuilder.append(item.value.toString() + "\n")
+                                stringBuilder.append(item.value.toString().toUpperCase() + "\n")
                             }
                         }
+                        release()
                     }
                 }
             })
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        var anim: LottieAnimationView
+        var viewBg: View
+
+        anim = findViewById(R.id.animationView)
+        viewBg = findViewById(R.id.bg_onLoad)
+        anim.visibility = View.GONE
+        viewBg.visibility = View.GONE
     }
 
     private fun startCameraSource() {
@@ -143,7 +158,7 @@ class ScanBackSejour : AppCompatActivity() {
 
     fun isCameraPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-            PackageManager.PERMISSION_GRANTED
+                PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestForPermission() {

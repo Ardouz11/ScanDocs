@@ -1,77 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
-    android:background="#63357e"
     tools:context=".SimScan">
+
 
     <SurfaceView
         android:id="@+id/surface_camera_preview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
+        android:background="@drawable/back_bg"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/back_iv"
+        android:layout_width="wrap_content"
+        android:background="?selectableItemBackgroundBorderless"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_left_back"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/back_bg"
-        tools:ignore="MissingConstraints" />
-    <android.support.v7.widget.LinearLayoutCompat
+        app:tint="#FFF" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/cl1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingStart="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline">
+
+        <ImageView
+            android:id="@+id/img1"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_position"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginEnd="21dp"
+            android:text="Positionnez votre pièce d'identité de façon alignée et cadrez très bien votre carte"
+            android:textColor="#c0c0c0"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img1"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/cl2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/cl1"
+        app:layout_constraintStart_toStartOf="@+id/cl1"
+        app:layout_constraintTop_toBottomOf="@+id/cl1">
+
+        <ImageView
+            android:id="@+id/img2"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_grid_img"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginEnd="21dp"
+            android:text="Mettez votre carte d'identité sur un fond noir ou de couleur foncée"
+            android:textColor="#c0c0c0"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img2"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/cl3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/cl2"
+        app:layout_constraintStart_toStartOf="@+id/cl2"
+        app:layout_constraintTop_toBottomOf="@+id/cl2">
+
+        <ImageView
+            android:id="@+id/img3"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_cam_instruction"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginEnd="21dp"
+            android:text="Lors de la prise de la photo éviter de secouez vos mains pour avoir une image claire et nette"
+            android:textColor="#c0c0c0"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img3"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayoutCompat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline">
+        app:layout_constraintTop_toBottomOf="@+id/cl3"
+        tools:layout_editor_absoluteX="0dp">
 
-    <Button
-        android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:layout_marginRight="16dp"
-        android:text="Start"
-        android:textColor="#c0c0c0"
-        android:background="@drawable/bg_for_button"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/button"/>
+        <ImageView
+            android:id="@+id/capture"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="30dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_capture"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:text="Sim"
-        android:textColor="#c0c0c0"
-        android:background="@drawable/bg_for_button"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/buttonSim"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.v7.widget.LinearLayoutCompat>
-    <android.support.v7.widget.LinearLayoutCompat
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompatTwo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginBottom="10dp"
+
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sim Card"
-            android:textSize="20dp"
-            android:textColor="#c0c0c0"
-            />
-    </android.support.v7.widget.LinearLayoutCompat>
-    <!--  <Button
-       android:layout_width="80dp"
-       android:layout_height="40dp"
-       android:text="Next"
-       android:layout_gravity="center_horizontal"
-       android:id="@+id/buttonNext"/>
+            android:text="SIM Card"
+            android:textColor="#fff"
+            android:textSize="20dp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <!--
    <Button
        android:layout_width="80dp"
        android:layout_height="40dp"
@@ -79,6 +183,15 @@
        android:layout_gravity="center_horizontal"
        android:id="@+id/buttonBack"/>
        -->
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+
+
     <TextView
         android:id="@+id/tv_result"
         android:layout_width="match_parent"
@@ -90,12 +203,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.69" />
+    <View
+        android:id="@+id/bg_onLoad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryNo"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/scan"
+        tools:ignore="MissingConstraints" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
