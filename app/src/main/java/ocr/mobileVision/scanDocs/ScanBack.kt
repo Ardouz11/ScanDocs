@@ -81,7 +81,7 @@ class ScanBack : AppCompatActivity() {
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             Log.d("items",item.value)
-                             if (Pattern.matches("[A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
+                             if (Pattern.matches("^[A-Z][A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
                                  val match=item.value.replace(" ","")
                                  Log.d("test", match)
                                  var pLineOne = Pattern.compile("[A-Z]+|\\d+")
@@ -93,11 +93,11 @@ class ScanBack : AppCompatActivity() {
                                  Log.d("test", allMatchesLineOne.toString())
                                  hashMap.put("CIN " , allMatchesLineOne[4] + allMatchesLineOne[5] )
                                  hashMap.put("Prenom ", allMatchesLineOne.last() )
-                                 if(!stringBuilder.toString().contains("Sexe")){
-                                     hashMap.put("Sexe",allMatchesLineOne[8].takeLast(1))
+                                 if(!hashMap.containsKey("Sexe")){
+                                     hashMap.put("Sexe",allMatchesLineOne[7].takeLast(1))
                                  }
                                  var string = StringBuilder()
-                                 for (i in 12 until allMatchesLineOne.size - 1) {
+                                 for (i in 11 until allMatchesLineOne.size - 1) {
 
                                      string.append(allMatchesLineOne[i] + " ")
                                  }
@@ -109,7 +109,7 @@ class ScanBack : AppCompatActivity() {
                                      hashMap.put("DOB" , allMatchesLineOne[6].take(6).takeLast(2) + "/" + allMatchesLineOne[6].take(4).takeLast(2) + "/19" + allMatchesLineOne[6].take(2) )
 
                                  }
-                                 hashMap.put("END Of Val" , allMatchesLineOne[7].take(6).takeLast(2) + "/" + allMatchesLineOne[7].take(4).takeLast(2) + "/20" + allMatchesLineOne[7].take(2))
+                                 hashMap.put("END Of Val" , allMatchesLineOne[8].take(6).takeLast(2) + "/" + allMatchesLineOne[8].take(4).takeLast(2) + "/20" + allMatchesLineOne[8].take(2))
 
                                  /*    stringBuilder.append("CIN : " + allMatchesLineOne[allMatchesLineOne.size-1]+allMatchesLineOne.last()  + "\n")
                                    allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
