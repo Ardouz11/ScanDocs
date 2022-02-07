@@ -33,9 +33,7 @@ class ScanFrontPassport : AppCompatActivity() {
     val stringBuilder = StringBuilder()
     var string: String = ""
     private val PERMISSION_REQUEST_CAMERA = 100
-    private lateinit var button: Button
-    private lateinit var buttonFront: Button
-    private lateinit var buttonNext: Button
+    val hashMap=HashMap<String,String>()
     private lateinit var start: ImageView
 
     val pattern = Pattern.compile("[^A-Z0-9 ]")
@@ -70,7 +68,7 @@ class ScanFrontPassport : AppCompatActivity() {
                         return
                     }
                     tvResult.post {
-                        stringBuilder.setLength(0)
+                        hashMap.clear()
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             if (Pattern.matches("P<.*", item.value)) {
@@ -83,20 +81,20 @@ class ScanFrontPassport : AppCompatActivity() {
 
                                 var string = StringBuilder()
                                 if (allMatchesLineOne.last() === "K") {
-                                    stringBuilder.append("Prenom: " + allMatchesLineOne[allMatchesLineOne.size - 1] + "\n")
+                                    hashMap.put("Prenom: " , allMatchesLineOne[allMatchesLineOne.size - 1] )
                                     for (i in 1 until allMatchesLineOne.size - 2) {
 
                                         string.append(allMatchesLineOne[i] + " ")
                                     }
                                 }
-                                stringBuilder.append("Prenom: " + allMatchesLineOne.last() + "\n")
+                                hashMap.put("Prenom: " , allMatchesLineOne.last() )
                                 allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
                                 Log.d("list1", allMatchesLineOne.toString())
                                 for (i in 1 until allMatchesLineOne.size - 1) {
 
                                     string.append(allMatchesLineOne[i] + " ")
                                 }
-                                stringBuilder.append("Nom: $string\n")
+                                hashMap.put("Nom", string.toString())
                                 var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
                                 var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i + 1).value)
                                 var allMatches: ArrayList<String> = ArrayList()
@@ -104,19 +102,24 @@ class ScanFrontPassport : AppCompatActivity() {
                                     allMatches.add(mLineTwo.group())
                                 }
 
-                                stringBuilder.append("Passport : " + allMatches[0] + allMatches[1].dropLast(1) + "\n")
-                                stringBuilder.append("Nationality: " + allMatches[2] + "\n")
-                                stringBuilder.append("DOB : " + allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/" + allMatches[3].take(2) + "\n")
-                                stringBuilder.append("Sexe : " + allMatches[4].takeLast(1) + "\n")
-                                stringBuilder.append("END Of Val : " + allMatches[5].take(6).takeLast(2) + "/" + allMatches[5].take(4).takeLast(2) + "/" + allMatches[5].take(2) + "\n")
+                                hashMap.put("Passport  " , allMatches[0] + allMatches[1].dropLast(1))
+                                hashMap.put("Nationalintity" , allMatches[2])
+                                if(allMatches[3].take(2).toInt()<40){
+                                    hashMap.put("DOB  " , allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2) )
+                                }
+                                else{
+                                    hashMap.put("DOB" , allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2))
+
+                                }
+                                hashMap.put("Sexe " , allMatches[4].takeLast(1) )
+                                hashMap.put("END Of Val " , allMatches[5].take(6).takeLast(2) + "/" + allMatches[5].take(4).takeLast(2) + "/20" + allMatches[5].take(2) )
                                 if (allMatches.size> 7) {
-                                    stringBuilder.append("CIN : " + allMatches[6] + allMatches[7] + "\n")
+                                    hashMap.put("CIN", allMatches[6] + allMatches[7])
                                 }
                             }
                         }
-                        string = stringBuilder.toString()
                         mCameraSource.stop()
-                        intent.putExtra("dataCIN", string)
+                        intent.putExtra("dataCIN", hashMap)
                         startActivity(intent)
                     }
                 }

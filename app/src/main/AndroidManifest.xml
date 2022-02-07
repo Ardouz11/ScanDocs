@@ -47,6 +47,9 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
+        <meta-data android:name="regexIDCard" android:value="ROYAUM.*|CARTE.*|.*MAROC|.*NATIONA.*|[a-z].*|.*[ä].*|[à].*|.*[~!@#\$%^&amp;*()_+'{}\\[\\]:;?-].*" />
+        <meta-data android:name="regexPassport" android:value="P.*"/>
     </application>
+
 
 </manifest>

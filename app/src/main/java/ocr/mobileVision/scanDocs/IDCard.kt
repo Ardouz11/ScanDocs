@@ -21,6 +21,10 @@ import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
+import android.content.pm.ApplicationInfo
+
+
+
 
 class IDCard : AppCompatActivity() {
 
@@ -28,11 +32,11 @@ class IDCard : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
     private lateinit var surface_camera_preview: SurfaceView
-    val stringBuilder = StringBuilder()
-    var string: String = ""
+    val hashMap=HashMap<String,String>()
     private val PERMISSION_REQUEST_CAMERA = 100
 
     private lateinit var start: ImageView
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,13 +57,14 @@ class IDCard : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
-
+            val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
+            val bundle = ai.metaData
+            val regex = bundle.getString("regexIDCard")
             val intent = Intent(this, ScanBack::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    string = stringBuilder.toString()
                     mCameraSource.stop()
-                    intent.putExtra("frontData", string)
+                    intent.putExtra("frontData", hashMap)
                     startActivity(intent)
                 }
 
@@ -71,57 +76,34 @@ class IDCard : AppCompatActivity() {
                     }
                     tvResult.post {
                         var flagName = true
-                        var flagCin = true
-                        var flagDob = true
-                        stringBuilder.setLength(0)
+                        hashMap.clear()
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            if (Pattern.matches("ROYAUM.*", item.value) ||
-                                Pattern.matches("CARTE.*", item.value) ||
-                                Pattern.matches(".*MAROC", item.value) ||
-                                Pattern.matches(".*NATIONA.*", item.value) ||
-                                Pattern.matches("[a-z].*", item.value) ||
-                                Pattern.matches(".*[ä].*", item.value) ||
-                                Pattern.matches("[à].*", item.value) ||
-                                Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;<>?-].*", item.value)
-                            ) {
-                                Log.i("matches", item.value)
-                            } else {
-                                /*  This patterns for matching DOB  */
-                                if (Pattern.matches("[0-9].*[0-9]", item.value) && item.value.length> 5 && i <7) {
-                                    // if(flagDob){
-                                    if (!stringBuilder.contains("Date")) {
-                                        //   flagDob=false
-                                        stringBuilder.append("Date de naissance est : " + item.value + "\n")
-                                    }
-                                        /*      }else {
-                                                      if(!stringBuilder.contains("Valable jusqu'au ")) {
-                                                          flagDob = true
-                                                          stringBuilder.append("Valable jusqu'au " + item.value + "\n")
-                                                      }
-                                                  }*/
-                                }
-                                /* This one for getting CIN
-                                if(flagCin){*/
-                                if (Pattern.matches("^[A-Z]+[0-9]+", item.value)) {
-                                    if (!stringBuilder.contains("CIN")) {
-                                        stringBuilder.append("CIN :" + item.value + "\n")
-                                        // flagCin=false
-                                    }
-                                }
-                                // }
-
-                                /* This one for getting LName and FName */
-                                if (Pattern.matches("^[A-Z]+", item.value) && item.value.toString().length> 2) {
-                                    if (flagName) {
-                                        if (!stringBuilder.contains("Prenom")) {
-                                            stringBuilder.append("Prenom est : " + item.value + "\n")
-                                            flagName = false
+                            if (regex != null) {
+                                if (Pattern.matches(regex.toRegex().toString(), item.value)) {
+                                    Log.i("matches", item.value)
+                                } else {
+                                    if (Pattern.matches("[0-9].*[0-9]", item.value) && item.value.length> 5 && i <7) {
+                                        if (!hashMap.containsKey("DOB")) {
+                                            hashMap.put("DOB",item.value)
                                         }
-                                    } else {
-                                        if (!stringBuilder.contains("Nom")) {
-                                            stringBuilder.append("Nom est : " + item.value + "\n")
-                                            flagName = true
+                                    }
+                                    if (Pattern.matches("^[A-Z]+[0-9]+", item.value)) {
+                                        if (!hashMap.containsKey("CIN")) {
+                                            hashMap.put("CIN",item.value)
+                                        }
+                                    }
+                                    if (Pattern.matches("^[A-Z]+", item.value) && item.value.toString().length> 2) {
+                                        if (flagName) {
+                                            if (!hashMap.containsKey("Prenom")) {
+                                                hashMap.put("Prenom",item.value)
+                                                flagName = false
+                                            }
+                                        } else {
+                                            if (!hashMap.containsKey("Nom")) {
+                                                hashMap.put("Nom",item.value)
+                                                flagName = true
+                                            }
                                         }
                                     }
                                 }
@@ -130,7 +112,6 @@ class IDCard : AppCompatActivity() {
                         release()
                     }
 
-                    // mCameraSource.stop()
                 }
             })
         }

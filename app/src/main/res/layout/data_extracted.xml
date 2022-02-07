@@ -89,7 +89,7 @@
         android:layout_marginBottom="30dp"
         android:background="@drawable/bg_button_confim"
         android:padding="14dp"
-        android:text="Retourner à la page duu Scan"
+        android:text="Retourner à la page du Scan"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="#FFF"

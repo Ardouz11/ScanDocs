@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -19,6 +20,7 @@ import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
@@ -28,10 +30,10 @@ class ScanBack : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tv_result: TextView
     private lateinit var surface_camera_preview: SurfaceView
-    val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var start: ImageView
-    var string: String = ""
+    val stringBuilder=StringBuilder()
+    var hashMap=HashMap<String,String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
@@ -56,9 +58,8 @@ class ScanBack : AppCompatActivity() {
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    string = stringBuilder.toString()
                     mCameraSource.stop()
-                    intent.putExtra("dataCIN", string)
+                    intent.putExtra("dataCIN", hashMap)
                     startActivity(intent)
                 }
 
@@ -70,27 +71,90 @@ class ScanBack : AppCompatActivity() {
                     }
 
                     tv_result.post {
-                        stringBuilder.setLength(0)
                         if (extras != null) {
-                            val value = extras.getString("frontData")
-                            stringBuilder.append(value)
+                            val intent = getIntent()
+                             hashMap =intent.getSerializableExtra("frontData") as HashMap<String, String>
+                            Log.d("hashback",hashMap.toString())
+
                         }
 
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            // Pattern of Sexe
-                            if (Pattern.matches("Sexe.*[MF]", item.value)) {
+                            Log.d("items",item.value)
+                             if (Pattern.matches("[A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
+                                 val match=item.value.replace(" ","")
+                                 Log.d("test", match)
+                                 var pLineOne = Pattern.compile("[A-Z]+|\\d+")
+                                 var mLineOne: Matcher = pLineOne.matcher(match)
+                                 var allMatchesLineOne: ArrayList<String> = ArrayList()
+                                 while (mLineOne.find()) {
+                                     allMatchesLineOne.add(mLineOne.group())
+                                 }
+                                 Log.d("test", allMatchesLineOne.toString())
+                                 hashMap.put("CIN " , allMatchesLineOne[4] + allMatchesLineOne[5] )
+                                 hashMap.put("Prenom ", allMatchesLineOne.last() )
+                                 if(!stringBuilder.toString().contains("Sexe")){
+                                     hashMap.put("Sexe",allMatchesLineOne[8].takeLast(1))
+                                 }
+                                 var string = StringBuilder()
+                                 for (i in 12 until allMatchesLineOne.size - 1) {
 
-                                stringBuilder.append(item.value.toString() + "\n")
+                                     string.append(allMatchesLineOne[i] + " ")
+                                 }
+                                 hashMap.put("Nom",string.toString())
+                                 if(allMatchesLineOne[6].take(2).toInt()<40){
+                                     hashMap.put("DOB" , allMatchesLineOne[6].take(6).takeLast(2) + "/" + allMatchesLineOne[6].take(4).takeLast(2) + "/20" + allMatchesLineOne[6].take(2))
+                                 }
+                                 else{
+                                     hashMap.put("DOB" , allMatchesLineOne[6].take(6).takeLast(2) + "/" + allMatchesLineOne[6].take(4).takeLast(2) + "/19" + allMatchesLineOne[6].take(2) )
+
+                                 }
+                                 hashMap.put("END Of Val" , allMatchesLineOne[7].take(6).takeLast(2) + "/" + allMatchesLineOne[7].take(4).takeLast(2) + "/20" + allMatchesLineOne[7].take(2))
+
+                                 /*    stringBuilder.append("CIN : " + allMatchesLineOne[allMatchesLineOne.size-1]+allMatchesLineOne.last()  + "\n")
+                                   allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
+                                    Log.d("list1", allMatchesLineOne.toString())
+
+                                    var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
+                                    var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i + 1).value)
+                                    var allMatches: ArrayList<String> = ArrayList()
+                                    while (mLineTwo.find()) {
+                                        allMatches.add(mLineTwo.group())
+                                    }
+                                    Log.d("list1", allMatches.toString())
+                                    var pLineThree = Pattern.compile("[A-Z]+|\\d+")
+                                    var mLineThree: Matcher = pLineThree.matcher(items.valueAt(i + 2).value)
+                                    var allMatchesThree: ArrayList<String> = ArrayList()
+                                    while (mLineThree.find()) {
+                                        allMatchesThree.add(mLineThree.group())
+                                    }
+                                    Log.d("list1", allMatchesThree.toString())
+                                    for (i in 1 until allMatchesThree.size - 1) {
+
+                                        string.append(allMatchesThree[i] + " ")
+                                    }
+                                stringBuilder.append("Nom2: $string\n")
+                                    stringBuilder.append("Prenom2 : "+ allMatchesLineOne.last() + "\n")
+                                    if(allMatches[3].take(2).toInt()<40){
+                                        stringBuilder.append("DOB2 : " + allMatches[0].take(6).takeLast(2) + "/" + allMatches[0].take(4).takeLast(2) + "/20" + allMatches[0].take(2) + "\n")
+                                    }
+                                    else{
+                                        stringBuilder.append("DOB2 : " + allMatches[0].take(6).takeLast(2) + "/" + allMatches[0].take(4).takeLast(2) + "/19" + allMatches[0].take(2) + "\n")
+
+                                    }
+                                    stringBuilder.append("Sexe2 : " + allMatches[1].takeLast(1) + "\n")
+                                    stringBuilder.append("END Of Val : " + allMatches[2].take(6).takeLast(2) + "/" + allMatches[2].take(4).takeLast(2) + "/20" + allMatches[2].take(2) + "\n")
+                             */ }
+                                if(!hashMap.containsKey("Sexe")){
+                                if (Pattern.matches("Sexe.*[MF]", item.value)) {
+                                    hashMap.put("Sexe",item.value)
+                                }
+                                if (Pattern.matches("[MF]", item.value)) {
+                                    hashMap.put("Sexe",item.value)
+                                }
                             }
-                            if (Pattern.matches("[MF]", item.value)) {
-
-                                stringBuilder.append("Sexe : ", item.value.toString() + "\n")
-                            }
-                            // Pattern of address
-
                             if (Pattern.matches("Adresse.*", item.value)) {
-                                stringBuilder.append(item.value.toString().toUpperCase() + "\n")
+                                hashMap.put("Adresse",item.value.toUpperCase())
                             }
                         }
                         release()

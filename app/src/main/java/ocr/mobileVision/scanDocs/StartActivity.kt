@@ -24,6 +24,8 @@ class StartActivity : AppCompatActivity() {
 
         val containerSejour = findViewById<ConstraintLayout>(R.id.container_sejour)
         val checkSejour = findViewById<ImageView>(R.id.check_sejour)
+        val containerSim = findViewById<ConstraintLayout>(R.id.container_sim)
+        val checkSim = findViewById<ImageView>(R.id.check_sim)
 
         val nextBtn = findViewById<TextView>(R.id.next_Btn)
 
@@ -39,7 +41,8 @@ class StartActivity : AppCompatActivity() {
             containerPassport.setBackgroundResource(R.drawable.our_item_background)
             checkSejour.setImageResource(R.drawable.unselected_radio)
             containerSejour.setBackgroundResource(R.drawable.our_item_background)
-
+            checkSim.setImageResource(R.drawable.unselected_radio)
+            containerSim.setBackgroundResource(R.drawable.our_item_background)
             nextBtn.background = ContextCompat.getDrawable(this, R.drawable.bg_button_confim)
         }
 
@@ -55,7 +58,8 @@ class StartActivity : AppCompatActivity() {
             containerCin.setBackgroundResource(R.drawable.our_item_background)
             checkSejour.setImageResource(R.drawable.unselected_radio)
             containerSejour.setBackgroundResource(R.drawable.our_item_background)
-
+            checkSim.setImageResource(R.drawable.unselected_radio)
+            containerSim.setBackgroundResource(R.drawable.our_item_background)
             nextBtn.background = ContextCompat.getDrawable(this, R.drawable.bg_button_confim)
         }
 
@@ -71,6 +75,24 @@ class StartActivity : AppCompatActivity() {
             containerPassport.setBackgroundResource(R.drawable.our_item_background)
             checkCin.setImageResource(R.drawable.unselected_radio)
             containerCin.setBackgroundResource(R.drawable.our_item_background)
+            checkSim.setImageResource(R.drawable.unselected_radio)
+            containerSim.setBackgroundResource(R.drawable.our_item_background)
+            nextBtn.background = ContextCompat.getDrawable(this, R.drawable.bg_button_confim)
+        }
+        containerSim.setOnClickListener {
+            methodSelected = "sim"
+            checkSim.setImageResource(R.drawable.selected_radio)
+            containerSim.setBackgroundResource(R.drawable.border_identity_violet)
+
+            /**
+             * Unselect Other
+             */
+            checkPassport.setImageResource(R.drawable.unselected_radio)
+            containerPassport.setBackgroundResource(R.drawable.our_item_background)
+            checkCin.setImageResource(R.drawable.unselected_radio)
+            containerCin.setBackgroundResource(R.drawable.our_item_background)
+            checkSejour.setImageResource(R.drawable.unselected_radio)
+            containerSejour.setBackgroundResource(R.drawable.our_item_background)
 
             nextBtn.background = ContextCompat.getDrawable(this, R.drawable.bg_button_confim)
         }
@@ -82,7 +104,11 @@ class StartActivity : AppCompatActivity() {
             } else if (methodSelected == "sejour") {
                 val intentScanFrontSejour = Intent(this, ScanFrontSejour::class.java)
                 startActivity(intentScanFrontSejour)
-            } else {
+            }
+            else if (methodSelected == "sim") {
+                val intentScanSim = Intent(this, SimScan::class.java)
+                startActivity(intentScanSim)
+            }else {
                 val intentIDCard = Intent(this, IDCard::class.java)
                 startActivity(intentIDCard)
             }

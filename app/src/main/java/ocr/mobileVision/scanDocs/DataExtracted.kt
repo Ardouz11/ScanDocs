@@ -18,12 +18,17 @@ class DataExtracted : AppCompatActivity() {
         setContentView(R.layout.data_extracted)
         tvResult = findViewById(R.id.tv_result)
         buttonBack=findViewById(R.id.back_Btn)
-
+        var hashMap=HashMap<String,String>()
         val extras = intent.extras
+        val string=""
 
         if (extras != null) {
-            val value = extras.getString("dataCIN")
-            tvResult.text = value
+            val intent = getIntent()
+            hashMap =intent.getSerializableExtra("dataCIN") as HashMap<String, String>
+            for((key,value) in hashMap){
+                tvResult.text =tvResult.text.toString()+ key+" : "+value+"\n"
+            }
+
         }
 
         buttonBack.setOnClickListener {
