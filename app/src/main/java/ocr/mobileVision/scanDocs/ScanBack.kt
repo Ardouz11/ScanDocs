@@ -80,7 +80,7 @@ class ScanBack : AppCompatActivity() {
 
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                             if (Pattern.matches("^[A-Z][A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
+                             if (Pattern.matches("I[A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
                                  val match=item.value.replace(" ","").drop(15)
                                  var pLineOne = Pattern.compile("[A-Z]+|\\d+")
                                  var mLineOne: Matcher = pLineOne.matcher(match)
@@ -100,14 +100,15 @@ class ScanBack : AppCompatActivity() {
                                      hashMap.put("Sexe",allMatchesLineOne[3].takeLast(1))
                                  }
                                  var string = StringBuilder()
-                                 for (i in 7 until allMatchesLineOne.size - 1) {
+                                 if(allMatchesLineOne.size>7) {
+                                     for (i in 7 until allMatchesLineOne.size - 1) {
 
-                                     string.append(allMatchesLineOne[i] + " ")
+                                         string.append(allMatchesLineOne[i] + " ")
+                                     }
+                                     if (hashMap.get("Nom") != string.toString()) {
+                                         hashMap.put("Nom", string.toString())
+                                     }
                                  }
-                                 if(hashMap.get("Nom")!=string.toString()){
-                                     hashMap.put("Nom",string.toString())
-                                 }
-
                                  if(allMatchesLineOne[2].take(2).toInt()<40){
                                      hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2))
                                  }
@@ -115,42 +116,7 @@ class ScanBack : AppCompatActivity() {
                                      hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2) )
 
                                  }
-                                // hashMap.put("END Of Val" , allMatchesLineOne[8].take(6).takeLast(2) + "/" + allMatchesLineOne[8].take(4).takeLast(2) + "/20" + allMatchesLineOne[8].take(2))
-
-                                 /*    stringBuilder.append("CIN : " + allMatchesLineOne[allMatchesLineOne.size-1]+allMatchesLineOne.last()  + "\n")
-                                   allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
-                                    Log.d("list1", allMatchesLineOne.toString())
-
-                                    var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
-                                    var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i + 1).value)
-                                    var allMatches: ArrayList<String> = ArrayList()
-                                    while (mLineTwo.find()) {
-                                        allMatches.add(mLineTwo.group())
-                                    }
-                                    Log.d("list1", allMatches.toString())
-                                    var pLineThree = Pattern.compile("[A-Z]+|\\d+")
-                                    var mLineThree: Matcher = pLineThree.matcher(items.valueAt(i + 2).value)
-                                    var allMatchesThree: ArrayList<String> = ArrayList()
-                                    while (mLineThree.find()) {
-                                        allMatchesThree.add(mLineThree.group())
-                                    }
-                                    Log.d("list1", allMatchesThree.toString())
-                                    for (i in 1 until allMatchesThree.size - 1) {
-
-                                        string.append(allMatchesThree[i] + " ")
-                                    }
-                                stringBuilder.append("Nom2: $string\n")
-                                    stringBuilder.append("Prenom2 : "+ allMatchesLineOne.last() + "\n")
-                                    if(allMatches[3].take(2).toInt()<40){
-                                        stringBuilder.append("DOB2 : " + allMatches[0].take(6).takeLast(2) + "/" + allMatches[0].take(4).takeLast(2) + "/20" + allMatches[0].take(2) + "\n")
-                                    }
-                                    else{
-                                        stringBuilder.append("DOB2 : " + allMatches[0].take(6).takeLast(2) + "/" + allMatches[0].take(4).takeLast(2) + "/19" + allMatches[0].take(2) + "\n")
-
-                                    }
-                                    stringBuilder.append("Sexe2 : " + allMatches[1].takeLast(1) + "\n")
-                                    stringBuilder.append("END Of Val : " + allMatches[2].take(6).takeLast(2) + "/" + allMatches[2].take(4).takeLast(2) + "/20" + allMatches[2].take(2) + "\n")
-                             */ }
+                             }
                                 if(!hashMap.containsKey("Sexe")){
                                 if (Pattern.matches("Sexe.*[MF]", item.value)) {
                                     hashMap.put("Sexe",item.value.replace("Sexe",""))
