@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -61,35 +59,38 @@ class SimScan : AppCompatActivity() {
             val intent = Intent(this, DataExtracted::class.java)
 
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
-                override fun release() {}
+                override fun release() {
+                    mCameraSource.stop()
+                    intent.putExtra("dataCIN", hashMap)
+                    startActivity(intent)
 
+                }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
-                    if (items.size() <= 0) {
-                        return
-                    }
                     tvResult.post {
-                        var flagSerial=true
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            if(item.value.length>=10 && Pattern.matches("[0-9]+",item.value)){
-
-                                if(item.value.length==10) {
-                                   hashMap.put("Tele Number ",item.value)
-                                }
-                                else if(flagSerial) {
-                                    flagSerial=false;
-                                    hashMap.put("ICC Number ",item.value)
-
-                                }
+                            var flagMatch=Pattern.matches("[0-9]+",item.value)
+                            processPhoneNumber(flagMatch,item)
+                            processICCNumber(flagMatch,item)
                             }
-                        }
-                        mCameraSource.stop()
-                        intent.putExtra("dataCIN", hashMap)
-                        startActivity(intent)
+                      release()
                     }
                 }
             })
+        }
+    }
+
+    private fun processICCNumber(flagMatch: Boolean, item: TextBlock?) {
+        if(item!!.value.length>10 && flagMatch) {
+            hashMap.put("ICC Number ",item.value)
+
+        }
+    }
+
+    private fun processPhoneNumber(flagMatch: Boolean, item: TextBlock?) {
+        if(item!!.value.length==10&& flagMatch) {
+            hashMap.put("Tele Number ", item.value)
         }
     }
 
@@ -118,6 +119,7 @@ class SimScan : AppCompatActivity() {
 
         surface_camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
+                //TODO
             }
 
             override fun surfaceDestroyed(p0: SurfaceHolder?) {

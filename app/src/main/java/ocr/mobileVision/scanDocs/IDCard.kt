@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
+import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -21,11 +21,6 @@ import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
-import android.content.pm.ApplicationInfo
-
-
-
-
 class IDCard : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
@@ -34,86 +29,93 @@ class IDCard : AppCompatActivity() {
     private lateinit var surface_camera_preview: SurfaceView
     val hashMap=HashMap<String,String>()
     private val PERMISSION_REQUEST_CAMERA = 100
-
+    private var flagName:Boolean = false
     private lateinit var start: ImageView
-    
-
+    private  var regex:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         var anim: LottieAnimationView
         var viewBg: View
-
         anim = findViewById(R.id.animationView)
         viewBg = findViewById(R.id.bg_onLoad)
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
-
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
+        val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
+        val bundle = ai.metaData
+        regex = bundle.getString("regexIDCard")
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
-            val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
-            val bundle = ai.metaData
-            val regex = bundle.getString("regexIDCard")
             val intent = Intent(this, ScanBack::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    mCameraSource.stop()
-                    intent.putExtra("frontData", hashMap)
-                    startActivity(intent)
+                    //TODO
                 }
-
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
-
                     if (items.size() <= 0) {
                         return
                     }
-                    tvResult.post {
-                        var flagName = true
-                        for (i in 0 until items.size()) {
-                            val item = items.valueAt(i)
-                            if (regex != null) {
-                                if (Pattern.matches(regex.toRegex().toString(), item.value)) {
-                                    Log.i("matches", item.value)
-                                } else {
-                                    if (Pattern.matches("[0-9].*[0-9]", item.value) && item.value.length> 5 && i <7) {
-                                        if (!hashMap.containsKey("DOB")) {
-                                            hashMap.put("DOB",item.value)
-                                        }
-                                    }
-                                    if (Pattern.matches("^[A-Z]+[0-9]+", item.value)) {
-                                        if (!hashMap.containsKey("CIN")) {
-                                            hashMap.put("CIN",item.value)
-                                        }
-                                    }
-                                    if (Pattern.matches("^[A-Z]+", item.value) && item.value.toString().length> 2) {
-                                        if (flagName) {
-                                            if (!hashMap.containsKey("Prenom")) {
-                                                hashMap.put("Prenom",item.value)
-                                                flagName = false
-                                            }
-                                        } else {
-                                            if (!hashMap.containsKey("Nom")) {
-                                                hashMap.put("Nom",item.value)
-                                                flagName = true
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        release()
-                    }
+                    process(items,intent)
 
                 }
             })
         }
+    }
+
+    private fun process(items: SparseArray<TextBlock>?,intent: Intent) {
+        tvResult.post {
+             this.flagName = true
+            for (i in 0 until items!!.size()) {
+                val item = items.valueAt(i)
+                    if (!Pattern.matches(regex!!.toRegex().toString(), item.value)) {
+                        var flagMatchDOB=Pattern.matches("[0-9].*[0-9]", item.value)
+                        processDOB(item,i,flagMatchDOB)
+                        var flagMatchCIN=Pattern.matches("^[A-Z]+[0-9]+", item.value)
+                        processCIN(flagMatchCIN,item)
+                        var flagMatchFLname=Pattern.matches("^[A-Z]+", item.value)
+                        processFLname(item,flagMatchFLname)
+
+                    }
+            }
+            releaseCam(intent) } }
+
+    private fun processFLname(item: TextBlock?,flagMatchFLname:Boolean) {
+        if (flagMatchFLname && item!!.value.toString().length> 2) {
+            if (this.flagName&&!hashMap.containsKey("Prenom")) {
+                hashMap.put("Prenom",item.value)
+                this.flagName = false
+            } else {
+                if (!hashMap.containsKey("Nom")) {
+                    hashMap.put("Nom",item.value)
+                    this.flagName = true
+                }
+            }
+        }
+    }
+
+    private fun processCIN(flagMatchCIN: Boolean, item: TextBlock?) {
+        if (flagMatchCIN&&!hashMap.containsKey("CIN")) {
+            hashMap.put("CIN",item!!.value)
+        }
+
+    }
+
+    private fun processDOB(item: TextBlock?, i: Int, flagMatchDOB: Boolean) {
+        if ( flagMatchDOB && item!!.value.length> 5 && i <7&&!hashMap.containsKey("DOB")) {
+            hashMap.put("DOB",item.value)
+        }
+    }
+
+    private fun releaseCam(intent: Intent) {
+        mCameraSource.stop()
+        intent.putExtra("frontData", hashMap)
+        startActivity(intent)
     }
 
     override fun onResume() {
@@ -149,6 +151,7 @@ class IDCard : AppCompatActivity() {
 
         surface_camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
+                //TODO
             }
 
             override fun surfaceDestroyed(p0: SurfaceHolder?) {

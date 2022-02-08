@@ -36,15 +36,12 @@ class ScanBack : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
-
         val anim: LottieAnimationView
         val viewBg: View
-
         anim = findViewById(R.id.animationView)
         viewBg = findViewById(R.id.bg_onLoad)
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
-
         tv_result = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
@@ -64,59 +61,58 @@ class ScanBack : AppCompatActivity() {
 
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
-
-                    if (items.size() <= 0) {
-                        return
-                    }
-
                     tv_result.post {
                         if (extras != null) {
                             val intent = getIntent()
-                             hashMap =intent.getSerializableExtra("frontData") as HashMap<String, String>
-                            Log.d("hashback",hashMap.toString())
+                            hashMap =intent.getSerializableExtra("frontData") as HashMap<String, String>
 
                         }
 
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                             if (Pattern.matches("I[A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
-                                 val match=item.value.replace(" ","").drop(15)
-                                 val pLineOne = Pattern.compile("[A-Z]+|\\d+")
-                                 val mLineOne: Matcher = pLineOne.matcher(match)
-                                 var allMatchesLineOne: ArrayList<String> = ArrayList()
-                                 while (mLineOne.find()) {
-                                     allMatchesLineOne.add(mLineOne.group())
-                                 }
-                                 Log.d("test", allMatchesLineOne.toString())
-                                 if(hashMap.get("CIN")!=allMatchesLineOne[0] + allMatchesLineOne[1]){
-                                     hashMap.put("CIN" , allMatchesLineOne[0] + allMatchesLineOne[1] )
-                                 }
-                                 if(hashMap.get("Prenom")!=allMatchesLineOne.last()){
-                                     hashMap.put("Prenom", allMatchesLineOne.last() )
-                                 }
+                            if (Pattern.matches("I[A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
+                                val match=item.value.replace(" ","").drop(15)
+                                val pLineOne = Pattern.compile("[A-Z]+|\\d+")
+                                val mLineOne: Matcher = pLineOne.matcher(match)
+                                var allMatchesLineOne: ArrayList<String> = ArrayList()
+                                while (mLineOne.find()) {
+                                    allMatchesLineOne.add(mLineOne.group())
+                                }
+                                var size=allMatchesLineOne.size
+                                Log.d("test", allMatchesLineOne.toString())
+                                if(hashMap.get("CIN")!=allMatchesLineOne[0] + allMatchesLineOne[1]){
+                                    hashMap.put("CIN" , allMatchesLineOne[0] + allMatchesLineOne[1] )
+                                }
+                                if(hashMap.get("Prenom")!=allMatchesLineOne.last()){
+                                    if(allMatchesLineOne.last()=="K"){
+                                        size=size-1
+                                        hashMap.put("Prenom", allMatchesLineOne[size-1])
+                                    }
+                                    hashMap.put("Prenom", allMatchesLineOne.last())
+                                }
+                                var string = StringBuilder()
+                                if(allMatchesLineOne.size>7) {
+                                    for (i in 7 until size-1) {
 
-                                 if(!hashMap.containsKey("Sexe")){
-                                     hashMap.put("Sexe",allMatchesLineOne[3].takeLast(1))
-                                 }
-                                 var string = StringBuilder()
-                                 if(allMatchesLineOne.size>7) {
-                                     for (i in 7 until allMatchesLineOne.size - 1) {
+                                        string.append(allMatchesLineOne[i] + " ")
+                                    }
+                                    if(!hashMap.containsKey("Sexe")){
+                                        hashMap.put("Sexe",allMatchesLineOne[3].takeLast(1))
+                                    }
+                                    if (hashMap.get("Nom") != string.toString()) {
+                                        hashMap.put("Nom", string.toString())
+                                    }
+                                    if(allMatchesLineOne[2].take(2).toInt()<40){
+                                        hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2))
+                                    }
+                                    else{
+                                        hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2) )
 
-                                         string.append(allMatchesLineOne[i] + " ")
-                                     }
-                                     if (hashMap.get("Nom") != string.toString()) {
-                                         hashMap.put("Nom", string.toString())
-                                     }
-                                 }
-                                 if(allMatchesLineOne[2].take(2).toInt()<40){
-                                     hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2))
-                                 }
-                                 else{
-                                     hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2) )
+                                    }
+                                }
 
-                                 }
-                             }
-                                if(!hashMap.containsKey("Sexe")){
+                            }
+                            if(!hashMap.containsKey("Sexe")){
                                 if (Pattern.matches("Sexe.*[MF]", item.value)) {
                                     hashMap.put("Sexe",item.value.replace("Sexe",""))
                                 }
@@ -168,6 +164,7 @@ class ScanBack : AppCompatActivity() {
 
         surface_camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
+                //TODO
             }
 
             override fun surfaceDestroyed(p0: SurfaceHolder?) {
