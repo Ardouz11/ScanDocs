@@ -28,7 +28,7 @@ class ScanFrontSejour : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
     private lateinit var surface_camera_preview: SurfaceView
-    val stringBuilder = StringBuilder()
+    val hashMap=HashMap<String,String>()
     var string: String = ""
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var start: ImageView
@@ -46,7 +46,9 @@ class ScanFrontSejour : AppCompatActivity() {
         viewBg = findViewById(R.id.bg_onLoad)
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
-
+        val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
+        val bundle = ai.metaData
+        val regex = bundle.getString("regexIDCard")
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         start.setOnClickListener {
@@ -56,9 +58,9 @@ class ScanFrontSejour : AppCompatActivity() {
             val intent = Intent(this, ScanBackSejour::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    string = stringBuilder.toString()
+
                     mCameraSource.stop()
-                    intent.putExtra("frontData", string)
+                    intent.putExtra("frontData", hashMap)
                     startActivity(intent)
                 }
 
@@ -70,83 +72,73 @@ class ScanFrontSejour : AppCompatActivity() {
                     }
                     tvResult.post {
                         var flagName = true
-                        var flagCin = true
                         var flagDob = true
-                        stringBuilder.setLength(0)
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-
-                            if (Pattern.matches("ROYAUM.*", item.value) ||
-                                Pattern.matches("CARTE.*", item.value) ||
-                                Pattern.matches(".*IMMATRICULA.*", item.value) ||
-                                Pattern.matches(".*MAROC.*", item.value) ||
-                                Pattern.matches(".*[ä].*", item.value) ||
-                                Pattern.matches("[à].*", item.value) ||
-                                Pattern.matches(".*[~!@#\$%^&*()_+'{}\\[\\]:;<>?-].*", item.value)
-                            ) {
-                                Log.i("matches", item.value)
-                            } else {
-                                /*  This patterns for matching DOB  */
-                                if (Pattern.matches("[0-9].*[0-9]", item.value) && item.value.length> 5) {
-                                    if (flagDob) {
-                                        if (!stringBuilder.contains("Date")) {
-                                            flagDob = false
-                                            stringBuilder.append("Date de naissance est : " + item.value + "\n")
+                            if (regex != null) {
+                                if (Pattern.matches(regex.toRegex().toString(), item.value)
+                                ) {
+                                    Log.i("matches", item.value)
+                                } else {
+                                    /*  This pattern for matching DOB  */
+                                    if (Pattern.matches("[0-9].*[0-9]", item.value) && item.value.length> 5) {
+                                        if (flagDob) {
+                                            if (!hashMap.containsKey("Date")) {
+                                                flagDob = false
+                                                hashMap.put("DOB" , item.value)
+                                            }
                                         }
                                     }
-                                }
-                                if (Pattern.matches("Valable du.*", item.value)) {
-                                    if (!stringBuilder.contains("Valable du")) {
-                                        stringBuilder.append("Valable du : " + items.valueAt(i + 1).value + "\n")
-                                    }
-                                }
-                                if (Pattern.matches("au.*", item.value)) {
-                                    if (!stringBuilder.contains("Valable jusqu'au")) {
-                                        stringBuilder.append("Valable jusqu'au : " + items.valueAt(i + 1).value + "\n")
-                                    }
-                                }
-                                if (Pattern.matches("National.*", item.value)) {
-                                    if (!stringBuilder.contains("Nationali")) {
-                                        stringBuilder.append(item.value + "\n")
-                                    }
-                                }
-
-                                /*
-                                if(Pattern.matches("à.*",item.value)){
-                                    if(!stringBuilder.contains("POB ")) {
-                                        stringBuilder.append("POB " + item.value.replace("à", ": ") + "\n")
-                                    }
-                                }*/
-                              /*  if(Pattern.matches("Vala.*[0-9]",item.value)){
-                                        if(!stringBuilder.contains("Valable jusqu'au")){
-                                            val words = item.value.split("\\W+".toRegex())
-                                            Log.d("words",words[-1])
-                                            stringBuilder.append("Valable jusqu'au " +words[3]+"."+words[4]+"."+words[5]+"\n")
+                                    if (Pattern.matches("Valable du.*", item.value)) {
+                                        if (!hashMap.containsKey("Valable du")) {
+                                            hashMap.put("Valable du" , items.valueAt(i + 1).value)
                                         }
                                     }
-                                    */
-
-                                /* This one for getting CIN */
-                                if (flagCin) {
-                                    if (Pattern.matches("[A-Z].*[0-9].*", item.value)) {
-                                        if (!stringBuilder.contains("CIN")) {
-                                            stringBuilder.append("CIN est : " + item.value + "\n")
-                                            flagCin = false
+                                    if (Pattern.matches("au.*", item.value)) {
+                                        if (!hashMap.containsKey("Valable jusqu'au")) {
+                                            hashMap.put("Valable jusqu'au", items.valueAt(i + 1).value)
                                         }
                                     }
-                                }
-
-                                /* This one for getting LName and FName */
-                                if (Pattern.matches("[A-Z].*[A-Z]", item.value) && item.value.toString().length> 2) {
-                                    if (flagName) {
-                                        if (!stringBuilder.contains("Prenom")) {
-                                            stringBuilder.append("Prenom est : " + item.value + "\n")
-                                            flagName = false
+                                    if (Pattern.matches("National.*", item.value)) {
+                                        if (!hashMap.containsKey("Nationali")) {
+                                            hashMap.put("Nationality",item.value.replace("Nationalité",""))
                                         }
-                                    } else {
-                                        if (!stringBuilder.contains("Nom")) {
-                                            stringBuilder.append("Nom est : " + item.value + "\n")
-                                            flagName = true
+                                    }
+
+                                    /*
+                                                        if(Pattern.matches("à.*",item.value)){
+                                                            if(!stringBuilder.contains("POB ")) {
+                                                                stringBuilder.append("POB " + item.value.replace("à", ": ") + "\n")
+                                                            }
+                                                        }*/
+                                    /*  if(Pattern.matches("Vala.*[0-9]",item.value)){
+                                                                if(!stringBuilder.contains("Valable jusqu'au")){
+                                                                    val words = item.value.split("\\W+".toRegex())
+                                                                    Log.d("words",words[-1])
+                                                                    stringBuilder.append("Valable jusqu'au " +words[3]+"."+words[4]+"."+words[5]+"\n")
+                                                                }
+                                                            }
+                                                            */
+
+                                    /* This one for getting CIN */
+                                    if (Pattern.matches("^[A-Z]+[0-9]+", item.value)) {
+                                        if (!hashMap.containsKey("CIN")) {
+                                            hashMap.put("CIN",item.value)
+                                        }
+                                    }
+
+                                    /* This one for getting LName and FName */
+                                    if (Pattern.matches("[A-Z].*[A-Z]", item.value) && item.value.toString().length> 2) {
+                                        if (flagName) {
+                                            if (!hashMap.containsKey("Prenom")) {
+                                                hashMap.put("Prenom", item.value)
+                                                flagName = false
+                                            }
+                                        } else {
+                                            if (!hashMap.containsKey("Nom")) {
+                                                hashMap.put("Nom" ,item.value)
+                                                flagName = true
+                                            }
                                         }
                                     }
                                 }

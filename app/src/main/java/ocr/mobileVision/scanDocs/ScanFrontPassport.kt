@@ -30,7 +30,6 @@ class ScanFrontPassport : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
     private lateinit var surface_camera_preview: SurfaceView
-    val stringBuilder = StringBuilder()
     var string: String = ""
     private val PERMISSION_REQUEST_CAMERA = 100
     val hashMap=HashMap<String,String>()

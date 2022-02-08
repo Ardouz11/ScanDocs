@@ -32,14 +32,13 @@ class ScanBack : AppCompatActivity() {
     private lateinit var surface_camera_preview: SurfaceView
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var start: ImageView
-    val stringBuilder=StringBuilder()
     var hashMap=HashMap<String,String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
 
-        var anim: LottieAnimationView
-        var viewBg: View
+        val anim: LottieAnimationView
+        val viewBg: View
 
         anim = findViewById(R.id.animationView)
         viewBg = findViewById(R.id.bg_onLoad)
@@ -82,8 +81,8 @@ class ScanBack : AppCompatActivity() {
                             val item = items.valueAt(i)
                              if (Pattern.matches("I[A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
                                  val match=item.value.replace(" ","").drop(15)
-                                 var pLineOne = Pattern.compile("[A-Z]+|\\d+")
-                                 var mLineOne: Matcher = pLineOne.matcher(match)
+                                 val pLineOne = Pattern.compile("[A-Z]+|\\d+")
+                                 val mLineOne: Matcher = pLineOne.matcher(match)
                                  var allMatchesLineOne: ArrayList<String> = ArrayList()
                                  while (mLineOne.find()) {
                                      allMatchesLineOne.add(mLineOne.group())
@@ -126,7 +125,7 @@ class ScanBack : AppCompatActivity() {
                                 }
                             }
                             if (Pattern.matches("Adresse.*", item.value)) {
-                                hashMap.put("Adresse",item.value.toUpperCase())
+                                hashMap.put("Adresse",item.value.toUpperCase().replace("ADRESSE",""))
                             }
                         }
                         release()

@@ -30,16 +30,15 @@ class ScanBackSejour : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tv_result: TextView
     private lateinit var surface_camera_preview: SurfaceView
-    val stringBuilder = StringBuilder()
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var start: ImageView
-    var string: String = ""
+    var hashMap=HashMap<String,String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back_sejour)
 
-        var anim: LottieAnimationView
-        var viewBg: View
+        val anim: LottieAnimationView
+        val viewBg: View
 
         anim = findViewById(R.id.animationView)
         viewBg = findViewById(R.id.bg_onLoad)
@@ -58,9 +57,8 @@ class ScanBackSejour : AppCompatActivity() {
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    string = stringBuilder.toString()
                     mCameraSource.stop()
-                    intent.putExtra("dataCIN", string)
+                    intent.putExtra("dataCIN", hashMap)
                     startActivity(intent)
                 }
 
@@ -72,27 +70,62 @@ class ScanBackSejour : AppCompatActivity() {
                     }
 
                     tv_result.post {
-                        stringBuilder.setLength(0)
                         if (extras != null) {
-                            val value = extras.getString("frontData")
-                            stringBuilder.append(value)
+                            val intent = getIntent()
+                            hashMap =intent.getSerializableExtra("frontData") as HashMap<String, String>
+                            Log.d("hashback",hashMap.toString())
+
                         }
 
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            // Pattern of Sexe
-                            if (Pattern.matches("Sexe.*[MF]", item.value)) {
+                            if (Pattern.matches("I[A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
+                                val match=item.value.replace(" ","").drop(15)
+                                val pLineOne = Pattern.compile("[A-Z]+|\\d+")
+                                val mLineOne: Matcher = pLineOne.matcher(match)
+                                var allMatchesLineOne: ArrayList<String> = ArrayList()
+                                while (mLineOne.find()) {
+                                    allMatchesLineOne.add(mLineOne.group())
+                                }
+                                Log.d("test", allMatchesLineOne.toString())
+                                if(hashMap.get("CIN")!=allMatchesLineOne[0] + allMatchesLineOne[1]){
+                                    hashMap.put("CIN" , allMatchesLineOne[0] + allMatchesLineOne[1] )
+                                }
+                                if(hashMap.get("Prenom")!=allMatchesLineOne.last()){
+                                    hashMap.put("Prenom", allMatchesLineOne.last() )
+                                }
 
-                                stringBuilder.append(item.value.toString() + "\n")
+                                if(!hashMap.containsKey("Sexe")){
+                                    hashMap.put("Sexe",allMatchesLineOne[3].takeLast(1))
+                                }
+                                var string = StringBuilder()
+                                if(allMatchesLineOne.size>7) {
+                                    for (i in 7 until allMatchesLineOne.size - 1) {
+
+                                        string.append(allMatchesLineOne[i] + " ")
+                                    }
+                                    if (hashMap.get("Nom") != string.toString()) {
+                                        hashMap.put("Nom", string.toString())
+                                    }
+                                }
+                                if(allMatchesLineOne[2].take(2).toInt()<40){
+                                    hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2))
+                                }
+                                else{
+                                    hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2) )
+
+                                }
                             }
-                            if (Pattern.matches("[MF]", item.value)) {
-
-                                stringBuilder.append("Sexe : ", item.value.toString() + "\n")
+                            if(!hashMap.containsKey("Sexe")){
+                                if (Pattern.matches("Sexe.*[MF]", item.value)) {
+                                    hashMap.put("Sexe",item.value.replace("Sexe",""))
+                                }
+                                if (Pattern.matches("[MF]", item.value)) {
+                                    hashMap.put("Sexe",item.value)
+                                }
                             }
-                            // Pattern of address
-
                             if (Pattern.matches("Adresse.*", item.value)) {
-                                stringBuilder.append(item.value.toString().toUpperCase() + "\n")
+                                hashMap.put("Adresse",item.value.toUpperCase().replace("ADRESSE",""))
                             }
                         }
                         release()

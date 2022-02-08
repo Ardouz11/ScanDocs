@@ -20,8 +20,6 @@ class DataExtracted : AppCompatActivity() {
         buttonBack=findViewById(R.id.back_Btn)
         var hashMap=HashMap<String,String>()
         val extras = intent.extras
-        val string=""
-
         if (extras != null) {
             val intent = getIntent()
             hashMap =intent.getSerializableExtra("dataCIN") as HashMap<String, String>

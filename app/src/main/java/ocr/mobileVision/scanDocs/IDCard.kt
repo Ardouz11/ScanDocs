@@ -76,7 +76,6 @@ class IDCard : AppCompatActivity() {
                     }
                     tvResult.post {
                         var flagName = true
-                        hashMap.clear()
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             if (regex != null) {
