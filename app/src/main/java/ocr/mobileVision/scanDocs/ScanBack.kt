@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -33,6 +34,8 @@ class ScanBack : AppCompatActivity() {
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var start: ImageView
     var hashMap=HashMap<String,String>()
+      var extras:Bundle?=null
+    var size=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
@@ -45,7 +48,7 @@ class ScanBack : AppCompatActivity() {
         tv_result = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
-        val extras = intent.extras
+        extras = intent.extras
         startCameraSource()
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
@@ -54,83 +57,119 @@ class ScanBack : AppCompatActivity() {
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    mCameraSource.stop()
-                    intent.putExtra("dataCIN", hashMap)
-                    startActivity(intent)
+                    //TODO
+
                 }
 
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
-                    tv_result.post {
-                        if (extras != null) {
-                            val intent = getIntent()
-                            hashMap =intent.getSerializableExtra("frontData") as HashMap<String, String>
+                    if (items.size() <= 0) {
+                        return
+                    }
+                    process(items,intent)
 
-                        }
-
-                        for (i in 0 until items.size()) {
-                            val item = items.valueAt(i)
-                            if (Pattern.matches("I[A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
-                                val match=item.value.replace(" ","").drop(15)
-                                val pLineOne = Pattern.compile("[A-Z]+|\\d+")
-                                val mLineOne: Matcher = pLineOne.matcher(match)
-                                var allMatchesLineOne: ArrayList<String> = ArrayList()
-                                while (mLineOne.find()) {
-                                    allMatchesLineOne.add(mLineOne.group())
-                                }
-                                var size=allMatchesLineOne.size
-                                Log.d("test", allMatchesLineOne.toString())
-                                if(hashMap.get("CIN")!=allMatchesLineOne[0] + allMatchesLineOne[1]){
-                                    hashMap.put("CIN" , allMatchesLineOne[0] + allMatchesLineOne[1] )
-                                }
-                                if(hashMap.get("Prenom")!=allMatchesLineOne.last()){
-                                    if(allMatchesLineOne.last()=="K"){
-                                        size=size-1
-                                        hashMap.put("Prenom", allMatchesLineOne[size-1])
-                                    }
-                                    hashMap.put("Prenom", allMatchesLineOne.last())
-                                }
-                                var string = StringBuilder()
-                                if(allMatchesLineOne.size>7) {
-                                    for (i in 7 until size-1) {
-
-                                        string.append(allMatchesLineOne[i] + " ")
-                                    }
-                                    if(!hashMap.containsKey("Sexe")){
-                                        hashMap.put("Sexe",allMatchesLineOne[3].takeLast(1))
-                                    }
-                                    if (hashMap.get("Nom") != string.toString()) {
-                                        hashMap.put("Nom", string.toString())
-                                    }
-                                    if(allMatchesLineOne[2].take(2).toInt()<40){
-                                        hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2))
-                                    }
-                                    else{
-                                        hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2) )
-
-                                    }
-                                }
-
-                            }
-                            if(!hashMap.containsKey("Sexe")){
-                                if (Pattern.matches("Sexe.*[MF]", item.value)) {
-                                    hashMap.put("Sexe",item.value.replace("Sexe",""))
-                                }
-                                if (Pattern.matches("[MF]", item.value)) {
-                                    hashMap.put("Sexe",item.value)
-                                }
-                            }
-                            if (Pattern.matches("Adresse.*", item.value)) {
-                                hashMap.put("Adresse",item.value.toUpperCase().replace("ADRESSE",""))
-                            }
-                        }
-                        release()
                     }
                 }
-            })
+            )
+        }
+    }
+    private fun process(items: SparseArray<TextBlock>?, intent: Intent) {
+        if (extras != null) {
+            val intent = getIntent()
+            hashMap =intent.getSerializableExtra("frontData") as HashMap<String, String>
+
+        }
+        tv_result.post {
+            for (i in 0 until items!!.size()) {
+                val item = items.valueAt(i)
+                var flagMatchMRZ=Pattern.matches("I[A-Z0-9<\\s]+", item.value)
+                processMRZ(flagMatchMRZ,item)
+                var flagMatchAddress=Pattern.matches("Adresse.*", item.value)
+                processAddress(item,flagMatchAddress)
+                var flagMatchSex=Pattern.matches("Sexe.*[MF]|[MF]", item.value)
+                processSex(item,flagMatchSex)
+            }
+            releaseCam(intent)
+        } }
+
+    private fun processMRZ(flagMatchMRZ: Boolean, item: TextBlock?) {
+        if (flagMatchMRZ&&item!!.value.length>20) {
+            val match=item.value.replace(" ","").drop(15)
+            val pLineOne = Pattern.compile("[A-Z]+|\\d+")
+            val mLineOne: Matcher = pLineOne.matcher(match)
+            var allMatchesLineOne: ArrayList<String> = ArrayList()
+            while (mLineOne.find()) {
+                allMatchesLineOne.add(mLineOne.group())
+            }
+            this.size=allMatchesLineOne.size
+            Log.d("debug", allMatchesLineOne.toString())
+            var flagMatchCIN=hashMap.get("CIN")!=allMatchesLineOne[0] + allMatchesLineOne[1]
+            processCIN(flagMatchCIN,allMatchesLineOne[0] + allMatchesLineOne[1])
+            var flagMatchFname=hashMap.get("Prenom")!=allMatchesLineOne.last()
+            processFname(flagMatchFname,allMatchesLineOne)
+
+            var flagMatch=allMatchesLineOne.size>7
+            processLname(flagMatch,allMatchesLineOne)
+
         }
     }
 
+    private fun processFname(flagMatchFname: Boolean, allMatchesLineOne: ArrayList<String>) {
+        if(flagMatchFname){
+            if(allMatchesLineOne.last()=="K"){
+                this.size=this.size-1
+                hashMap.put("Prenom", allMatchesLineOne[this.size-1])
+            }
+            hashMap.put("Prenom", allMatchesLineOne.last())
+        }
+    }
+
+    private fun processLname(flagMatch: Boolean, allMatchesLineOne: ArrayList<String>) {
+        var string = StringBuilder()
+        if(flagMatch) {
+            for (i in 7 until this.size-1) {
+                string.append(allMatchesLineOne[i] + " ")
+            }
+            if(!hashMap.containsKey("Sexe")){
+                hashMap.put("Sexe",allMatchesLineOne[3].takeLast(1))
+            }
+            if (hashMap.get("Nom") != string.toString()) {
+                hashMap.put("Nom", string.toString())
+            }
+            if(allMatchesLineOne[2].take(2).toInt()<40){
+                hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2))
+            }
+            else{
+                hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2) )
+
+            }
+        }
+    }
+
+    private fun processCIN(flagMatchCIN: Boolean, s: String) {
+        if(flagMatchCIN){
+            hashMap.put("CIN" , s ) 
+        }
+       
+    }
+
+    private fun processSex(item: TextBlock?, flagMatchSex: Boolean) {
+            if (flagMatchSex&&!hashMap.containsKey("Sexe")) {
+                hashMap.put("Sexe",item!!.value.replace("Sexe",""))
+        }
+    }
+
+    private fun processAddress(item: TextBlock?, flagMatchAddress: Boolean) {
+        if (flagMatchAddress) {
+            hashMap.put("Adresse",item!!.value.toUpperCase().replace("ADRESSE",""))
+        }
+    }
+
+    private fun releaseCam(intent: Intent) {
+        mCameraSource.stop()
+        intent.putExtra("dataCIN", hashMap)
+        startActivity(intent)
+    }
     override fun onResume() {
         super.onResume()
 

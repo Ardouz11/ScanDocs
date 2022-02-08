@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -19,7 +18,6 @@ import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
@@ -67,6 +65,9 @@ class SimScan : AppCompatActivity() {
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
+                    if (items.size() <= 0) {
+                        return
+                    }
                     tvResult.post {
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)

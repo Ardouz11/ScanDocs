@@ -70,18 +70,18 @@ class IDCard : AppCompatActivity() {
 
     private fun process(items: SparseArray<TextBlock>?,intent: Intent) {
         tvResult.post {
-             this.flagName = true
+            this.flagName = true
             for (i in 0 until items!!.size()) {
                 val item = items.valueAt(i)
-                    if (!Pattern.matches(regex!!.toRegex().toString(), item.value)) {
-                        var flagMatchDOB=Pattern.matches("[0-9].*[0-9]", item.value)
-                        processDOB(item,i,flagMatchDOB)
-                        var flagMatchCIN=Pattern.matches("^[A-Z]+[0-9]+", item.value)
-                        processCIN(flagMatchCIN,item)
-                        var flagMatchFLname=Pattern.matches("^[A-Z]+", item.value)
-                        processFLname(item,flagMatchFLname)
+                if (!Pattern.matches(regex!!.toRegex().toString(), item.value)) {
+                    var flagMatchDOB=Pattern.matches("[0-9].*[0-9]", item.value)
+                    processDOB(item,i,flagMatchDOB)
+                    var flagMatchCIN=Pattern.matches("^[A-Z]+[0-9]+", item.value)
+                    processCIN(flagMatchCIN,item)
+                    var flagMatchFLname=Pattern.matches("^[A-Z]+", item.value)
+                    processFLname(item,flagMatchFLname)
 
-                    }
+                }
             }
             releaseCam(intent) } }
 
@@ -175,7 +175,7 @@ class IDCard : AppCompatActivity() {
 
     fun isCameraPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-            PackageManager.PERMISSION_GRANTED
+                PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestForPermission() {
