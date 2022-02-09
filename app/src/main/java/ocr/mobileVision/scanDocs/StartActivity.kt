@@ -1,6 +1,7 @@
 package ocr.mobileVision.scanDocs
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -26,22 +27,31 @@ class StartActivity : AppCompatActivity() {
         val containerSim = findViewById<ConstraintLayout>(R.id.container_sim)
         val checkSim = findViewById<ImageView>(R.id.check_sim)
 
+        val viewCin = findViewById<View>(R.id.view_unselected_cin)
+        val viewPassport = findViewById<View>(R.id.view_unselected_passport)
+        val viewSejour = findViewById<View>(R.id.view_unselected_sejour)
+        val viewSim = findViewById<View>(R.id.view_unselected_sim)
+
         val nextBtn = findViewById<TextView>(R.id.next_Btn)
 
         containerCin.setOnClickListener {
             methodSelected = "cin"
             checkCin.setImageResource(R.drawable.selected_radio)
             containerCin.setBackgroundResource(R.drawable.border_identity_violet)
+            viewCin.visibility = View.GONE
 
             /**
              * Unselect Other
              */
+            viewSim.visibility = View.VISIBLE
+            viewSejour.visibility = View.VISIBLE
+            viewPassport.visibility = View.VISIBLE
             checkPassport.setImageResource(R.drawable.unselected_radio)
-            containerPassport.setBackgroundResource(R.drawable.our_item_background)
+            containerPassport.setBackgroundResource(R.drawable.border_identity_white)
             checkSejour.setImageResource(R.drawable.unselected_radio)
-            containerSejour.setBackgroundResource(R.drawable.our_item_background)
+            containerSejour.setBackgroundResource(R.drawable.border_identity_white)
             checkSim.setImageResource(R.drawable.unselected_radio)
-            containerSim.setBackgroundResource(R.drawable.our_item_background)
+            containerSim.setBackgroundResource(R.drawable.border_identity_white)
             nextBtn.background = ContextCompat.getDrawable(this, R.drawable.bg_button_confim)
         }
 
@@ -49,16 +59,20 @@ class StartActivity : AppCompatActivity() {
             methodSelected = "passport"
             checkPassport.setImageResource(R.drawable.selected_radio)
             containerPassport.setBackgroundResource(R.drawable.border_identity_violet)
+            viewPassport.visibility = View.GONE
 
             /**
              * Unselect Other
              */
+            viewSim.visibility = View.VISIBLE
+            viewSejour.visibility = View.VISIBLE
+            viewCin.visibility = View.VISIBLE
             checkCin.setImageResource(R.drawable.unselected_radio)
-            containerCin.setBackgroundResource(R.drawable.our_item_background)
+            containerCin.setBackgroundResource(R.drawable.border_identity_white)
             checkSejour.setImageResource(R.drawable.unselected_radio)
-            containerSejour.setBackgroundResource(R.drawable.our_item_background)
+            containerSejour.setBackgroundResource(R.drawable.border_identity_white)
             checkSim.setImageResource(R.drawable.unselected_radio)
-            containerSim.setBackgroundResource(R.drawable.our_item_background)
+            containerSim.setBackgroundResource(R.drawable.border_identity_white)
             nextBtn.background = ContextCompat.getDrawable(this, R.drawable.bg_button_confim)
         }
 
@@ -66,32 +80,40 @@ class StartActivity : AppCompatActivity() {
             methodSelected = "sejour"
             checkSejour.setImageResource(R.drawable.selected_radio)
             containerSejour.setBackgroundResource(R.drawable.border_identity_violet)
+            viewSejour.visibility = View.GONE
 
             /**
              * Unselect Other
              */
+            viewSim.visibility = View.VISIBLE
+            viewPassport.visibility = View.VISIBLE
+            viewCin.visibility = View.VISIBLE
             checkPassport.setImageResource(R.drawable.unselected_radio)
-            containerPassport.setBackgroundResource(R.drawable.our_item_background)
+            containerPassport.setBackgroundResource(R.drawable.border_identity_white)
             checkCin.setImageResource(R.drawable.unselected_radio)
-            containerCin.setBackgroundResource(R.drawable.our_item_background)
+            containerCin.setBackgroundResource(R.drawable.border_identity_white)
             checkSim.setImageResource(R.drawable.unselected_radio)
-            containerSim.setBackgroundResource(R.drawable.our_item_background)
+            containerSim.setBackgroundResource(R.drawable.border_identity_white)
             nextBtn.background = ContextCompat.getDrawable(this, R.drawable.bg_button_confim)
         }
         containerSim.setOnClickListener {
             methodSelected = "sim"
             checkSim.setImageResource(R.drawable.selected_radio)
             containerSim.setBackgroundResource(R.drawable.border_identity_violet)
+            viewSim.visibility = View.GONE
 
             /**
              * Unselect Other
              */
+            viewSejour.visibility = View.VISIBLE
+            viewPassport.visibility = View.VISIBLE
+            viewCin.visibility = View.VISIBLE
             checkPassport.setImageResource(R.drawable.unselected_radio)
-            containerPassport.setBackgroundResource(R.drawable.our_item_background)
+            containerPassport.setBackgroundResource(R.drawable.border_identity_white)
             checkCin.setImageResource(R.drawable.unselected_radio)
-            containerCin.setBackgroundResource(R.drawable.our_item_background)
+            containerCin.setBackgroundResource(R.drawable.border_identity_white)
             checkSejour.setImageResource(R.drawable.unselected_radio)
-            containerSejour.setBackgroundResource(R.drawable.our_item_background)
+            containerSejour.setBackgroundResource(R.drawable.border_identity_white)
 
             nextBtn.background = ContextCompat.getDrawable(this, R.drawable.bg_button_confim)
         }
