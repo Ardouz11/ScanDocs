@@ -36,7 +36,10 @@
         <activity
             android:name="ocr.mobileVision.scanDocs.IDCard"
             android:exported="false" />
-        <activity android:name="ocr.mobileVision.scanDocs.StartActivity">
+        <activity android:name="ocr.mobileVision.scanDocs.StartActivity"
+            android:exported="false"/>
+
+        <activity android:name="ocr.mobileVision.scanDocs.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
