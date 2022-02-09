@@ -112,11 +112,10 @@ class ScanBack : AppCompatActivity() {
     }
 
     private fun processFirstName(flagMatchFirstname: Boolean, allMatchesLineOne: ArrayList<String>) {
-        if (flagMatchFirstname) {
-            if (allMatchesLineOne.last() == "K") {
-                this.size = this.size - 1
-                hashMap["FirstName"] = allMatchesLineOne[this.size - 1]
-            }
+        if (allMatchesLineOne.remove("K")) {
+            this.size = allMatchesLineOne.size
+        }
+        if (flagMatchFirstname && allMatchesLineOne.size> 7) {
             hashMap["FirstName"] = allMatchesLineOne.last()
         }
     }

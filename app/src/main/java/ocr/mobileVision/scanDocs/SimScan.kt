@@ -20,7 +20,6 @@ import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
-
 class SimScan : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
@@ -31,7 +30,6 @@ class SimScan : AppCompatActivity() {
     private val permissionRequestCamera = 100
     private lateinit var start: ImageView
     val hashMap = HashMap<String, String>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sim_scan)
