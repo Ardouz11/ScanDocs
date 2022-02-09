@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorInwi"
     tools:context=".ScanBack">
 
     <SurfaceView
@@ -207,7 +207,7 @@
         android:id="@+id/bg_onLoad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryNo"/>
+        android:background="@color/colorInwi"/>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
