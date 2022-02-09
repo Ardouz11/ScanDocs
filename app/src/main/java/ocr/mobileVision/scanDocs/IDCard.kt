@@ -26,24 +26,22 @@ class IDCard : AppCompatActivity() {
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
-    private lateinit var surface_camera_preview: SurfaceView
-    val hashMap=HashMap<String,String>()
-    private val PERMISSION_REQUEST_CAMERA = 100
-    private var flagName:Boolean = false
+    private lateinit var surfaceCameraPreview: SurfaceView
+    val hashMap = HashMap<String, String>()
+    private val permissionRequestCamera = 100
+    private var flagName: Boolean = false
     private lateinit var start: ImageView
-    private  var regex:String? = null
+    private var regex: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var anim: LottieAnimationView
-        var viewBg: View
-        anim = findViewById(R.id.animationView)
-        viewBg = findViewById(R.id.bg_onLoad)
+        val anim: LottieAnimationView = findViewById(R.id.animationView)
+        val viewBg: View = findViewById(R.id.bg_onLoad)
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
-        surface_camera_preview = findViewById(R.id.surface_camera_preview)
+        surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
         val bundle = ai.metaData
@@ -54,45 +52,45 @@ class IDCard : AppCompatActivity() {
             val intent = Intent(this, ScanBack::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    //TODO
+                    println("TODO")
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
                     if (items.size() <= 0) {
                         return
                     }
-                    process(items,intent)
-
+                    process(items, intent)
                 }
             })
         }
     }
 
-    private fun process(items: SparseArray<TextBlock>?,intent: Intent) {
+    private fun process(items: SparseArray<TextBlock>?, intent: Intent) {
         tvResult.post {
             this.flagName = true
             for (i in 0 until items!!.size()) {
                 val item = items.valueAt(i)
                 if (!Pattern.matches(regex!!.toRegex().toString(), item.value)) {
-                    var flagMatchDOB=Pattern.matches("[0-9].*[0-9]", item.value)
-                    processDOB(item,i,flagMatchDOB)
-                    var flagMatchCIN=Pattern.matches("^[A-Z]+[0-9]+", item.value)
-                    processCIN(flagMatchCIN,item)
-                    var flagMatchFLname=Pattern.matches("^[A-Z]+", item.value)
-                    processFLname(item,flagMatchFLname)
-
+                    var flagMatchDOB = Pattern.matches("[0-9].*[0-9]", item.value)
+                    processDOB(item, i, flagMatchDOB)
+                    var flagMatchCIN = Pattern.matches("^[A-Z]+[0-9]+", item.value)
+                    processCIN(flagMatchCIN, item)
+                    var flagMatchFLname = Pattern.matches("^[A-Z]+", item.value)
+                    processFLname(item, flagMatchFLname)
                 }
             }
-            releaseCam(intent) } }
+            releaseCam(intent)
+        }
+    }
 
-    private fun processFLname(item: TextBlock?,flagMatchFLname:Boolean) {
+    private fun processFLname(item: TextBlock?, flagMatchFLname: Boolean) {
         if (flagMatchFLname && item!!.value.toString().length> 2) {
-            if (this.flagName&&!hashMap.containsKey("Prenom")) {
-                hashMap.put("Prenom",item.value)
+            if (this.flagName && !hashMap.containsKey("Prenom")) {
+                hashMap["Prenom"] = item.value
                 this.flagName = false
             } else {
                 if (!hashMap.containsKey("Nom")) {
-                    hashMap.put("Nom",item.value)
+                    hashMap["Nom"] = item.value
                     this.flagName = true
                 }
             }
@@ -100,15 +98,14 @@ class IDCard : AppCompatActivity() {
     }
 
     private fun processCIN(flagMatchCIN: Boolean, item: TextBlock?) {
-        if (flagMatchCIN&&!hashMap.containsKey("CIN")) {
-            hashMap.put("CIN",item!!.value)
+        if (flagMatchCIN && !hashMap.containsKey("CIN")) {
+            hashMap["CIN"] = item!!.value
         }
-
     }
 
     private fun processDOB(item: TextBlock?, i: Int, flagMatchDOB: Boolean) {
-        if ( flagMatchDOB && item!!.value.length> 5 && i <7&&!hashMap.containsKey("DOB")) {
-            hashMap.put("DOB",item.value)
+        if (flagMatchDOB && item!!.value.length> 5 && i <7 && !hashMap.containsKey("DOB")) {
+            hashMap["DOB"] = item.value
         }
     }
 
@@ -121,11 +118,8 @@ class IDCard : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        var anim: LottieAnimationView
-        var viewBg: View
-
-        anim = findViewById(R.id.animationView)
-        viewBg = findViewById(R.id.bg_onLoad)
+        val anim: LottieAnimationView = findViewById(R.id.animationView)
+        val viewBg: View = findViewById(R.id.bg_onLoad)
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
     }
@@ -149,9 +143,9 @@ class IDCard : AppCompatActivity() {
             .setRequestedFps(2.0f)
             .build()
 
-        surface_camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
+        surfaceCameraPreview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
-                //TODO
+                println("TODO")
             }
 
             override fun surfaceDestroyed(p0: SurfaceHolder?) {
@@ -162,7 +156,7 @@ class IDCard : AppCompatActivity() {
             override fun surfaceCreated(p0: SurfaceHolder?) {
                 try {
                     if (isCameraPermissionGranted()) {
-                        mCameraSource.start(surface_camera_preview.holder)
+                        mCameraSource.start(surfaceCameraPreview.holder)
                     } else {
                         requestForPermission()
                     }
@@ -175,23 +169,23 @@ class IDCard : AppCompatActivity() {
 
     fun isCameraPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-                PackageManager.PERMISSION_GRANTED
+            PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestForPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSION_REQUEST_CAMERA)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), permissionRequestCamera)
     }
 
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode != PERMISSION_REQUEST_CAMERA) {
+        if (requestCode != permissionRequestCamera) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             return
         }
 
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (isCameraPermissionGranted()) {
-                mCameraSource.start(surface_camera_preview.holder)
+                mCameraSource.start(surfaceCameraPreview.holder)
             } else {
                 toast("Permission need to grant")
                 finish()

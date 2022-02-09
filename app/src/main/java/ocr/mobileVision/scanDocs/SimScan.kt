@@ -26,13 +26,11 @@ class SimScan : AppCompatActivity() {
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
-    private lateinit var surface_camera_preview: SurfaceView
-    val stringBuilder = StringBuilder()
+    private lateinit var surfaceCameraPreview: SurfaceView
     var string: String = ""
-    private val PERMISSION_REQUEST_CAMERA = 100
+    private val permissionRequestCamera = 100
     private lateinit var start: ImageView
-    val hashMap=HashMap<String,String>()
-
+    val hashMap = HashMap<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,15 +38,12 @@ class SimScan : AppCompatActivity() {
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
 
-        var anim: LottieAnimationView
-        var viewBg: View
-
-        anim = findViewById(R.id.animationView)
-        viewBg = findViewById(R.id.bg_onLoad)
+        val anim: LottieAnimationView = findViewById(R.id.animationView)
+        val viewBg: View = findViewById(R.id.bg_onLoad)
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
 
-        surface_camera_preview = findViewById(R.id.surface_camera_preview)
+        surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
@@ -61,7 +56,6 @@ class SimScan : AppCompatActivity() {
                     mCameraSource.stop()
                     intent.putExtra("dataCIN", hashMap)
                     startActivity(intent)
-
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
@@ -71,11 +65,11 @@ class SimScan : AppCompatActivity() {
                     tvResult.post {
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            var flagMatch=Pattern.matches("[0-9]+",item.value)
-                            processPhoneNumber(flagMatch,item)
-                            processICCNumber(flagMatch,item)
-                            }
-                      release()
+                            val flagMatch = Pattern.matches("[0-9]+", item.value)
+                            processPhoneNumber(flagMatch, item)
+                            processICCNumber(flagMatch, item)
+                        }
+                        release()
                     }
                 }
             })
@@ -83,20 +77,15 @@ class SimScan : AppCompatActivity() {
     }
 
     private fun processICCNumber(flagMatch: Boolean, item: TextBlock?) {
-        if(item!!.value.length>10 && flagMatch) {
-            hashMap.put("ICC Number ",item.value)
-
+        if (item!!.value.length> 10 && flagMatch) {
+            hashMap["ICC Number "] = item.value
         }
     }
 
     private fun processPhoneNumber(flagMatch: Boolean, item: TextBlock?) {
-        if(item!!.value.length==10&& flagMatch) {
-            hashMap.put("Tele Number ", item.value)
+        if (item!!.value.length == 10 && flagMatch) {
+            hashMap["Tele Number "] = item.value
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     private fun startCameraSource() {
@@ -118,9 +107,9 @@ class SimScan : AppCompatActivity() {
             .setRequestedFps(2.0f)
             .build()
 
-        surface_camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
+        surfaceCameraPreview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
-                //TODO
+                println("TODO")
             }
 
             override fun surfaceDestroyed(p0: SurfaceHolder?) {
@@ -131,7 +120,7 @@ class SimScan : AppCompatActivity() {
             override fun surfaceCreated(p0: SurfaceHolder?) {
                 try {
                     if (isCameraPermissionGranted()) {
-                        mCameraSource.start(surface_camera_preview.holder)
+                        mCameraSource.start(surfaceCameraPreview.holder)
                     } else {
                         requestForPermission()
                     }
@@ -144,23 +133,23 @@ class SimScan : AppCompatActivity() {
 
     fun isCameraPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-                PackageManager.PERMISSION_GRANTED
+            PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestForPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSION_REQUEST_CAMERA)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), permissionRequestCamera)
     }
 
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode != PERMISSION_REQUEST_CAMERA) {
+        if (requestCode != permissionRequestCamera) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             return
         }
 
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (isCameraPermissionGranted()) {
-                mCameraSource.start(surface_camera_preview.holder)
+                mCameraSource.start(surfaceCameraPreview.holder)
             } else {
                 toast("Permission need to grant")
                 finish()
