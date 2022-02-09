@@ -32,7 +32,7 @@ class ScanBackSejour : AppCompatActivity() {
     private lateinit var surface_camera_preview: SurfaceView
     private val permissionRequestCamera = 100
     private lateinit var start: ImageView
-    var hashMap=HashMap<String,String>()
+    var hashMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back_sejour)
@@ -72,15 +72,14 @@ class ScanBackSejour : AppCompatActivity() {
                     tv_result.post {
                         if (extras != null) {
                             val intent = getIntent()
-                            hashMap =intent.getSerializableExtra("frontData") as HashMap<String, String>
-                            Log.d("hashback",hashMap.toString())
-
+                            hashMap = intent.getSerializableExtra("frontData") as HashMap<String, String>
+                            Log.d("hashback", hashMap.toString())
                         }
 
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            if (Pattern.matches("I[A-Z0-9<\\s]+",item.value)&&item.value.length>20) {
-                                val match=item.value.replace(" ","").drop(15)
+                            if (Pattern.matches("I[A-Z0-9<\\s]+", item.value) && item.value.length> 20) {
+                                val match = item.value.replace(" ", "").drop(15)
                                 val pLineOne = Pattern.compile("[A-Z]+|\\d+")
                                 val mLineOne: Matcher = pLineOne.matcher(match)
                                 var allMatchesLineOne: ArrayList<String> = ArrayList()
@@ -88,18 +87,18 @@ class ScanBackSejour : AppCompatActivity() {
                                     allMatchesLineOne.add(mLineOne.group())
                                 }
                                 Log.d("test", allMatchesLineOne.toString())
-                                if(hashMap.get("CIN")!=allMatchesLineOne[0] + allMatchesLineOne[1]){
-                                    hashMap.put("CIN" , allMatchesLineOne[0] + allMatchesLineOne[1] )
+                                if (hashMap.get("CIN") != allMatchesLineOne[0] + allMatchesLineOne[1]) {
+                                    hashMap.put("CIN", allMatchesLineOne[0] + allMatchesLineOne[1])
                                 }
-                                if(hashMap.get("Prenom")!=allMatchesLineOne.last()){
-                                    hashMap.put("Prenom", allMatchesLineOne.last() )
+                                if (hashMap.get("Prenom") != allMatchesLineOne.last()) {
+                                    hashMap.put("Prenom", allMatchesLineOne.last())
                                 }
 
-                                if(!hashMap.containsKey("Sexe")){
-                                    hashMap.put("Sexe",allMatchesLineOne[3].takeLast(1))
+                                if (!hashMap.containsKey("Sexe")) {
+                                    hashMap.put("Sexe", allMatchesLineOne[3].takeLast(1))
                                 }
                                 var string = StringBuilder()
-                                if(allMatchesLineOne.size>7) {
+                                if (allMatchesLineOne.size> 7) {
                                     for (i in 7 until allMatchesLineOne.size - 1) {
 
                                         string.append(allMatchesLineOne[i] + " ")
@@ -108,24 +107,22 @@ class ScanBackSejour : AppCompatActivity() {
                                         hashMap.put("Nom", string.toString())
                                     }
                                 }
-                                if(allMatchesLineOne[2].take(2).toInt()<40){
-                                    hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2))
-                                }
-                                else{
-                                    hashMap.put("DOB" , allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2) )
-
+                                if (allMatchesLineOne[2].take(2).toInt() <40) {
+                                    hashMap.put("DOB", allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2))
+                                } else {
+                                    hashMap.put("DOB", allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2))
                                 }
                             }
-                            if(!hashMap.containsKey("Sexe")){
+                            if (!hashMap.containsKey("Sexe")) {
                                 if (Pattern.matches("Sexe.*[MF]", item.value)) {
-                                    hashMap.put("Sexe",item.value.replace("Sexe",""))
+                                    hashMap.put("Sexe", item.value.replace("Sexe", ""))
                                 }
                                 if (Pattern.matches("[MF]", item.value)) {
-                                    hashMap.put("Sexe",item.value)
+                                    hashMap.put("Sexe", item.value)
                                 }
                             }
                             if (Pattern.matches("Adresse.*", item.value)) {
-                                hashMap.put("Adresse",item.value.toUpperCase().replace("ADRESSE",""))
+                                hashMap.put("Adresse", item.value.toUpperCase().replace("ADRESSE", ""))
                             }
                         }
                         release()
@@ -191,7 +188,7 @@ class ScanBackSejour : AppCompatActivity() {
 
     fun isCameraPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
-                PackageManager.PERMISSION_GRANTED
+            PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestForPermission() {
