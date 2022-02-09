@@ -1,5 +1,6 @@
 package ocr.mobileVision.scanDocs
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -7,6 +8,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import android.graphics.drawable.ColorDrawable
+import androidx.appcompat.app.ActionBar
+
 
 class StartActivity : AppCompatActivity() {
 

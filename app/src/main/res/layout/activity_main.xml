@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#4FBABABA"
+    android:background="#494949"
     tools:context=".IDCard">
 
 
@@ -22,17 +22,6 @@
         android:background="@drawable/back_bg"
         />
 
-    <ImageView
-        android:id="@+id/back_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/ic_left_back"
-        android:background="?selectableItemBackgroundBorderless"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="#FFF" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/cl1"
@@ -208,7 +197,7 @@
         android:id="@+id/bg_onLoad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_material_dark"/>
+        android:background="#494949" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
