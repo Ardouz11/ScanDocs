@@ -1,12 +1,11 @@
 package ocr.mobileVision.scanDocs
 import android.content.Intent
 import android.os.Bundle
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 
 class StartActivity : AppCompatActivity() {
 
@@ -104,11 +103,10 @@ class StartActivity : AppCompatActivity() {
             } else if (methodSelected == "sejour") {
                 val intentScanFrontSejour = Intent(this, ScanFrontSejour::class.java)
                 startActivity(intentScanFrontSejour)
-            }
-            else if (methodSelected == "sim") {
+            } else if (methodSelected == "sim") {
                 val intentScanSim = Intent(this, SimScan::class.java)
                 startActivity(intentScanSim)
-            }else {
+            } else {
                 val intentIDCard = Intent(this, IDCard::class.java)
                 startActivity(intentIDCard)
             }
