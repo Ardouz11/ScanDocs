@@ -83,8 +83,8 @@ class IDCard : AppCompatActivity() {
         }
     }
 
-    private fun processFLName(item: TextBlock?, flagMatchFLname: Boolean) {
-        if (flagMatchFLname && item!!.value.toString().length> 2) {
+    private fun processFLName(item: TextBlock?, flagMatchFLName: Boolean) {
+        if (flagMatchFLName && item!!.value.toString().length> 2) {
             if (this.flagName && !hashMap.containsKey("Prenom")) {
                 hashMap["Prenom"] = item.value
                 this.flagName = false
