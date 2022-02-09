@@ -30,7 +30,7 @@ class ScanBackSejour : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tv_result: TextView
     private lateinit var surface_camera_preview: SurfaceView
-    private val PERMISSION_REQUEST_CAMERA = 100
+    private val permissionRequestCamera = 100
     private lateinit var start: ImageView
     var hashMap=HashMap<String,String>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -195,12 +195,12 @@ class ScanBackSejour : AppCompatActivity() {
     }
 
     private fun requestForPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSION_REQUEST_CAMERA)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), permissionRequestCamera)
     }
 
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode != PERMISSION_REQUEST_CAMERA) {
+        if (requestCode != permissionRequestCamera) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             return
         }
