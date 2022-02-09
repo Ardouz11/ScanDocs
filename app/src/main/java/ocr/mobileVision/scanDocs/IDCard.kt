@@ -76,14 +76,14 @@ class IDCard : AppCompatActivity() {
                     var flagMatchCIN = Pattern.matches("^[A-Z]+[0-9]+", item.value)
                     processCIN(flagMatchCIN, item)
                     var flagMatchFLname = Pattern.matches("^[A-Z]+", item.value)
-                    processFLname(item, flagMatchFLname)
+                    processFLName(item, flagMatchFLname)
                 }
             }
             releaseCam(intent)
         }
     }
 
-    private fun processFLname(item: TextBlock?, flagMatchFLname: Boolean) {
+    private fun processFLName(item: TextBlock?, flagMatchFLname: Boolean) {
         if (flagMatchFLname && item!!.value.toString().length> 2) {
             if (this.flagName && !hashMap.containsKey("Prenom")) {
                 hashMap["Prenom"] = item.value
