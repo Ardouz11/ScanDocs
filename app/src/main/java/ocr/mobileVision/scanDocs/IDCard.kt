@@ -71,12 +71,12 @@ class IDCard : AppCompatActivity() {
             for (i in 0 until items!!.size()) {
                 val item = items.valueAt(i)
                 if (!Pattern.matches(regex!!.toRegex().toString(), item.value)) {
-                    var flagMatchDOB = Pattern.matches("[0-9].*[0-9]", item.value)
+                    val flagMatchDOB = Pattern.matches("[0-9].*[0-9]", item.value)
                     processDOB(item, i, flagMatchDOB)
-                    var flagMatchCIN = Pattern.matches("^[A-Z]+[0-9]+", item.value)
+                    val flagMatchCIN = Pattern.matches("^[A-Z]+[0-9]+", item.value)
                     processCIN(flagMatchCIN, item)
-                    var flagMatchFLname = Pattern.matches("^[A-Z]+", item.value)
-                    processFLName(item, flagMatchFLname)
+                    val flagMatchFLName = Pattern.matches("^[A-Z]+", item.value)
+                    processFLName(item, flagMatchFLName)
                 }
             }
             releaseCam(intent)
