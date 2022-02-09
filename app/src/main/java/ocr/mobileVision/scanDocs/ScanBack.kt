@@ -115,9 +115,9 @@ class ScanBack : AppCompatActivity() {
         if (flagMatchFirstname) {
             if (allMatchesLineOne.last() == "K") {
                 this.size = this.size - 1
-                hashMap["Prenom"] = allMatchesLineOne[this.size - 1]
+                hashMap["FirstName"] = allMatchesLineOne[this.size - 1]
             }
-            hashMap["Prenom"] = allMatchesLineOne.last()
+            hashMap["FirstName"] = allMatchesLineOne.last()
         }
     }
 
@@ -130,8 +130,8 @@ class ScanBack : AppCompatActivity() {
             if (!hashMap.containsKey("Sexe")) {
                 hashMap["Sexe"] = allMatchesLineOne[3].takeLast(1)
             }
-            if (hashMap["Nom"] != string.toString()) {
-                hashMap["Nom"] = string.toString()
+            if (hashMap["LastName"] != string.toString()) {
+                hashMap["LastName"] = string.toString()
             }
             if (allMatchesLineOne[2].take(2).toInt() <date) {
                 hashMap["DOB"] =
@@ -147,6 +147,7 @@ class ScanBack : AppCompatActivity() {
             hashMap["CIN"] = s
         }
     }
+
     private fun processSex(item: TextBlock?, flagMatchSex: Boolean) {
         if (flagMatchSex && !hashMap.containsKey("Sexe")) {
             hashMap["Sexe"] = item!!.value.replace("Sexe", "")

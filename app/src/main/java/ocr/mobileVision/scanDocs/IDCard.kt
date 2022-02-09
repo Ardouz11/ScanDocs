@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -85,12 +86,12 @@ class IDCard : AppCompatActivity() {
 
     private fun processFLName(item: TextBlock?, flagMatchFLName: Boolean) {
         if (flagMatchFLName && item!!.value.toString().length> 2) {
-            if (this.flagName && !hashMap.containsKey("Prenom")) {
-                hashMap["Prenom"] = item.value
+            if (this.flagName && !hashMap.containsKey("FirstName")) {
+                hashMap["FirstName"] = item.value
                 this.flagName = false
             } else {
-                if (!hashMap.containsKey("Nom")) {
-                    hashMap["Nom"] = item.value
+                if (!hashMap.containsKey("LastName")) {
+                    hashMap["LastName"] = item.value
                     this.flagName = true
                 }
             }
