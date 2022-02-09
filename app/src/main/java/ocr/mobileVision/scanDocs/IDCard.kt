@@ -27,7 +27,7 @@ class IDCard : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
     private lateinit var surfaceCameraPreview: SurfaceView
-    val hashMap = HashMap<String, String>()
+    private val hashMap = HashMap<String, String>()
     private val permissionRequestCamera = 100
     private var flagName: Boolean = false
     private lateinit var start: ImageView
