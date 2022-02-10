@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -77,13 +78,13 @@ class SimScan : AppCompatActivity() {
 
     private fun processICCNumber(flagMatch: Boolean, item: TextBlock?) {
         if (item!!.value.length> 10 && flagMatch) {
-            hashMap["ICC Number "] = item.value
+            hashMap["ICC"] = item.value
         }
     }
 
     private fun processPhoneNumber(flagMatch: Boolean, item: TextBlock?) {
         if (item!!.value.length == 10 && flagMatch) {
-            hashMap["Tele Number "] = item.value
+            hashMap["MDN"] = item.value
         }
     }
 
