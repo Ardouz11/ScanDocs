@@ -47,7 +47,7 @@ class ScanFrontSejour : AppCompatActivity() {
         start = findViewById(R.id.capture)
         surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
-        val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
+        val ai = packageManager.getApplicationInfo(this.packageName, PackageManager.GET_META_DATA)
         val bundle = ai.metaData
         regex = bundle.getString("regexIDCard")
         start.setOnClickListener {

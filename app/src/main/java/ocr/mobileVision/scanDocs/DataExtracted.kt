@@ -98,7 +98,7 @@ class DataExtracted : AppCompatActivity() {
         val extras = intent.extras
 
         if (extras != null) {
-            val intent = getIntent()
+            val intent = intent
             fromActivityValue = intent.getSerializableExtra("fromActivity") as String
             hashMap = intent.getSerializableExtra("dataCIN") as HashMap<String, String>
 
@@ -110,7 +110,7 @@ class DataExtracted : AppCompatActivity() {
                 "sim" -> setSimView(hashMap)
             }
             for ((key, value) in hashMap) {
-                Log.d("TestPlot : ", "- $key" + " : $value")
+                Log.d("TestPlot : ", "- $key : $value")
                 tvResult.text = tvResult.text.toString() + key + " : " + value + "\n"
             }
         }
