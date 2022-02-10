@@ -38,6 +38,7 @@ class ScanBackSejour : AppCompatActivity() {
     private var extras: Bundle? = null
     private var size = 0
     private val date = 22
+    private lateinit var extractLabel: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back_sejour)
@@ -46,6 +47,8 @@ class ScanBackSejour : AppCompatActivity() {
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
         tvResult = findViewById(R.id.tv_result)
+        extractLabel = findViewById(R.id.extract_label)
+        extractLabel.visibility = View.GONE
         start = findViewById(R.id.capture)
         surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
         extras = intent.extras
@@ -53,6 +56,8 @@ class ScanBackSejour : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {

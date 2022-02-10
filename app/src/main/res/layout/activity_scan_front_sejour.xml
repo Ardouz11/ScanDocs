@@ -148,20 +148,21 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompatTwo"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:layout_marginBottom="10dp"
-
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Front"
+            android:text="Recto"
             android:textColor="#fff"
-            android:textSize="20dp" />
+            android:textSize="16dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!--
@@ -207,6 +208,20 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/scan"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/extract_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Extraction des données.."
+        android:textColor="#FFFFFF"
+        android:visibility="gone"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

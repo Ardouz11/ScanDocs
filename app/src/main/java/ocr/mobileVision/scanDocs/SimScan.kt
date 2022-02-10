@@ -26,9 +26,13 @@ class SimScan : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
     private lateinit var surfaceCameraPreview: SurfaceView
+
     var string: String = ""
     private val permissionRequestCamera = 100
+
     private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
+
     val hashMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +42,19 @@ class SimScan : AppCompatActivity() {
 
         val anim: LottieAnimationView = findViewById(R.id.animationView)
         val viewBg: View = findViewById(R.id.bg_onLoad)
+        extractLabel = findViewById(R.id.extract_label)
+
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
 
         surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
 

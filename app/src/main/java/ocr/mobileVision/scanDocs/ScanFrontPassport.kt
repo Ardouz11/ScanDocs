@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -34,6 +33,7 @@ class ScanFrontPassport : AppCompatActivity() {
     val hashMap = HashMap<String, String>()
     private lateinit var start: ImageView
     private var size = 0
+    private lateinit var extractLabel: TextView
     val pattern = Pattern.compile("[^A-Z0-9 ]")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +41,7 @@ class ScanFrontPassport : AppCompatActivity() {
         setContentView(R.layout.activity_scan_front_passport)
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
+        extractLabel = findViewById(R.id.extract_label)
 
         var anim: LottieAnimationView
         var viewBg: View
@@ -49,12 +50,15 @@ class ScanFrontPassport : AppCompatActivity() {
         viewBg = findViewById(R.id.bg_onLoad)
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
 
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
@@ -80,7 +84,7 @@ class ScanFrontPassport : AppCompatActivity() {
                                 if (allMatchesLineOne.remove("K")) {
                                     size = allMatchesLineOne.size
                                 }
-                                hashMap.put("FirstName", allMatchesLineOne[size-1])
+                                hashMap.put("FirstName", allMatchesLineOne[size - 1])
                                 allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
                                 for (i in 1 until size - 1) {
                                     string.append(allMatchesLineOne[i] + " ")

@@ -33,11 +33,14 @@ class ScanFrontSejour : AppCompatActivity() {
     private var flagName: Boolean = false
     private lateinit var start: ImageView
     private var regex: String? = null
+    private lateinit var extractLabel: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_front_sejour)
         val anim: LottieAnimationView = findViewById(R.id.animationView)
         val viewBg: View = findViewById(R.id.bg_onLoad)
+        extractLabel = findViewById(R.id.extract_label)
+        extractLabel.visibility = View.GONE
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
         tvResult = findViewById(R.id.tv_result)
@@ -50,7 +53,11 @@ class ScanFrontSejour : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
-            val intent = Intent(this, ScanBack::class.java)
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
+
+            val intent = Intent(this, ScanBackSejour::class.java)
+
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     println("TODO")

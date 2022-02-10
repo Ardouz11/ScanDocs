@@ -35,17 +35,25 @@ class ScanBack : AppCompatActivity() {
     private lateinit var surfaceCameraPreview: SurfaceView
     private val permissionRequestCamera = 100
     private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
+
     private var hashMap = HashMap<String, String>()
     private var extras: Bundle? = null
     private var size = 0
     private val date = 22
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
+
         val anim: LottieAnimationView = findViewById(R.id.animationView)
         val viewBg: View = findViewById(R.id.bg_onLoad)
+        extractLabel = findViewById(R.id.extract_label)
+
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
+
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
         surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
@@ -54,6 +62,8 @@ class ScanBack : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
