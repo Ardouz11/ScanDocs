@@ -20,7 +20,7 @@ import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
-import java.util.*
+import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList

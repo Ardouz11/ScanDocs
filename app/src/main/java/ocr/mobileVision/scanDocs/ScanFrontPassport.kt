@@ -33,7 +33,7 @@ class ScanFrontPassport : AppCompatActivity() {
     private val PERMISSION_REQUEST_CAMERA = 100
     val hashMap = HashMap<String, String>()
     private lateinit var start: ImageView
-
+    private var size = 0
     val pattern = Pattern.compile("[^A-Z0-9 ]")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,20 +75,14 @@ class ScanFrontPassport : AppCompatActivity() {
                                 while (mLineOne.find()) {
                                     allMatchesLineOne.add(mLineOne.group())
                                 }
-
+                                size = allMatchesLineOne.size
                                 var string = StringBuilder()
-                                if (allMatchesLineOne.last() === "K") {
-                                    hashMap.put("FirstName", allMatchesLineOne[allMatchesLineOne.size - 1])
-                                    for (i in 1 until allMatchesLineOne.size - 2) {
-
-                                        string.append(allMatchesLineOne[i] + " ")
-                                    }
+                                if (allMatchesLineOne.remove("K")) {
+                                    size = allMatchesLineOne.size
                                 }
-                                hashMap.put("FirstName", allMatchesLineOne.last())
-                                hashMap.put("LastName", string.toString())
+                                hashMap.put("FirstName", allMatchesLineOne[size-1])
                                 allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
-                                for (i in 1 until allMatchesLineOne.size - 1) {
-
+                                for (i in 1 until size - 1) {
                                     string.append(allMatchesLineOne[i] + " ")
                                 }
                                 hashMap.put("LastName", string.toString())

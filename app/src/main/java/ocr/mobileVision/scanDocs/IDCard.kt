@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import collections.forEach
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
@@ -43,7 +44,7 @@ class IDCard : AppCompatActivity() {
         start = findViewById(R.id.capture)
         surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
-        val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
+        val ai = packageManager.getApplicationInfo(this.packageName, PackageManager.GET_META_DATA)
         val bundle = ai.metaData
         regex = bundle.getString("regexIDCard")
         start.setOnClickListener {
@@ -66,46 +67,50 @@ class IDCard : AppCompatActivity() {
     }
 
     private fun process(items: SparseArray<TextBlock>?, intent: Intent) {
+        val arrayList = ArrayList<String>()
+        items!!.forEach { i, _ ->
+            if (!Pattern.matches(regex!!.toRegex().toString(), items.valueAt(i).value)) {
+                arrayList.add(items.valueAt(i).value)
+            }
+        }
         tvResult.post {
             this.flagName = true
-            for (i in 0 until items!!.size()) {
-                val item = items.valueAt(i)
-                if (!Pattern.matches(regex!!.toRegex().toString(), item.value)) {
-                    val flagMatchDOB = Pattern.matches("[0-9].*[0-9]", item.value)
-                    processDOB(item, i, flagMatchDOB)
-                    val flagMatchCIN = Pattern.matches("^[A-Z]+[0-9]+", item.value)
-                    processCIN(flagMatchCIN, item)
-                    val flagMatchFLName = Pattern.matches("^[A-Z]+", item.value)
-                    processFLName(item, flagMatchFLName)
-                }
+            for (i in 0 until arrayList.size) {
+                val item = arrayList[i]
+                val flagMatchDOB = Pattern.matches("[0-9].*[0-9]", item)
+                processDOB(item, i, flagMatchDOB)
+                val flagMatchCIN = Pattern.matches("^[A-Z]+[0-9]+", item)
+                processCIN(flagMatchCIN, item)
+                val flagMatchFLName = Pattern.matches("^[A-Z]+", item)
+                processFLName(item, flagMatchFLName)
             }
             releaseCam(intent)
         }
     }
 
-    private fun processFLName(item: TextBlock?, flagMatchFLName: Boolean) {
-        if (flagMatchFLName && item!!.value.toString().length> 2) {
+    private fun processFLName(item: String, flagMatchFLName: Boolean) {
+        if (flagMatchFLName && item.length> 2) {
             if (this.flagName && !hashMap.containsKey("FirstName")) {
-                hashMap["FirstName"] = item.value
+                hashMap["FirstName"] = item
                 this.flagName = false
             } else {
                 if (!hashMap.containsKey("LastName")) {
-                    hashMap["LastName"] = item.value
+                    hashMap["LastName"] = item
                     this.flagName = true
                 }
             }
         }
     }
 
-    private fun processCIN(flagMatchCIN: Boolean, item: TextBlock?) {
+    private fun processCIN(flagMatchCIN: Boolean, item: String) {
         if (flagMatchCIN && !hashMap.containsKey("CIN")) {
-            hashMap["CIN"] = item!!.value
+            hashMap["CIN"] = item
         }
     }
 
-    private fun processDOB(item: TextBlock?, i: Int, flagMatchDOB: Boolean) {
-        if (flagMatchDOB && item!!.value.length> 5 && i <7 && !hashMap.containsKey("DOB")) {
-            hashMap["DOB"] = item.value
+    private fun processDOB(item: String, i: Int, flagMatchDOB: Boolean) {
+        if (flagMatchDOB && item.length> 5 && i <7 && !hashMap.containsKey("DOB")) {
+            hashMap["DOB"] = item
         }
     }
 
