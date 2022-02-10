@@ -91,8 +91,8 @@ class ScanBackSejour : AppCompatActivity() {
                                 if (hashMap.get("CIN") != allMatchesLineOne[0] + allMatchesLineOne[1]) {
                                     hashMap.put("CIN", allMatchesLineOne[0] + allMatchesLineOne[1])
                                 }
-                                if (hashMap.get("Prenom") != allMatchesLineOne.last()) {
-                                    hashMap.put("Prenom", allMatchesLineOne.last())
+                                if (hashMap.get("FirstName") != allMatchesLineOne.last()) {
+                                    hashMap.put("FirstName", allMatchesLineOne.last())
                                 }
 
                                 if (!hashMap.containsKey("Sexe")) {
@@ -104,8 +104,8 @@ class ScanBackSejour : AppCompatActivity() {
 
                                         string.append(allMatchesLineOne[i] + " ")
                                     }
-                                    if (hashMap.get("Nom") != string.toString()) {
-                                        hashMap.put("Nom", string.toString())
+                                    if (hashMap.get("LastName") != string.toString()) {
+                                        hashMap.put("LastName", string.toString())
                                     }
                                 }
                                 if (allMatchesLineOne[2].take(2).toInt() <40) {

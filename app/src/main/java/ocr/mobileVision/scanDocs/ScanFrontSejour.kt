@@ -28,7 +28,7 @@ class ScanFrontSejour : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
     private lateinit var surface_camera_preview: SurfaceView
-    val hashMap=HashMap<String,String>()
+    val hashMap = HashMap<String, String>()
     var string: String = ""
     private val PERMISSION_REQUEST_CAMERA = 100
     private lateinit var start: ImageView
@@ -85,13 +85,13 @@ class ScanFrontSejour : AppCompatActivity() {
                                         if (flagDob) {
                                             if (!hashMap.containsKey("Date")) {
                                                 flagDob = false
-                                                hashMap.put("DOB" , item.value)
+                                                hashMap.put("DOB", item.value)
                                             }
                                         }
                                     }
                                     if (Pattern.matches("Valable du.*", item.value)) {
                                         if (!hashMap.containsKey("Valable du")) {
-                                            hashMap.put("Valable du" , items.valueAt(i + 1).value)
+                                            hashMap.put("Valable du", items.valueAt(i + 1).value)
                                         }
                                     }
                                     if (Pattern.matches("au.*", item.value)) {
@@ -101,29 +101,13 @@ class ScanFrontSejour : AppCompatActivity() {
                                     }
                                     if (Pattern.matches("National.*", item.value)) {
                                         if (!hashMap.containsKey("Nationali")) {
-                                            hashMap.put("Nationality",item.value.replace("Nationalité",""))
+                                            hashMap.put("Nationality", item.value.replace("Nationalité", ""))
                                         }
                                     }
-
-                                    /*
-                                                        if(Pattern.matches("à.*",item.value)){
-                                                            if(!stringBuilder.contains("POB ")) {
-                                                                stringBuilder.append("POB " + item.value.replace("à", ": ") + "\n")
-                                                            }
-                                                        }*/
-                                    /*  if(Pattern.matches("Vala.*[0-9]",item.value)){
-                                                                if(!stringBuilder.contains("Valable jusqu'au")){
-                                                                    val words = item.value.split("\\W+".toRegex())
-                                                                    Log.d("words",words[-1])
-                                                                    stringBuilder.append("Valable jusqu'au " +words[3]+"."+words[4]+"."+words[5]+"\n")
-                                                                }
-                                                            }
-                                                            */
-
                                     /* This one for getting CIN */
                                     if (Pattern.matches("^[A-Z]+[0-9]+", item.value)) {
                                         if (!hashMap.containsKey("CIN")) {
-                                            hashMap.put("CIN",item.value)
+                                            hashMap.put("CIN", item.value)
                                         }
                                     }
 
@@ -136,7 +120,7 @@ class ScanFrontSejour : AppCompatActivity() {
                                             }
                                         } else {
                                             if (!hashMap.containsKey("Nom")) {
-                                                hashMap.put("Nom" ,item.value)
+                                                hashMap.put("Nom", item.value)
                                                 flagName = true
                                             }
                                         }

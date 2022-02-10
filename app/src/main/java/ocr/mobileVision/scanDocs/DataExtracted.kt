@@ -67,8 +67,8 @@ class DataExtracted : AppCompatActivity() {
      */
     private fun setCinView(result: HashMap<String, String>) {
         showTextCin()
-        prenomCinResult.text = result["Prenom"].toString()
-        nomCinResult.text = result["Nom"].toString()
+        prenomCinResult.text = result["FirstName"].toString()
+        nomCinResult.text = result["LastName"].toString()
         dateCinResult.text = result["DOB"].toString()
         numberCinResult.text = result["CIN"].toString()
         adresseCinResult.text = result["Adresse"].toString()
@@ -92,8 +92,8 @@ class DataExtracted : AppCompatActivity() {
      */
     private fun setSejourView(result: HashMap<String, String>) {
         showTextSejour()
-        prenomCinResult.text = result["Prenom"].toString()
-        nomCinResult.text = result["Nom"].toString()
+        prenomCinResult.text = result["FirstName"].toString()
+        nomCinResult.text = result["LastName"].toString()
         dateCinResult.text = result["DOB"].toString()
         numberCinResult.text = result["CIN"].toString()
         adresseCinResult.text = result["Adresse"].toString()
