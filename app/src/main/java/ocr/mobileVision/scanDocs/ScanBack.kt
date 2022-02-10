@@ -38,6 +38,7 @@ class ScanBack : AppCompatActivity() {
     private var hashMap = HashMap<String, String>()
     private var extras: Bundle? = null
     private var size = 0
+    private val date = 22
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
@@ -100,39 +101,38 @@ class ScanBack : AppCompatActivity() {
                 allMatchesLineOne.add(mLineOne.group())
             }
             this.size = allMatchesLineOne.size
-            Log.d("match", allMatchesLineOne.toString())
+            Log.d("test", allMatchesLineOne.toString())
             val flagMatchCIN = hashMap["CIN"] != allMatchesLineOne[0] + allMatchesLineOne[1]
             processCIN(flagMatchCIN, allMatchesLineOne[0] + allMatchesLineOne[1])
-            val flagMatchFname = hashMap["Prenom"] != allMatchesLineOne.last()
-            processFname(flagMatchFname, allMatchesLineOne)
-            val flagMatch = allMatchesLineOne.size> 7
-            processLname(flagMatch, allMatchesLineOne)
+            val flagMatchFirstname = hashMap["Prenom"] != allMatchesLineOne.last()
+            processFirstName(flagMatchFirstname, allMatchesLineOne)
+            val flagMatchLastName = allMatchesLineOne.size> 7
+            processLastName(flagMatchLastName, allMatchesLineOne)
         }
     }
 
-    private fun processFname(flagMatchFname: Boolean, allMatchesLineOne: ArrayList<String>) {
-        if (flagMatchFname) {
-            if (allMatchesLineOne.last() == "K") {
-                this.size = this.size - 1
-                hashMap["Prenom"] = allMatchesLineOne[this.size - 1]
-            }
-            hashMap["Prenom"] = allMatchesLineOne.last()
+    private fun processFirstName(flagMatchFirstname: Boolean, allMatchesLineOne: ArrayList<String>) {
+        if (allMatchesLineOne.remove("K")) {
+            this.size = allMatchesLineOne.size
+        }
+        if (flagMatchFirstname && allMatchesLineOne.size> 7) {
+            hashMap["FirstName"] = allMatchesLineOne.last()
         }
     }
 
-    private fun processLname(flagMatch: Boolean, allMatchesLineOne: ArrayList<String>) {
+    private fun processLastName(flagMatchLastName: Boolean, allMatchesLineOne: ArrayList<String>) {
         var string = StringBuilder()
-        if (flagMatch) {
+        if (flagMatchLastName) {
             for (i in 7 until this.size - 1) {
                 string.append(allMatchesLineOne[i] + " ")
             }
             if (!hashMap.containsKey("Sexe")) {
                 hashMap["Sexe"] = allMatchesLineOne[3].takeLast(1)
             }
-            if (hashMap["Nom"] != string.toString()) {
-                hashMap["Nom"] = string.toString()
+            if (hashMap["LastName"] != string.toString()) {
+                hashMap["LastName"] = string.toString()
             }
-            if (allMatchesLineOne[2].take(2).toInt() <40) {
+            if (allMatchesLineOne[2].take(2).toInt() <date) {
                 hashMap["DOB"] =
                     allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2)
             } else {
@@ -141,7 +141,6 @@ class ScanBack : AppCompatActivity() {
             }
         }
     }
-
     private fun processCIN(flagMatchCIN: Boolean, s: String) {
         if (flagMatchCIN) {
             hashMap["CIN"] = s
