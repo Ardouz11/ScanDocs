@@ -59,6 +59,7 @@ class ScanBackSejour : AppCompatActivity() {
                 override fun release() {
                     mCameraSource.stop()
                     intent.putExtra("dataCIN", hashMap)
+                    intent.putExtra("fromActivity", "sejour")
                     startActivity(intent)
                 }
 

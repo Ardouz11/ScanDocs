@@ -161,6 +161,7 @@ class ScanBack : AppCompatActivity() {
     private fun releaseCam(intent: Intent) {
         mCameraSource.stop()
         intent.putExtra("dataCIN", hashMap)
+        intent.putExtra("fromActivity", "cin")
         startActivity(intent)
     }
     override fun onResume() {
