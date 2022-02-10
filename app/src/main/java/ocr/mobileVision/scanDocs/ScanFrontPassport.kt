@@ -119,6 +119,7 @@ class ScanFrontPassport : AppCompatActivity() {
                         }
                         mCameraSource.stop()
                         intent.putExtra("dataCIN", hashMap)
+                        intent.putExtra("fromActivity", "passport")
                         startActivity(intent)
                     }
                 }

@@ -55,6 +55,7 @@ class SimScan : AppCompatActivity() {
                 override fun release() {
                     mCameraSource.stop()
                     intent.putExtra("dataCIN", hashMap)
+                    intent.putExtra("fromActivity", "sim")
                     startActivity(intent)
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
