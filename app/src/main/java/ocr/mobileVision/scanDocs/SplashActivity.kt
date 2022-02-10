@@ -3,7 +3,6 @@ package ocr.mobileVision.scanDocs
 import android.animation.Animator
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 
@@ -31,10 +30,7 @@ class SplashActivity : AppCompatActivity() {
 
             override fun onAnimationStart(animation: Animator?) {
                 // Do nothing
-
             }
         })
-
-
     }
 }

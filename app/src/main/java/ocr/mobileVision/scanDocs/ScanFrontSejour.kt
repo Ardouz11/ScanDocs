@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -22,6 +21,7 @@ import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
+
 class ScanFrontSejour : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()

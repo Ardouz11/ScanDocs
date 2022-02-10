@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView

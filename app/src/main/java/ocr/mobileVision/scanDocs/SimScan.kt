@@ -77,13 +77,13 @@ class SimScan : AppCompatActivity() {
 
     private fun processICCNumber(flagMatch: Boolean, item: TextBlock?) {
         if (item!!.value.length> 10 && flagMatch) {
-            hashMap["ICC Number "] = item.value
+            hashMap["iccNumber"] = item.value
         }
     }
 
     private fun processPhoneNumber(flagMatch: Boolean, item: TextBlock?) {
         if (item!!.value.length == 10 && flagMatch) {
-            hashMap["Tele Number "] = item.value
+            hashMap["phoneNumber"] = item.value
         }
     }
 
