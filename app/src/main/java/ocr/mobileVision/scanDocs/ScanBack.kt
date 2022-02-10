@@ -153,7 +153,7 @@ class ScanBack : AppCompatActivity() {
 
     private fun processAddress(item: TextBlock?, flagMatchAddress: Boolean) {
         if (flagMatchAddress) {
-            hashMap["Adresse"] = item!!.value.toUpperCase().replace("ADRESSE", "")
+            hashMap["Adresse"] = item!!.value.toUpperCase().replace("ADRESSE ", "")
         }
     }
 
