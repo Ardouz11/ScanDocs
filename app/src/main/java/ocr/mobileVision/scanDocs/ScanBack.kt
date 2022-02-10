@@ -103,7 +103,7 @@ class ScanBack : AppCompatActivity() {
             this.size = allMatchesLineOne.size
             val flagMatchCIN = hashMap["CIN"] != allMatchesLineOne[0] + allMatchesLineOne[1]
             processCIN(flagMatchCIN, allMatchesLineOne[0] + allMatchesLineOne[1])
-            val flagMatchFirstname = hashMap["Prenom"] != allMatchesLineOne.last()
+            val flagMatchFirstname = hashMap["FirstName"] != allMatchesLineOne.last()
             processFirstName(flagMatchFirstname, allMatchesLineOne)
             val flagMatchLastName = allMatchesLineOne.size> 7
             processLastName(flagMatchLastName, allMatchesLineOne)
