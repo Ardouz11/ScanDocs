@@ -78,19 +78,20 @@ class ScanFrontPassport : AppCompatActivity() {
 
                                 var string = StringBuilder()
                                 if (allMatchesLineOne.last() === "K") {
-                                    hashMap.put("FirstName: ", allMatchesLineOne[allMatchesLineOne.size - 1])
+                                    hashMap.put("FirstName", allMatchesLineOne[allMatchesLineOne.size - 1])
                                     for (i in 1 until allMatchesLineOne.size - 2) {
 
                                         string.append(allMatchesLineOne[i] + " ")
                                     }
                                 }
-                                hashMap.put("LastName: ", allMatchesLineOne.last())
+                                hashMap.put("FirstName", allMatchesLineOne.last())
+                                hashMap.put("LastName", string.toString())
                                 allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
-                                Log.d("list1", allMatchesLineOne.toString())
                                 for (i in 1 until allMatchesLineOne.size - 1) {
 
                                     string.append(allMatchesLineOne[i] + " ")
                                 }
+                                hashMap.put("LastName", string.toString())
                                 var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
                                 var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i + 1).value)
                                 var allMatches: ArrayList<String> = ArrayList()
@@ -101,7 +102,7 @@ class ScanFrontPassport : AppCompatActivity() {
                                 hashMap.put("Passport", allMatches[0] + allMatches[1].dropLast(1))
                                 hashMap.put("Nationality", allMatches[2])
                                 if (allMatches[3].take(2).toInt() <40) {
-                                    hashMap.put("DOB  ", allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2))
+                                    hashMap.put("DOB", allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2))
                                 } else {
                                     hashMap.put("DOB", allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2))
                                 }
@@ -113,7 +114,6 @@ class ScanFrontPassport : AppCompatActivity() {
                             }
                         }
                         mCameraSource.stop()
-                        Log.d("pass", hashMap.toString())
                         intent.putExtra("dataCIN", hashMap)
                         intent.putExtra("fromActivity", "passport")
                         startActivity(intent)

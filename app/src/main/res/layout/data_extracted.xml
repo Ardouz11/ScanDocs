@@ -63,6 +63,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:weightSum="8"
+        android:visibility="gone"
         android:background="#fff"
         android:paddingStart="10dp"
         app:layout_constraintTop_toBottomOf="@+id/result_label"
@@ -73,7 +74,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Prénom :" />
+            android:text="Prénom"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/prenom_cin_result"
@@ -97,6 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
+        android:visibility="gone"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:weightSum="8"
@@ -108,7 +111,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Nom :" />
+            android:text="Nom"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/nom_cin_result"
@@ -134,6 +138,7 @@
         android:paddingStart="10dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
+        android:visibility="gone"
         android:weightSum="8"
         android:background="#fff"
         app:layout_constraintTop_toBottomOf="@+id/nom_cin_ll"
@@ -144,7 +149,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Date de naissance" />
+            android:text="Date de naissance"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/date_cin_result"
@@ -169,6 +175,7 @@
         android:layout_height="wrap_content"
         android:weightSum="8"
         android:paddingStart="10dp"
+        android:visibility="gone"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         app:layout_constraintTop_toBottomOf="@+id/date_cin_ll"
@@ -179,7 +186,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="CIN :" />
+            android:text="CIN"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/number_cin_result"
@@ -197,52 +205,18 @@
 
     </LinearLayout>
 
-    <!-- adresse_cin_ll -->
-    <LinearLayout
-        android:id="@+id/adresse_cin_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="8"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="#fff"
-        android:paddingStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/number_cin_ll"
-        tools:layout_editor_absoluteX="0dp">
-
-        <TextView
-            android:id="@+id/adresse_cin_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Adresse :" />
-
-        <TextView
-            android:id="@+id/adresse_cin_result"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:text="Prénode d edexedexdxedzdzdzddzdzdzdzdzdzdzd d dz d dzz dz dzxdexdedxem" />
-
-        <ImageView
-            android:id="@+id/adresse_cin_icon"
-            android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            android:src="@drawable/check" />
-
-    </LinearLayout>
-
     <!-- sexe_cin_ll -->
     <LinearLayout
         android:id="@+id/sexe_cin_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="8"
+        android:visibility="gone"
         android:paddingTop="4dp"
+        android:background="#fff"
         android:paddingBottom="4dp"
         android:paddingStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/adresse_cin_ll"
+        app:layout_constraintTop_toBottomOf="@+id/number_cin_ll"
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
@@ -250,7 +224,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Sexe : " />
+            android:text="Sexe"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/sexe_cin_result"
@@ -268,10 +243,48 @@
 
     </LinearLayout>
 
-    <!--
-    ** Specific for SEJOUR PART
-    -->
+    <!-- adresse_cin_ll -->
+    <LinearLayout
+        android:id="@+id/adresse_cin_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="8"
+        android:visibility="gone"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingStart="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/sexe_cin_ll"
+        tools:layout_editor_absoluteX="0dp">
 
+        <TextView
+            android:id="@+id/adresse_cin_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Adresse"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/adresse_cin_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="Prénode d edexedexdxedzdzdzddzdzdzdzdzdzdzd d dz d dzz dz dzxdexdedxem" />
+
+        <ImageView
+            android:id="@+id/adresse_cin_icon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:src="@drawable/check" />
+
+    </LinearLayout>
+
+
+
+    <!--
+        ** Specific for SEJOUR PART
+    -->
     <!-- nationalite_sejour_ll -->
     <LinearLayout
         android:id="@+id/nationalite_sejour_ll"
@@ -280,9 +293,10 @@
         android:weightSum="8"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
+        android:visibility="gone"
         android:background="#fff"
         android:paddingStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/sexe_cin_ll"
+        app:layout_constraintTop_toBottomOf="@+id/adresse_cin_ll"
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
@@ -290,7 +304,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Nationalité :" />
+            android:text="Nationalité"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/nationalite_sejour_result"
@@ -316,6 +331,7 @@
         android:weightSum="8"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
+        android:visibility="gone"
         android:paddingStart="10dp"
         app:layout_constraintTop_toBottomOf="@+id/nationalite_sejour_ll"
         tools:layout_editor_absoluteX="0dp">
@@ -325,7 +341,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Fin de validité :" />
+            android:text="Fin de validité"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/validite_sejour_result"
@@ -344,9 +361,8 @@
     </LinearLayout>
 
     <!--
-    ** Specific for Passport PART
+        ** Specific for Passport PART
     -->
-
     <!-- passport_num_ll -->
     <LinearLayout
         android:id="@+id/passport_num_ll"
@@ -356,9 +372,8 @@
         android:visibility="gone"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:background="#fff"
         android:paddingStart="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/validite_sejour_ll"
+        app:layout_constraintTop_toBottomOf="@+id/sexe_cin_ll"
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
@@ -377,6 +392,85 @@
 
         <ImageView
             android:id="@+id/passport_num_icon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:src="@drawable/check" />
+
+    </LinearLayout>
+
+    <!--
+        ** Specific for Sim PART
+    -->
+    <!-- icc_sim_ll -->
+    <LinearLayout
+        android:id="@+id/icc_sim_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingTop="4dp"
+        android:visibility="gone"
+        android:paddingBottom="4dp"
+        android:weightSum="8"
+        android:background="#fff"
+        android:paddingStart="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/result_label"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:id="@+id/icc_sim_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textStyle="bold"
+            android:text="ICC :" />
+
+        <TextView
+            android:id="@+id/icc_sim_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text=" " />
+
+        <ImageView
+            android:id="@+id/icc_sim_icon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:src="@drawable/check" />
+
+    </LinearLayout>
+
+    <!-- mdn_sim_ll -->
+    <LinearLayout
+        android:id="@+id/mdn_sim_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:weightSum="8"
+        android:visibility="gone"
+        android:paddingStart="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/icc_sim_ll"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:id="@+id/mdn_sim_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Mdn"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/mdn_sim_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text=" " />
+
+        <ImageView
+            android:id="@+id/mdn_sim_icon"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_weight="1"
