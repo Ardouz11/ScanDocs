@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -32,16 +31,24 @@ class IDCard : AppCompatActivity() {
     private val permissionRequestCamera = 100
     private var flagName: Boolean = false
     private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
     private var regex: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val anim: LottieAnimationView = findViewById(R.id.animationView)
         val viewBg: View = findViewById(R.id.bg_onLoad)
+        extractLabel = findViewById(R.id.extract_label)
+
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
+
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
+
         surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
@@ -50,6 +57,9 @@ class IDCard : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
+
             val intent = Intent(this, ScanBack::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {

@@ -22,10 +22,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/basier_circle_medium"
+        android:fontFamily="sans-serif-condensed-medium"
         android:text="OCR"
         android:textColor="#FFF"
-        android:textSize="30sp"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

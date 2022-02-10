@@ -3,6 +3,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,13 @@ class DataExtracted : AppCompatActivity() {
     private lateinit var numberCinLl: LinearLayout
     private lateinit var adresseCinLl: LinearLayout
     private lateinit var sexeCinLl: LinearLayout
+
+    private lateinit var prenomCinIcon: ImageView
+    private lateinit var nomCinIcon: ImageView
+    private lateinit var dateCinIcon: ImageView
+    private lateinit var numberCinIcon: ImageView
+    private lateinit var adresseCinIcon: ImageView
+    private lateinit var sexeCinIcon: ImageView
 
     // Sejour
     private lateinit var nationaliteSejourResult: TextView
@@ -71,6 +79,14 @@ class DataExtracted : AppCompatActivity() {
         iccSimLl = findViewById(R.id.icc_sim_ll)
         mdnSimLl = findViewById(R.id.mdn_sim_ll)
 
+        // Images
+        prenomCinIcon = findViewById(R.id.prenom_cin_icon)
+        nomCinIcon = findViewById(R.id.nom_cin_icon)
+        dateCinIcon = findViewById(R.id.date_cin_icon)
+        numberCinIcon = findViewById(R.id.number_cin_icon)
+        adresseCinIcon = findViewById(R.id.adresse_cin_icon)
+        sexeCinIcon = findViewById(R.id.sexe_cin_icon)
+
         val hashMap: HashMap<String, String>
         val fromActivityValue: String
         val extras = intent.extras
@@ -104,12 +120,30 @@ class DataExtracted : AppCompatActivity() {
      */
     private fun setCinView(resultCin: HashMap<String, String>) {
         showTextCin()
-        prenomCinResult.text = resultCin["FirstName"].toString()
-        nomCinResult.text = resultCin["LastName"].toString()
-        dateCinResult.text = resultCin["DOB"].toString()
-        numberCinResult.text = resultCin["CIN"].toString()
-        adresseCinResult.text = resultCin["Adresse"].toString()
-        sexeCinResult.text = resultCin["Sexe"].toString()
+
+        if (resultCin["FirstName"] != null)
+            prenomCinResult.text = resultCin["FirstName"].toString()
+        else prenomCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultCin["LastName"] != null)
+            nomCinResult.text = resultCin["LastName"].toString()
+        else nomCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultCin["DOB"] != null)
+            dateCinResult.text = resultCin["DOB"].toString()
+        else dateCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultCin["CIN"] != null)
+            numberCinResult.text = resultCin["CIN"].toString()
+        else numberCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultCin["Sexe"] != null)
+            sexeCinResult.text = resultCin["Sexe"].toString()
+        else sexeCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultCin["Adresse"] != null)
+            adresseCinResult.text = resultCin["Adresse"].toString()
+        else adresseCinIcon.setImageResource(R.drawable.warning)
     }
 
     /*
@@ -142,12 +176,29 @@ class DataExtracted : AppCompatActivity() {
      */
     private fun setPassportView(resultPassport: HashMap<String, String>) {
         showTextPassport()
-        prenomCinResult.text = resultPassport["FirstName"].toString()
-        nomCinResult.text = resultPassport["LastName"].toString()
-        dateCinResult.text = resultPassport["DOB"].toString()
-        numberCinResult.text = resultPassport["CIN"].toString()
-        sexeCinResult.text = resultPassport["Sexe"].toString()
-        passportNumResult.text = resultPassport["Passport"].toString()
+        if (resultPassport["FirstName"] != null)
+            prenomCinResult.text = resultPassport["FirstName"].toString()
+        else prenomCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultPassport["LastName"] != null)
+            nomCinResult.text = resultPassport["LastName"].toString()
+        else nomCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultPassport["DOB"] != null)
+            dateCinResult.text = resultPassport["DOB"].toString()
+        else dateCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultPassport["CIN"] != null)
+            numberCinResult.text = resultPassport["CIN"].toString()
+        else numberCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultPassport["Sexe"] != null)
+            sexeCinResult.text = resultPassport["Sexe"].toString()
+        else sexeCinIcon.setImageResource(R.drawable.warning)
+
+        if (resultPassport["passport"] != null)
+            passportNumResult.text = resultPassport["passport"].toString()
+        else passportNumResult.text = resultPassport["passport"].toString() // TODO()
     }
 
     /*
@@ -168,7 +219,7 @@ class DataExtracted : AppCompatActivity() {
         mdnSimResult.text = resultSim["MDN"].toString()
     }
 
-    /**
+    /*
      * Function to show sim result part
      */
     private fun showTextSim() {

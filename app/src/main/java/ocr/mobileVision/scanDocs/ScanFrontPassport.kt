@@ -33,6 +33,7 @@ class ScanFrontPassport : AppCompatActivity() {
     private val PERMISSION_REQUEST_CAMERA = 100
     val hashMap = HashMap<String, String>()
     private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
 
     val pattern = Pattern.compile("[^A-Z0-9 ]")
 
@@ -41,9 +42,11 @@ class ScanFrontPassport : AppCompatActivity() {
         setContentView(R.layout.activity_scan_front_passport)
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
+        extractLabel = findViewById(R.id.extract_label)
 
         var anim: LottieAnimationView
         var viewBg: View
+        extractLabel.visibility = View.GONE
 
         anim = findViewById(R.id.animationView)
         viewBg = findViewById(R.id.bg_onLoad)
@@ -55,6 +58,8 @@ class ScanFrontPassport : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {

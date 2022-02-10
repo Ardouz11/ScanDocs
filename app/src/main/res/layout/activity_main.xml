@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#494949"
+    android:orientation="vertical"
     tools:context=".IDCard">
-
 
 
     <SurfaceView
@@ -15,12 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
+        android:background="@drawable/back_bg"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/back_bg"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -140,8 +138,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginBottom="30dp"
-            android:src="@drawable/ic_capture"
             android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_capture"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -150,19 +148,21 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompatTwo"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Recto"
             android:textColor="#fff"
-            android:textSize="20dp" />
+            android:textSize="16dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!--
@@ -197,17 +197,34 @@
         android:id="@+id/bg_onLoad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:background="#494949" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
         android:layout_width="200dp"
         android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/scan"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/extract_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Extraction des données.."
+        android:textColor="#FFFFFF"
+        android:visibility="gone"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
