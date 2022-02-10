@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -33,8 +32,8 @@ class ScanFrontPassport : AppCompatActivity() {
     private val PERMISSION_REQUEST_CAMERA = 100
     val hashMap = HashMap<String, String>()
     private lateinit var start: ImageView
+    private var size = 0
     private lateinit var extractLabel: TextView
-
     val pattern = Pattern.compile("[^A-Z0-9 ]")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +70,6 @@ class ScanFrontPassport : AppCompatActivity() {
                         return
                     }
                     tvResult.post {
-                        hashMap.clear()
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             if (Pattern.matches("P<.*", item.value)) {
@@ -81,20 +79,14 @@ class ScanFrontPassport : AppCompatActivity() {
                                 while (mLineOne.find()) {
                                     allMatchesLineOne.add(mLineOne.group())
                                 }
-
+                                size = allMatchesLineOne.size
                                 var string = StringBuilder()
-                                if (allMatchesLineOne.last() === "K") {
-                                    hashMap.put("FirstName: ", allMatchesLineOne[allMatchesLineOne.size - 1])
-                                    for (i in 1 until allMatchesLineOne.size - 2) {
-
-                                        string.append(allMatchesLineOne[i] + " ")
-                                    }
+                                if (allMatchesLineOne.remove("K")) {
+                                    size = allMatchesLineOne.size
                                 }
-                                hashMap.put("LastName: ", allMatchesLineOne.last())
+                                hashMap.put("FirstName", allMatchesLineOne[size - 1])
                                 allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
-                                Log.d("list1", allMatchesLineOne.toString())
-                                for (i in 1 until allMatchesLineOne.size - 1) {
-
+                                for (i in 1 until size - 1) {
                                     string.append(allMatchesLineOne[i] + " ")
                                 }
                                 hashMap.put("LastName", string.toString())
@@ -108,7 +100,7 @@ class ScanFrontPassport : AppCompatActivity() {
                                 hashMap.put("Passport", allMatches[0] + allMatches[1].dropLast(1))
                                 hashMap.put("Nationality", allMatches[2])
                                 if (allMatches[3].take(2).toInt() <40) {
-                                    hashMap.put("DOB  ", allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2))
+                                    hashMap.put("DOB", allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2))
                                 } else {
                                     hashMap.put("DOB", allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2))
                                 }

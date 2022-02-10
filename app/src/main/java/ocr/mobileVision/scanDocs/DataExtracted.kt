@@ -221,12 +221,12 @@ class DataExtracted : AppCompatActivity() {
      */
     private fun setSimView(resultSim: HashMap<String, String>) {
         showTextSim()
-        if (resultSim["ICC"] != null)
-            iccSimResult.text = resultSim["ICC"].toString()
+        if (resultSim["iccNumber"] != null)
+            iccSimResult.text = resultSim["iccNumber"].toString()
         else iccSimIcon.setImageResource(R.drawable.warning)
 
-        if (resultSim["MDN"] != null)
-            mdnSimResult.text = resultSim["MDN"].toString()
+        if (resultSim["phoneNumber"] != null)
+            mdnSimResult.text = resultSim["phoneNumber"].toString()
         else mdnSimIcon.setImageResource(R.drawable.warning)
     }
 
