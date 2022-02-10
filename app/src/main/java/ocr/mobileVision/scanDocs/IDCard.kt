@@ -12,7 +12,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import collections.forEach
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
@@ -81,12 +80,8 @@ class IDCard : AppCompatActivity() {
     }
 
     private fun process(items: SparseArray<TextBlock>?, intent: Intent) {
-        val arrayList = ArrayList<String>()
-        items!!.forEach { i, _ ->
-            if (!Pattern.matches(regex!!.toRegex().toString(), items.valueAt(i).value)) {
-                arrayList.add(items.valueAt(i).value)
-            }
-        }
+        val helper = Helpers()
+        val arrayList = helper.removeUnuseful(items, regex!!.toRegex().toString())
         tvResult.post {
             this.flagName = true
             for (i in 0 until arrayList.size) {
@@ -123,7 +118,7 @@ class IDCard : AppCompatActivity() {
     }
 
     private fun processDOB(item: String, i: Int, flagMatchDOB: Boolean) {
-        if (flagMatchDOB && item.length> 5 && i <7 && !hashMap.containsKey("DOB")) {
+        if (flagMatchDOB && item.length> 5 && i <5 && !hashMap.containsKey("DOB")) {
             hashMap["DOB"] = item
         }
     }

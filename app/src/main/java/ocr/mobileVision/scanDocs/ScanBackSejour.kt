@@ -20,6 +20,7 @@ import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
+import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
@@ -124,7 +125,7 @@ class ScanBackSejour : AppCompatActivity() {
     }
 
     private fun processLastName(flagMatchLastName: Boolean, allMatchesLineOne: ArrayList<String>) {
-        var string = StringBuilder()
+        val string = StringBuilder()
         if (flagMatchLastName) {
             for (i in 7 until this.size - 1) {
                 string.append(allMatchesLineOne[i] + " ")
@@ -158,7 +159,7 @@ class ScanBackSejour : AppCompatActivity() {
 
     private fun processAddress(item: TextBlock?, flagMatchAddress: Boolean) {
         if (flagMatchAddress) {
-            hashMap["Adresse"] = item!!.value.toUpperCase().replace("ADRESSE", "")
+            hashMap["Adresse"] = item!!.value.toUpperCase(Locale.getDefault()).replace("ADRESSE", "")
         }
     }
 
