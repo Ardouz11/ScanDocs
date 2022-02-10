@@ -34,6 +34,8 @@ class DataExtracted : AppCompatActivity() {
     private lateinit var adresseCinIcon: ImageView
     private lateinit var sexeCinIcon: ImageView
     private lateinit var passportNumIcon: ImageView
+    private lateinit var iccSimIcon: ImageView
+    private lateinit var mdnSimIcon: ImageView
 
     // Sejour
     private lateinit var nationaliteSejourResult: TextView
@@ -88,6 +90,8 @@ class DataExtracted : AppCompatActivity() {
         adresseCinIcon = findViewById(R.id.adresse_cin_icon)
         sexeCinIcon = findViewById(R.id.sexe_cin_icon)
         passportNumIcon = findViewById(R.id.passport_num_icon)
+        iccSimIcon = findViewById(R.id.icc_sim_icon)
+        mdnSimIcon = findViewById(R.id.mdn_sim_icon)
 
         val hashMap: HashMap<String, String>
         val fromActivityValue: String
@@ -217,8 +221,13 @@ class DataExtracted : AppCompatActivity() {
      */
     private fun setSimView(resultSim: HashMap<String, String>) {
         showTextSim()
-        iccSimResult.text = resultSim["ICC"].toString()
-        mdnSimResult.text = resultSim["MDN"].toString()
+        if (resultSim["ICC"] != null)
+            iccSimResult.text = resultSim["ICC"].toString()
+        else iccSimIcon.setImageResource(R.drawable.warning)
+
+        if (resultSim["MDN"] != null)
+            mdnSimResult.text = resultSim["MDN"].toString()
+        else mdnSimIcon.setImageResource(R.drawable.warning)
     }
 
     /*

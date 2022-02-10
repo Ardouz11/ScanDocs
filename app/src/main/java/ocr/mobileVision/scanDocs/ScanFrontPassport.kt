@@ -46,12 +46,12 @@ class ScanFrontPassport : AppCompatActivity() {
 
         var anim: LottieAnimationView
         var viewBg: View
-        extractLabel.visibility = View.GONE
 
         anim = findViewById(R.id.animationView)
         viewBg = findViewById(R.id.bg_onLoad)
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
 
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()

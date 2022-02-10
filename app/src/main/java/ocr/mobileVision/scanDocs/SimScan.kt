@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -61,6 +62,9 @@ class SimScan : AppCompatActivity() {
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     mCameraSource.stop()
+                    for(i in hashMap.keys) Log.d("valuesMe","key : $i - value : "+hashMap[i])
+
+                    Log.d("valuesMe","All value : "+hashMap)
                     intent.putExtra("dataCIN", hashMap)
                     intent.putExtra("fromActivity", "sim")
                     startActivity(intent)

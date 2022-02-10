@@ -32,6 +32,8 @@ class ScanBackSejour : AppCompatActivity() {
     private lateinit var surface_camera_preview: SurfaceView
     private val permissionRequestCamera = 100
     private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
+
     var hashMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +44,11 @@ class ScanBackSejour : AppCompatActivity() {
 
         anim = findViewById(R.id.animationView)
         viewBg = findViewById(R.id.bg_onLoad)
+        extractLabel = findViewById(R.id.extract_label)
+
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
 
         tv_result = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
@@ -53,6 +58,8 @@ class ScanBackSejour : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
