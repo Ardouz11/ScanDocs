@@ -62,9 +62,9 @@ class SimScan : AppCompatActivity() {
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     mCameraSource.stop()
-                    for(i in hashMap.keys) Log.d("valuesMe","key : $i - value : "+hashMap[i])
+                    for (i in hashMap.keys) Log.d("valuesMe", "key : $i - value : " + hashMap[i])
 
-                    Log.d("valuesMe","All value : "+hashMap)
+                    Log.d("valuesMe", "All value : " + hashMap)
                     intent.putExtra("dataCIN", hashMap)
                     intent.putExtra("fromActivity", "sim")
                     startActivity(intent)
