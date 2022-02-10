@@ -34,7 +34,6 @@ class DataExtracted : AppCompatActivity() {
         nationaliteSejourResult = findViewById(R.id.nationalite_sejour_result)
         validiteSejourResult = findViewById(R.id.validite_sejour_result)
 
-
         val hashMap: HashMap<String, String>
         val fromActivityValue: String
         val extras = intent.extras
@@ -99,8 +98,8 @@ class DataExtracted : AppCompatActivity() {
         numberCinResult.text = result["CIN"].toString()
         adresseCinResult.text = result["Adresse"].toString()
         sexeCinResult.text = result["Sexe"].toString()
-        //nationaliteSejourResult.text = result[""].toString()
-        //validiteSejourResult.text = result[""].toString()
+        // nationaliteSejourResult.text = result[""].toString()
+        // validiteSejourResult.text = result[""].toString()
     }
 
     /**
