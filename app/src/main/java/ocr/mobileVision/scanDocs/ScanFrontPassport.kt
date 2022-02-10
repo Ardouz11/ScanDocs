@@ -66,7 +66,6 @@ class ScanFrontPassport : AppCompatActivity() {
                         return
                     }
                     tvResult.post {
-                        hashMap.clear()
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
                             if (Pattern.matches("P<.*", item.value)) {
@@ -92,7 +91,6 @@ class ScanFrontPassport : AppCompatActivity() {
 
                                     string.append(allMatchesLineOne[i] + " ")
                                 }
-                                hashMap.put("LastName", string.toString())
                                 var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
                                 var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i + 1).value)
                                 var allMatches: ArrayList<String> = ArrayList()
@@ -115,6 +113,7 @@ class ScanFrontPassport : AppCompatActivity() {
                             }
                         }
                         mCameraSource.stop()
+                        Log.d("pass", hashMap.toString())
                         intent.putExtra("dataCIN", hashMap)
                         intent.putExtra("fromActivity", "passport")
                         startActivity(intent)
