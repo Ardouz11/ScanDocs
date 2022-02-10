@@ -33,6 +33,7 @@ class DataExtracted : AppCompatActivity() {
     private lateinit var numberCinIcon: ImageView
     private lateinit var adresseCinIcon: ImageView
     private lateinit var sexeCinIcon: ImageView
+    private lateinit var passportNumIcon: ImageView
 
     // Sejour
     private lateinit var nationaliteSejourResult: TextView
@@ -86,6 +87,7 @@ class DataExtracted : AppCompatActivity() {
         numberCinIcon = findViewById(R.id.number_cin_icon)
         adresseCinIcon = findViewById(R.id.adresse_cin_icon)
         sexeCinIcon = findViewById(R.id.sexe_cin_icon)
+        passportNumIcon = findViewById(R.id.passport_num_icon)
 
         val hashMap: HashMap<String, String>
         val fromActivityValue: String
@@ -196,9 +198,9 @@ class DataExtracted : AppCompatActivity() {
             sexeCinResult.text = resultPassport["Sexe"].toString()
         else sexeCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultPassport["passport"] != null)
-            passportNumResult.text = resultPassport["passport"].toString()
-        else passportNumResult.text = resultPassport["passport"].toString() // TODO()
+        if (resultPassport["Passport"] != null)
+            passportNumResult.text = resultPassport["Passport"].toString()
+        else passportNumIcon.setImageResource(R.drawable.warning)
     }
 
     /*

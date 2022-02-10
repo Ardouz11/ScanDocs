@@ -28,19 +28,24 @@ class ScanFrontSejour : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
     private lateinit var surface_camera_preview: SurfaceView
+
     val hashMap = HashMap<String, String>()
     var string: String = ""
     private val PERMISSION_REQUEST_CAMERA = 100
+
     private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_front_sejour)
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
+        extractLabel = findViewById(R.id.extract_label)
 
         var anim: LottieAnimationView
         var viewBg: View
+        extractLabel.visibility = View.GONE
 
         anim = findViewById(R.id.animationView)
         viewBg = findViewById(R.id.bg_onLoad)
@@ -54,6 +59,8 @@ class ScanFrontSejour : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, ScanBackSejour::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
