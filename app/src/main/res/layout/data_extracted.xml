@@ -269,9 +269,8 @@
     </LinearLayout>
 
     <!--
-    ** Specific for SEJOUR PART
+        ** Specific for SEJOUR PART
     -->
-
     <!-- nationalite_sejour_ll -->
     <LinearLayout
         android:id="@+id/nationalite_sejour_ll"
@@ -344,9 +343,8 @@
     </LinearLayout>
 
     <!--
-    ** Specific for Passport PART
+        ** Specific for Passport PART
     -->
-
     <!-- passport_num_ll -->
     <LinearLayout
         android:id="@+id/passport_num_ll"
@@ -377,6 +375,83 @@
 
         <ImageView
             android:id="@+id/passport_num_icon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:src="@drawable/check" />
+
+    </LinearLayout>
+
+    <!--
+        ** Specific for Sim PART
+    -->
+    <!-- icc_sim_ll -->
+    <LinearLayout
+        android:id="@+id/icc_sim_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:weightSum="8"
+        android:background="#fff"
+        android:paddingStart="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/result_label"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:id="@+id/icc_sim_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textStyle="bold"
+            android:text="ICC :" />
+
+        <TextView
+            android:id="@+id/icc_sim_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text=" " />
+
+        <ImageView
+            android:id="@+id/icc_sim_icon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:src="@drawable/check" />
+
+    </LinearLayout>
+
+    <!-- mdn_sim_ll -->
+    <LinearLayout
+        android:id="@+id/mdn_sim_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:weightSum="8"
+        android:paddingStart="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/icc_sim_ll"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:id="@+id/mdn_sim_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Mdn"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/mdn_sim_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text=" " />
+
+        <ImageView
+            android:id="@+id/mdn_sim_icon"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_weight="1"

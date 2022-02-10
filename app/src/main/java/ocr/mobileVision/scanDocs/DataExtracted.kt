@@ -47,7 +47,7 @@ class DataExtracted : AppCompatActivity() {
             when (fromActivityValue) {
                 "cin" -> setCinView(hashMap)
                 "sejour" -> setSejourView(hashMap)
-                "passport" -> setCinView(hashMap)
+                "passport" -> setPassportView(hashMap)
                 "sim" -> setCinView(hashMap)
             }
             for ((key, value) in hashMap) {
@@ -109,5 +109,8 @@ class DataExtracted : AppCompatActivity() {
         showTextCin() // same field like cin part
         nationaliteSejourResult.visibility = View.VISIBLE
         sexeCinResult.visibility = View.VISIBLE
+    }
+
+    private fun setPassportView(result: HashMap<String, String>) {
     }
 }
