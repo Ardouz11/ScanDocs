@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ocr.mobileVision.scanDocs">
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -7,11 +8,12 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="Scan Documents"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher_second"
+        android:label="OCR Inwi"
+        android:roundIcon="@mipmap/ic_launcher_second"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="MissingClass">
         <activity
             android:name="ocr.mobileVision.scanDocs.ScanBack"
             android:exported="false" />
@@ -36,7 +38,10 @@
         <activity
             android:name="ocr.mobileVision.scanDocs.IDCard"
             android:exported="false" />
-        <activity android:name="ocr.mobileVision.scanDocs.StartActivity">
+        <activity android:name="ocr.mobileVision.scanDocs.StartActivity"
+            android:exported="false"/>
+
+        <activity android:name="ocr.mobileVision.scanDocs.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

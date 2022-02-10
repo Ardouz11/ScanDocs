@@ -32,6 +32,8 @@ class ScanBackSejour : AppCompatActivity() {
     private lateinit var surface_camera_preview: SurfaceView
     private val permissionRequestCamera = 100
     private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
+
     var hashMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +44,11 @@ class ScanBackSejour : AppCompatActivity() {
 
         anim = findViewById(R.id.animationView)
         viewBg = findViewById(R.id.bg_onLoad)
+        extractLabel = findViewById(R.id.extract_label)
+
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
 
         tv_result = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
@@ -53,12 +58,15 @@ class ScanBackSejour : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     mCameraSource.stop()
                     intent.putExtra("dataCIN", hashMap)
+                    intent.putExtra("fromActivity", "sejour")
                     startActivity(intent)
                 }
 
@@ -90,8 +98,8 @@ class ScanBackSejour : AppCompatActivity() {
                                 if (hashMap.get("CIN") != allMatchesLineOne[0] + allMatchesLineOne[1]) {
                                     hashMap.put("CIN", allMatchesLineOne[0] + allMatchesLineOne[1])
                                 }
-                                if (hashMap.get("Prenom") != allMatchesLineOne.last()) {
-                                    hashMap.put("Prenom", allMatchesLineOne.last())
+                                if (hashMap.get("FirstName") != allMatchesLineOne.last()) {
+                                    hashMap.put("FirstName", allMatchesLineOne.last())
                                 }
 
                                 if (!hashMap.containsKey("Sexe")) {
@@ -103,8 +111,8 @@ class ScanBackSejour : AppCompatActivity() {
 
                                         string.append(allMatchesLineOne[i] + " ")
                                     }
-                                    if (hashMap.get("Nom") != string.toString()) {
-                                        hashMap.put("Nom", string.toString())
+                                    if (hashMap.get("LastName") != string.toString()) {
+                                        hashMap.put("LastName", string.toString())
                                     }
                                 }
                                 if (allMatchesLineOne[2].take(2).toInt() <40) {

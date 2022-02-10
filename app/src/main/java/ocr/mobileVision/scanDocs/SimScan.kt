@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -20,18 +21,20 @@ import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
-
 class SimScan : AppCompatActivity() {
 
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
     private lateinit var surfaceCameraPreview: SurfaceView
+
     var string: String = ""
     private val permissionRequestCamera = 100
-    private lateinit var start: ImageView
-    val hashMap = HashMap<String, String>()
 
+    private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
+
+    val hashMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sim_scan)
@@ -40,21 +43,30 @@ class SimScan : AppCompatActivity() {
 
         val anim: LottieAnimationView = findViewById(R.id.animationView)
         val viewBg: View = findViewById(R.id.bg_onLoad)
+        extractLabel = findViewById(R.id.extract_label)
+
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
 
         surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
 
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     mCameraSource.stop()
+                    for (i in hashMap.keys) Log.d("valuesMe", "key : $i - value : " + hashMap[i])
+
+                    Log.d("valuesMe", "All value : " + hashMap)
                     intent.putExtra("dataCIN", hashMap)
+                    intent.putExtra("fromActivity", "sim")
                     startActivity(intent)
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
@@ -78,13 +90,13 @@ class SimScan : AppCompatActivity() {
 
     private fun processICCNumber(flagMatch: Boolean, item: TextBlock?) {
         if (item!!.value.length> 10 && flagMatch) {
-            hashMap["ICC Number "] = item.value
+            hashMap["ICC"] = item.value
         }
     }
 
     private fun processPhoneNumber(flagMatch: Boolean, item: TextBlock?) {
         if (item!!.value.length == 10 && flagMatch) {
-            hashMap["Tele Number "] = item.value
+            hashMap["MDN"] = item.value
         }
     }
 

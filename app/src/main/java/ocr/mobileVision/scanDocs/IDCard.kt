@@ -27,20 +27,31 @@ class IDCard : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
     private lateinit var surfaceCameraPreview: SurfaceView
+
     private val hashMap = HashMap<String, String>()
     private val permissionRequestCamera = 100
     private var flagName: Boolean = false
+
     private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
+
     private var regex: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val anim: LottieAnimationView = findViewById(R.id.animationView)
         val viewBg: View = findViewById(R.id.bg_onLoad)
+        extractLabel = findViewById(R.id.extract_label)
+
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
+
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
+
         surfaceCameraPreview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         val ai = packageManager.getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA)
@@ -49,6 +60,9 @@ class IDCard : AppCompatActivity() {
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
+
             val intent = Intent(this, ScanBack::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
@@ -85,12 +99,12 @@ class IDCard : AppCompatActivity() {
 
     private fun processFLName(item: TextBlock?, flagMatchFLName: Boolean) {
         if (flagMatchFLName && item!!.value.toString().length> 2) {
-            if (this.flagName && !hashMap.containsKey("Prenom")) {
-                hashMap["Prenom"] = item.value
+            if (this.flagName && !hashMap.containsKey("FirstName")) {
+                hashMap["FirstName"] = item.value
                 this.flagName = false
             } else {
-                if (!hashMap.containsKey("Nom")) {
-                    hashMap["Nom"] = item.value
+                if (!hashMap.containsKey("LastName")) {
+                    hashMap["LastName"] = item.value
                     this.flagName = true
                 }
             }

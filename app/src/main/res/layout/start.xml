@@ -4,43 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#F2F2F8"
+    android:orientation="vertical"
     tools:context=".StartActivity">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <View
+        android:id="@+id/viewTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:layout_height="0dp"
+        android:background="#FFF"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-        <TextView
-            android:id="@+id/account_creation_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Scanner Votre Document"
-            android:textSize="20dp"
-            android:textColor="@color/colorInwi"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <ImageView
+        android:id="@+id/image_inwi"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:src="@drawable/inwi"
+        app:layout_constraintBottom_toTopOf="@+id/view5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/view5"
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/gray_line"
-        android:layout_marginEnd="40dp"
+        app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4" />
+        android:text="Choisissez le type du document"
+        android:textColor="#3E3D3D"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <View
         android:id="@+id/view6"
@@ -51,13 +54,15 @@
         android:background="@drawable/gray_line"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+
+
     <!-- First Part of CIN Scan -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_cin"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginHorizontal="20dp"
-        android:background="@drawable/our_item_background"
+        android:background="@drawable/border_identity_white"
         app:layout_constraintBottom_toTopOf="@+id/guideline1"
         app:layout_constraintTop_toTopOf="@+id/guideline"
         tools:ignore="MissingConstraints"
@@ -65,8 +70,9 @@
 
         <ImageView
             android:id="@+id/icon_residence"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/ic_cin_item"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +115,18 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/view_unselected_cin"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline1"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        android:background="@drawable/backgroud_gray_unselected"
+        android:layout_marginHorizontal="20dp"
+        tools:ignore="MissingConstraints"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="-16dp"/>
+
 
     <!-- First Part of Passport Scan -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -116,7 +134,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginHorizontal="20dp"
-        android:background="@drawable/our_item_background"
+        android:background="@drawable/border_identity_white"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline1"
         tools:ignore="MissingConstraints"
@@ -124,8 +142,9 @@
 
         <ImageView
             android:id="@+id/icon_residence2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/ic_passport_item"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -161,12 +180,24 @@
             android:id="@+id/check_passport"
             android:layout_width="22dp"
             android:layout_height="22dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/unselected_radio"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view_unselected_passport"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/backgroud_gray_unselected"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/guideline1"
+        android:layout_marginHorizontal="20dp"
+        tools:ignore="MissingConstraints"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="-16dp"/>
 
 
     <!-- First Part of Sejour Scan -->
@@ -175,7 +206,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginHorizontal="20dp"
-        android:background="@drawable/our_item_background"
+        android:background="@drawable/border_identity_white"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         tools:ignore="MissingConstraints"
@@ -183,8 +214,9 @@
 
         <ImageView
             android:id="@+id/icon_residence3"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/residence_card_item"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -227,13 +259,25 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/view_unselected_sejour"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/backgroud_gray_unselected"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        android:layout_marginHorizontal="20dp"
+        tools:ignore="MissingConstraints"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="-16dp"/>
+
     <!-- First Part of SIM Scan -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_sim"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginHorizontal="20dp"
-        android:background="@drawable/our_item_background"
+        android:background="@drawable/border_identity_white"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
         tools:ignore="MissingConstraints"
@@ -241,8 +285,9 @@
 
         <ImageView
             android:id="@+id/icon_sim"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/residence_card_item"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -285,6 +330,17 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/view_unselected_sim"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/backgroud_gray_unselected"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        android:layout_marginHorizontal="20dp"
+        tools:ignore="MissingConstraints"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="-16dp"/>
 
     <TextView
         android:id="@+id/next_Btn"
@@ -325,34 +381,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.36" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.47" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintGuide_percent="0.58" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.69" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_begin="80dp" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

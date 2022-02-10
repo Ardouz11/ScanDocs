@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -32,8 +31,9 @@ class ScanFrontPassport : AppCompatActivity() {
     private lateinit var surface_camera_preview: SurfaceView
     var string: String = ""
     private val PERMISSION_REQUEST_CAMERA = 100
-    val hashMap=HashMap<String,String>()
+    val hashMap = HashMap<String, String>()
     private lateinit var start: ImageView
+    private lateinit var extractLabel: TextView
 
     val pattern = Pattern.compile("[^A-Z0-9 ]")
 
@@ -42,6 +42,7 @@ class ScanFrontPassport : AppCompatActivity() {
         setContentView(R.layout.activity_scan_front_passport)
         tvResult = findViewById(R.id.tv_result)
         start = findViewById(R.id.capture)
+        extractLabel = findViewById(R.id.extract_label)
 
         var anim: LottieAnimationView
         var viewBg: View
@@ -50,12 +51,15 @@ class ScanFrontPassport : AppCompatActivity() {
         viewBg = findViewById(R.id.bg_onLoad)
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
+        extractLabel.visibility = View.GONE
 
         surface_camera_preview = findViewById(R.id.surface_camera_preview)
         startCameraSource()
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE
+            extractLabel.visibility = View.VISIBLE
+            anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
@@ -80,20 +84,20 @@ class ScanFrontPassport : AppCompatActivity() {
 
                                 var string = StringBuilder()
                                 if (allMatchesLineOne.last() === "K") {
-                                    hashMap.put("Prenom: " , allMatchesLineOne[allMatchesLineOne.size - 1] )
+                                    hashMap.put("FirstName: ", allMatchesLineOne[allMatchesLineOne.size - 1])
                                     for (i in 1 until allMatchesLineOne.size - 2) {
 
                                         string.append(allMatchesLineOne[i] + " ")
                                     }
                                 }
-                                hashMap.put("Prenom: " , allMatchesLineOne.last() )
+                                hashMap.put("LastName: ", allMatchesLineOne.last())
                                 allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
                                 Log.d("list1", allMatchesLineOne.toString())
                                 for (i in 1 until allMatchesLineOne.size - 1) {
 
                                     string.append(allMatchesLineOne[i] + " ")
                                 }
-                                hashMap.put("Nom", string.toString())
+                                hashMap.put("LastName", string.toString())
                                 var pLineTwo = Pattern.compile("[A-Z]+|\\d+")
                                 var mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i + 1).value)
                                 var allMatches: ArrayList<String> = ArrayList()
@@ -101,17 +105,15 @@ class ScanFrontPassport : AppCompatActivity() {
                                     allMatches.add(mLineTwo.group())
                                 }
 
-                                hashMap.put("Passport  " , allMatches[0] + allMatches[1].dropLast(1))
-                                hashMap.put("Nationalintity" , allMatches[2])
-                                if(allMatches[3].take(2).toInt()<40){
-                                    hashMap.put("DOB  " , allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2) )
+                                hashMap.put("Passport", allMatches[0] + allMatches[1].dropLast(1))
+                                hashMap.put("Nationality", allMatches[2])
+                                if (allMatches[3].take(2).toInt() <40) {
+                                    hashMap.put("DOB  ", allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2))
+                                } else {
+                                    hashMap.put("DOB", allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2))
                                 }
-                                else{
-                                    hashMap.put("DOB" , allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2))
-
-                                }
-                                hashMap.put("Sexe " , allMatches[4].takeLast(1) )
-                                hashMap.put("END Of Val " , allMatches[5].take(6).takeLast(2) + "/" + allMatches[5].take(4).takeLast(2) + "/20" + allMatches[5].take(2) )
+                                hashMap.put("Sexe", allMatches[4].takeLast(1))
+                                hashMap.put("END Of Val", allMatches[5].take(6).takeLast(2) + "/" + allMatches[5].take(4).takeLast(2) + "/20" + allMatches[5].take(2))
                                 if (allMatches.size> 7) {
                                     hashMap.put("CIN", allMatches[6] + allMatches[7])
                                 }
@@ -119,6 +121,7 @@ class ScanFrontPassport : AppCompatActivity() {
                         }
                         mCameraSource.stop()
                         intent.putExtra("dataCIN", hashMap)
+                        intent.putExtra("fromActivity", "passport")
                         startActivity(intent)
                     }
                 }

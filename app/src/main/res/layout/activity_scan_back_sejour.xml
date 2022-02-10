@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="#494949"
     android:orientation="vertical"
     tools:context=".ScanFrontPassport">
 
@@ -20,17 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/back_iv"
-        android:layout_width="wrap_content"
-        android:background="?selectableItemBackgroundBorderless"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/ic_left_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="#FFF" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/cl1"
@@ -159,20 +148,21 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompatTwo"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:layout_marginBottom="10dp"
-
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back"
+            android:text="verso"
             android:textColor="#fff"
-            android:textSize="20dp" />
+            android:textSize="16dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!--
@@ -207,7 +197,9 @@
         android:id="@+id/bg_onLoad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryNo"/>
+        android:background="#494949"
+        android:visibility="gone"
+        />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
@@ -218,6 +210,20 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/scan"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/extract_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Extraction des données.."
+        android:textColor="#FFFFFF"
+        android:visibility="gone"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
