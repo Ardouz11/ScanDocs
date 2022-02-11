@@ -49,8 +49,9 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
-        <meta-data android:name="regexIDCard" android:value="ROYAUM.*|CARTE.*|.*MAROC|.*NATIONA.*|[a-z].*|.*[ä].*|[à].*|.*[~!@#\$%^&amp;*()_+'{}\\[\\]:;?-].*" />
+        <meta-data android:name="regexIDCard" android:value="^ROYAUM.*|^ ROYAUM.*|.*CARTE.*|.*MAROC.*|.*NATIONA.*|[a-z].*|.*[ä].*|.*[àé].*|.*[~!@#\$%^;*()_+'{}\\[\\]:;?-].*" />
         <meta-data android:name="regexPassport" android:value="P.*"/>
+        <meta-data android:name="regexCarteSejour" android:value="^ROYAUM.*|^ ROYAUM.*|.*CARTE.*|.*MAROC.*|.*IMMATRICULA.*|[a-z].*|.*[ä].*|.*[àé].*|.*[~!@#\$%^;*()_+'{}\\[\\]:;?-].*" />
     </application>
 
 
