@@ -497,7 +497,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text=""
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:visibility="gone"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="35dp"
@@ -515,7 +515,7 @@
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="#FFF"
-        android:textSize="18dp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
