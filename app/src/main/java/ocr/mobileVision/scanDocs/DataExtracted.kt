@@ -1,7 +1,6 @@
 package ocr.mobileVision.scanDocs
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -108,10 +107,6 @@ class DataExtracted : AppCompatActivity() {
                 "sejour" -> setSejourView(hashMap)
                 "passport" -> setPassportView(hashMap)
                 "sim" -> setSimView(hashMap)
-            }
-            for ((key, value) in hashMap) {
-                Log.d("TestPlot : ", "- $key : $value")
-                tvResult.text = tvResult.text.toString() + key + " : " + value + "\n"
             }
         }
 

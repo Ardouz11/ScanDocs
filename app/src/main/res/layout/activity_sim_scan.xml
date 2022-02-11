@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:text="Carte Sim"
             android:textColor="#fff"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!--

@@ -119,18 +119,23 @@ class StartActivity : AppCompatActivity() {
         }
 
         nextBtn.setOnClickListener {
-            if (methodSelected == "passport") {
-                val intentScanFrontPassport = Intent(this, ScanFrontPassport::class.java)
-                startActivity(intentScanFrontPassport)
-            } else if (methodSelected == "sejour") {
-                val intentScanFrontSejour = Intent(this, ScanFrontSejour::class.java)
-                startActivity(intentScanFrontSejour)
-            } else if (methodSelected == "sim") {
-                val intentScanSim = Intent(this, SimScan::class.java)
-                startActivity(intentScanSim)
-            } else {
-                val intentIDCard = Intent(this, IDCard::class.java)
-                startActivity(intentIDCard)
+            when (methodSelected) {
+                "passport" -> {
+                    val intentScanFrontPassport = Intent(this, ScanFrontPassport::class.java)
+                    startActivity(intentScanFrontPassport)
+                }
+                "sejour" -> {
+                    val intentScanFrontSejour = Intent(this, ScanFrontSejour::class.java)
+                    startActivity(intentScanFrontSejour)
+                }
+                "sim" -> {
+                    val intentScanSim = Intent(this, SimScan::class.java)
+                    startActivity(intentScanSim)
+                }
+                else -> {
+                    val intentIDCard = Intent(this, IDCard::class.java)
+                    startActivity(intentIDCard)
+                }
             }
         }
     }
