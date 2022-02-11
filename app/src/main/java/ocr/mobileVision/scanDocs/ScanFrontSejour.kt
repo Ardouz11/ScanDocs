@@ -49,7 +49,7 @@ class ScanFrontSejour : AppCompatActivity() {
         startCameraSource()
         val ai = packageManager.getApplicationInfo(this.packageName, PackageManager.GET_META_DATA)
         val bundle = ai.metaData
-        regex = bundle.getString("regexIDCard")
+        regex = bundle.getString("regexCarteSejour")
         start.setOnClickListener {
             anim.visibility = View.VISIBLE
             viewBg.visibility = View.VISIBLE

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -103,51 +104,78 @@ class ScanBack : AppCompatActivity() {
 
     private fun processMRZ(flagMatchMRZ: Boolean, item: TextBlock?) {
         if (flagMatchMRZ && item!!.value.length> 20) {
-            val match = item.value.replace(" ", "").drop(15)
+            val match = item.value.replace(" ", "")
+            val chunked = match.replace(" ", "").chunked(30)
             val pLineOne = Pattern.compile("[A-Z]+|\\d+")
-            val mLineOne: Matcher = pLineOne.matcher(match)
-            val allMatchesLineOne: ArrayList<String> = ArrayList()
-            while (mLineOne.find()) {
-                allMatchesLineOne.add(mLineOne.group())
+            val pLineThree = Pattern.compile("[A-Z]+")
+            if (chunked.size> 2) {
+                val mLineOne: Matcher = pLineOne.matcher(chunked[0].replace(" ", "").drop(15))
+                val mLineTwo: Matcher = pLineOne.matcher(chunked[1].replace(" ", "").take(15))
+                val mLineThree: Matcher = pLineThree.matcher(chunked[2].replace(" ", ""))
+                processLineOne(mLineOne)
+                processLineTwo(mLineTwo)
+                processLineThree(mLineThree)
             }
-            this.size = allMatchesLineOne.size
-            val flagMatchCIN = hashMap["CIN"] != allMatchesLineOne[0] + allMatchesLineOne[1]
-            processCIN(flagMatchCIN, allMatchesLineOne[0] + allMatchesLineOne[1])
-            val flagMatchFirstname = hashMap["FirstName"] != allMatchesLineOne.last()
-            processFirstName(flagMatchFirstname, allMatchesLineOne)
-            val flagMatchLastName = allMatchesLineOne.size> 7
-            processLastName(flagMatchLastName, allMatchesLineOne)
         }
     }
 
+    private fun processLineThree(mLineThree: Matcher) {
+        val allMatchesLineThree: ArrayList<String> = ArrayList()
+        while (mLineThree.find()) {
+            allMatchesLineThree.add(mLineThree.group())
+        }
+        this.size = allMatchesLineThree.size
+        val flagMatchFirstname = hashMap["FirstName"] != allMatchesLineThree.last()
+        processFirstName(flagMatchFirstname, allMatchesLineThree)
+        processLastName(allMatchesLineThree)
+    }
+
+    private fun processLineTwo(mLineTwo: Matcher) {
+        val allMatchesLineTwo: ArrayList<String> = ArrayList()
+        while (mLineTwo.find()) {
+            allMatchesLineTwo.add(mLineTwo.group())
+        }
+        Log.d("chunk", allMatchesLineTwo.toString())
+        if (!hashMap.containsKey("Sexe")) {
+            hashMap["Sexe"] = allMatchesLineTwo[1].takeLast(1)
+        }
+        if (allMatchesLineTwo[0].take(2).toInt() <date) {
+            hashMap["DOB"] =
+                allMatchesLineTwo[0].take(6).takeLast(2) + "/" + allMatchesLineTwo[0].take(4).takeLast(2) + "/20" + allMatchesLineTwo[0].take(2)
+        } else {
+            hashMap["DOB"] =
+                allMatchesLineTwo[0].take(6).takeLast(2) + "/" + allMatchesLineTwo[0].take(4).takeLast(2) + "/19" + allMatchesLineTwo[0].take(2)
+        }
+    }
+
+    private fun processLineOne(mLineOne: Matcher) {
+        val allMatchesLineOne: ArrayList<String> = ArrayList()
+        while (mLineOne.find()) {
+            allMatchesLineOne.add(mLineOne.group())
+        }
+        Log.d("chunk", allMatchesLineOne.toString())
+        val flagMatchCIN = hashMap["CIN"] != allMatchesLineOne[0] + allMatchesLineOne[1]
+        processCIN(flagMatchCIN, allMatchesLineOne[0] + allMatchesLineOne[1])
+    }
+
     private fun processFirstName(flagMatchFirstname: Boolean, allMatchesLineOne: ArrayList<String>) {
-        if (allMatchesLineOne.remove("K")) {
+        while (allMatchesLineOne.remove("K")) {
             this.size = allMatchesLineOne.size
         }
-        if (flagMatchFirstname && allMatchesLineOne.size> 7) {
+        Log.d("chunk", allMatchesLineOne.toString())
+        if (flagMatchFirstname) {
             hashMap["FirstName"] = allMatchesLineOne.last()
         }
     }
 
-    private fun processLastName(flagMatchLastName: Boolean, allMatchesLineOne: ArrayList<String>) {
+    private fun processLastName(allMatchesLineOne: ArrayList<String>) {
         val string = StringBuilder()
-        if (flagMatchLastName) {
-            for (i in 7 until this.size - 1) {
-                string.append(allMatchesLineOne[i] + " ")
-            }
-            if (!hashMap.containsKey("Sexe")) {
-                hashMap["Sexe"] = allMatchesLineOne[3].takeLast(1)
-            }
-            if (hashMap["LastName"] != string.toString()) {
-                hashMap["LastName"] = string.toString()
-            }
-            if (allMatchesLineOne[2].take(2).toInt() <date) {
-                hashMap["DOB"] =
-                    allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2)
-            } else {
-                hashMap["DOB"] =
-                    allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2)
-            }
+        for (i in 0 until this.size - 1) {
+            string.append(allMatchesLineOne[i] + " ")
+        }
+
+        if (hashMap["LastName"] != string.toString()) {
+            hashMap["LastName"] = string.toString()
         }
     }
     private fun processCIN(flagMatchCIN: Boolean, s: String) {
