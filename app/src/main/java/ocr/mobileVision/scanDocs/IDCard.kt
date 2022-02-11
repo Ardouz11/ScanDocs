@@ -22,7 +22,6 @@ import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 class IDCard : AppCompatActivity() {
-
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
