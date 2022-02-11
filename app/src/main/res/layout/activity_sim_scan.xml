@@ -136,7 +136,6 @@
             android:id="@+id/capture"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginBottom="30dp"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_capture"
             app:layout_constraintBottom_toBottomOf="parent"
