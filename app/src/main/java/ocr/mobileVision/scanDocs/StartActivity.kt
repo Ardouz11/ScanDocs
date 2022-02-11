@@ -34,7 +34,10 @@ class StartActivity : AppCompatActivity() {
 
         val nextBtn = findViewById<TextView>(R.id.next_Btn)
 
+        nextBtn.setEnabled(false)
+
         containerCin.setOnClickListener {
+            nextBtn.setEnabled(true)
             methodSelected = "cin"
             checkCin.setImageResource(R.drawable.selected_radio)
             containerCin.setBackgroundResource(R.drawable.border_identity_violet)
@@ -56,6 +59,7 @@ class StartActivity : AppCompatActivity() {
         }
 
         containerPassport.setOnClickListener {
+            nextBtn.setEnabled(true)
             methodSelected = "passport"
             checkPassport.setImageResource(R.drawable.selected_radio)
             containerPassport.setBackgroundResource(R.drawable.border_identity_violet)
@@ -77,6 +81,7 @@ class StartActivity : AppCompatActivity() {
         }
 
         containerSejour.setOnClickListener {
+            nextBtn.setEnabled(true)
             methodSelected = "sejour"
             checkSejour.setImageResource(R.drawable.selected_radio)
             containerSejour.setBackgroundResource(R.drawable.border_identity_violet)
@@ -97,6 +102,7 @@ class StartActivity : AppCompatActivity() {
             nextBtn.background = ContextCompat.getDrawable(this, R.drawable.bg_button_confim)
         }
         containerSim.setOnClickListener {
+            nextBtn.setEnabled(true)
             methodSelected = "sim"
             checkSim.setImageResource(R.drawable.selected_radio)
             containerSim.setBackgroundResource(R.drawable.border_identity_violet)
