@@ -34,9 +34,6 @@ class IDCard : AppCompatActivity() {
     private lateinit var start: ImageView
     private lateinit var extractLabel: TextView
     private var regex: String? = null
-    private var tStart: Long? = null
-    private var tEnd: Long? = 0
-    private var k = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -67,7 +64,6 @@ class IDCard : AppCompatActivity() {
                     println("TODO")
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
-                    tStart = System.currentTimeMillis()
                     val items = detections.detectedItems
                     if (items.size() <= 0) {
                         return
@@ -92,14 +88,6 @@ class IDCard : AppCompatActivity() {
                 val flagMatchFLName = Pattern.matches("^[A-Z]+", item)
                 processFLName(item, flagMatchFLName)
             }
-            tEnd = System.currentTimeMillis()
-            val tDelta: Long = this.tEnd!! - this.tStart!!
-            val elapsedSeconds = tDelta / 1000.0
-            if (k == 0) {
-                k++
-                Log.d("elapsed_front", elapsedSeconds.toString())
-            }
-
             releaseCam(intent)
         }
     }

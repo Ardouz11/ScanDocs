@@ -33,9 +33,6 @@ class SimScan : AppCompatActivity() {
 
     private lateinit var start: ImageView
     private lateinit var extractLabel: TextView
-    private var tStart: Long? = null
-    private var tEnd: Long? = 0
-    private var k = 0
     val hashMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +65,6 @@ class SimScan : AppCompatActivity() {
                     startActivity(intent)
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
-                    tStart = System.currentTimeMillis()
                     val items = detections.detectedItems
                     if (items.size() <= 0) {
                         return
@@ -79,13 +75,6 @@ class SimScan : AppCompatActivity() {
                             val flagMatch = Pattern.matches("[0-9]+", item.value)
                             processPhoneNumber(flagMatch, item)
                             processICCNumber(flagMatch, item)
-                        }
-                        tEnd = System.currentTimeMillis()
-                        val tDelta: Long = tEnd!! - tStart!!
-                        val elapsedSeconds = tDelta / 1000.0
-                        if (k == 0) {
-                            k++
-                            Log.d("elapsed_scan", elapsedSeconds.toString())
                         }
                         release()
                     }

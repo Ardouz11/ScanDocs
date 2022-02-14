@@ -42,9 +42,6 @@ class ScanBack : AppCompatActivity() {
     private var extras: Bundle? = null
     private var size = 0
     private val date = 22
-    private var tStart: Long? = null
-    private var tEnd: Long? = 0
-    private var k = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
@@ -75,7 +72,6 @@ class ScanBack : AppCompatActivity() {
                 }
 
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
-                    tStart = System.currentTimeMillis()
                     val items = detections.detectedItems
                     if (items.size() <= 0) {
                         return
@@ -101,14 +97,6 @@ class ScanBack : AppCompatActivity() {
                 val flagMatchSex = Pattern.matches("Sexe.*[MF]|[MF]", item.value)
                 processSex(item, flagMatchSex)
             }
-            tEnd = System.currentTimeMillis()
-            val tDelta: Long = this.tEnd!! - this.tStart!!
-            val elapsedSeconds = tDelta / 1000.0
-            if (k == 0) {
-                Log.d("elapsed_back", elapsedSeconds.toString())
-                k++
-            }
-
             releaseCam(intent)
         }
     }
