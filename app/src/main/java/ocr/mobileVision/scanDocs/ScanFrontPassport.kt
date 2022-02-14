@@ -58,7 +58,9 @@ class ScanFrontPassport : AppCompatActivity() {
 
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
-                override fun release() {}
+                override fun release() {
+                    println("TODO")
+                }
 
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
                     val items = detections.detectedItems
@@ -68,44 +70,9 @@ class ScanFrontPassport : AppCompatActivity() {
                     tvResult.post {
                         for (i in 0 until items.size()) {
                             val item = items.valueAt(i)
-                            if (Pattern.matches("P<.*", item.value)) {
-                                val pLineOne = Pattern.compile("[A-Z]+")
-                                val mLineOne: Matcher = pLineOne.matcher(item.value)
-                                val allMatchesLineOne: ArrayList<String> = ArrayList()
-                                while (mLineOne.find()) {
-                                    allMatchesLineOne.add(mLineOne.group())
-                                }
-                                size = allMatchesLineOne.size
-                                val string = StringBuilder()
-                                if (allMatchesLineOne.remove("K")) {
-                                    size = allMatchesLineOne.size
-                                }
-                                hashMap["FirstName"] = allMatchesLineOne[size - 1]
-                                allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
-                                for (i in 1 until size - 1) {
-                                    string.append(allMatchesLineOne[i] + " ")
-                                }
-                                hashMap["LastName"] = string.toString()
-                                val pLineTwo = Pattern.compile("[A-Z]+|\\d+")
-                                val mLineTwo: Matcher = pLineTwo.matcher(items.valueAt(i + 1).value)
-                                val allMatches: ArrayList<String> = ArrayList()
-                                while (mLineTwo.find()) {
-                                    allMatches.add(mLineTwo.group())
-                                }
-
-                                hashMap["Passport"] = allMatches[0] + allMatches[1].dropLast(1)
-                                hashMap["Nationality"] = allMatches[2]
-                                if (allMatches[3].take(2).toInt() <40) {
-                                    hashMap["DOB"] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2)
-                                } else {
-                                    hashMap["DOB"] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2)
-                                }
-                                hashMap["Sexe"] = allMatches[4].takeLast(1)
-                                hashMap["END Of Val"] =
-                                    allMatches[5].take(6).takeLast(2) + "/" + allMatches[5].take(4).takeLast(2) + "/20" + allMatches[5].take(2)
-                                if (allMatches.size> 7) {
-                                    hashMap["CIN"] = allMatches[6] + allMatches[7]
-                                }
+                            val flagMatchMRZ = Pattern.matches("P<.*", item.value)
+                            if (flagMatchMRZ) {
+                                processMRZ(item, items.valueAt(i + 1).value)
                             }
                         }
                         mCameraSource.stop()
@@ -116,6 +83,61 @@ class ScanFrontPassport : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    private fun processMRZ(item: TextBlock?, valueAt: String) {
+        val pLineOne = Pattern.compile("[A-Z]+")
+        val mLineOne: Matcher = pLineOne.matcher(item!!.value)
+        val pLineTwo = Pattern.compile("[A-Z]+|\\d+")
+        val mLineTwo: Matcher = pLineTwo.matcher(valueAt)
+        processLineOne(mLineOne)
+        processLineTwo(mLineTwo)
+    }
+
+    private fun processLineTwo(mLineTwo: Matcher) {
+        val allMatches: ArrayList<String> = ArrayList()
+        while (mLineTwo.find()) {
+            allMatches.add(mLineTwo.group())
+        }
+        hashMap["Passport"] = allMatches[0] + allMatches[1].dropLast(1)
+        hashMap["Nationality"] = allMatches[2]
+        if (allMatches[3].take(2).toInt() <40) {
+            hashMap["DOB"] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2)
+        } else {
+            hashMap["DOB"] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2)
+        }
+        hashMap["Sexe"] = allMatches[4].takeLast(1)
+        hashMap["END Of Val"] =
+            allMatches[5].take(6).takeLast(2) + "/" + allMatches[5].take(4).takeLast(2) + "/20" + allMatches[5].take(2)
+        if (allMatches.size> 7) {
+            hashMap["CIN"] = allMatches[6] + allMatches[7]
+        }
+    }
+
+    private fun processLineOne(mLineOne: Matcher) {
+        val allMatchesLineOne: ArrayList<String> = ArrayList()
+        while (mLineOne.find()) {
+            allMatchesLineOne.add(mLineOne.group())
+        }
+        size = allMatchesLineOne.size
+        processFirstName(allMatchesLineOne)
+        processLastName(allMatchesLineOne)
+    }
+
+    private fun processLastName(allMatchesLineOne: ArrayList<String>) {
+        val string = StringBuilder()
+        allMatchesLineOne[1] = allMatchesLineOne[1].drop(3)
+        for (i in 1 until size - 1) {
+            string.append(allMatchesLineOne[i] + " ")
+        }
+        hashMap["LastName"] = string.toString()
+    }
+
+    private fun processFirstName(allMatchesLineOne: ArrayList<String>) {
+        while (allMatchesLineOne.remove("K")) {
+            size = allMatchesLineOne.size
+        }
+        hashMap["FirstName"] = allMatchesLineOne[size - 1]
     }
 
     private fun startCameraSource() {
@@ -139,6 +161,7 @@ class ScanFrontPassport : AppCompatActivity() {
 
         surfaceCameraPreview.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
+                println("TODO")
             }
 
             override fun surfaceDestroyed(p0: SurfaceHolder?) {
