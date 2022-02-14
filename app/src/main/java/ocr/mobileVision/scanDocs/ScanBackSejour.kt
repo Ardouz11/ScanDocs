@@ -45,6 +45,7 @@ class ScanBackSejour : AppCompatActivity() {
         setContentView(R.layout.activity_scan_back_sejour)
         val anim: LottieAnimationView = findViewById(R.id.animationView)
         val viewBg: View = findViewById(R.id.bg_onLoad)
+
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
         tvResult = findViewById(R.id.tv_result)

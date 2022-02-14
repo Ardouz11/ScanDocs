@@ -39,9 +39,11 @@ class IDCard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val anim: LottieAnimationView = findViewById(R.id.animationView)
         val viewBg: View = findViewById(R.id.bg_onLoad)
         extractLabel = findViewById(R.id.extract_label)
+
         anim.visibility = View.GONE
         viewBg.visibility = View.GONE
         extractLabel.visibility = View.GONE
