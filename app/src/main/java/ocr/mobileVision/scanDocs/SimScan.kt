@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -32,7 +33,8 @@ class SimScan : AppCompatActivity() {
 
     private lateinit var start: ImageView
     private lateinit var extractLabel: TextView
-
+    private var tStart: Long? = null
+    private var tEnd: Long? = null
     val hashMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +59,14 @@ class SimScan : AppCompatActivity() {
             anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
-
+            tStart = System.currentTimeMillis()
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     mCameraSource.stop()
+                    tEnd = System.currentTimeMillis()
+                    val tDelta: Long? = tEnd!! - tStart!!
+                    val elapsedSeconds = tDelta!! / 1000.0
+                    Log.d("elpased_scan", elapsedSeconds.toString())
                     intent.putExtra("dataCIN", hashMap)
                     intent.putExtra("fromActivity", "sim")
                     startActivity(intent)

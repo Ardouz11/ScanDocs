@@ -42,7 +42,8 @@ class ScanBack : AppCompatActivity() {
     private var extras: Bundle? = null
     private var size = 0
     private val date = 22
-
+    private var tStart: Long? = null
+    private var tEnd: Long? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
@@ -67,6 +68,7 @@ class ScanBack : AppCompatActivity() {
             anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
+            tStart = System.currentTimeMillis()
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     println("TODO")
@@ -105,13 +107,13 @@ class ScanBack : AppCompatActivity() {
     private fun processMRZ(flagMatchMRZ: Boolean, item: TextBlock?) {
         if (flagMatchMRZ && item!!.value.length> 20) {
             val match = item.value.replace(" ", "")
-            val chunked = match.replace(" ", "").chunked(30)
+            val chunks = match.replace(" ", "").chunked(30)
             val pLineOne = Pattern.compile("[A-Z]+|\\d+")
             val pLineThree = Pattern.compile("[A-Z]+")
-            if (chunked.size> 2) {
-                val mLineOne: Matcher = pLineOne.matcher(chunked[0].replace(" ", "").drop(15))
-                val mLineTwo: Matcher = pLineOne.matcher(chunked[1].replace(" ", "").take(15))
-                val mLineThree: Matcher = pLineThree.matcher(chunked[2].replace(" ", ""))
+            if (chunks.size> 2) {
+                val mLineOne: Matcher = pLineOne.matcher(chunks[0].replace(" ", "").drop(15))
+                val mLineTwo: Matcher = pLineOne.matcher(chunks[1].replace(" ", "").take(15))
+                val mLineThree: Matcher = pLineThree.matcher(chunks[2].replace(" ", ""))
                 processLineOne(mLineOne)
                 processLineTwo(mLineTwo)
                 processLineThree(mLineThree)
@@ -198,6 +200,10 @@ class ScanBack : AppCompatActivity() {
 
     private fun releaseCam(intent: Intent) {
         mCameraSource.stop()
+        tEnd = System.currentTimeMillis()
+        val tDelta: Long? = this.tEnd!! - this.tStart!!
+        val elapsedSeconds = tDelta!! / 1000.0
+        Log.d("elpased_back", elapsedSeconds.toString())
         intent.putExtra("dataCIN", hashMap)
         intent.putExtra("fromActivity", "cin")
         startActivity(intent)
