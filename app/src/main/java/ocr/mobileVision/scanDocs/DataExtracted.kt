@@ -35,6 +35,7 @@ class DataExtracted : AppCompatActivity() {
     private lateinit var passportNumIcon: ImageView
     private lateinit var iccSimIcon: ImageView
     private lateinit var mdnSimIcon: ImageView
+    private lateinit var passportNationalityIcon: ImageView
 
     // Sejour
     private lateinit var nationaliteSejourResult: TextView
@@ -43,6 +44,9 @@ class DataExtracted : AppCompatActivity() {
     // Passport
     private lateinit var passportNumResult: TextView
     private lateinit var passportNumLl: LinearLayout
+    private lateinit var passportNationalityResult: TextView
+    private lateinit var passportNationalityLl: LinearLayout
+
 
     // Sim Card
     private lateinit var iccSimResult: TextView
@@ -67,6 +71,7 @@ class DataExtracted : AppCompatActivity() {
         iccSimResult = findViewById(R.id.icc_sim_result)
         mdnSimResult = findViewById(R.id.mdn_sim_result)
         passportNumResult = findViewById(R.id.passport_num_result)
+        passportNationalityResult = findViewById(R.id.passport_nationality_result)
 
         // Layout of the context
         prenomCinLl = findViewById(R.id.prenom_cin_ll)
@@ -77,6 +82,7 @@ class DataExtracted : AppCompatActivity() {
         sexeCinLl = findViewById(R.id.sexe_cin_ll)
 
         passportNumLl = findViewById(R.id.passport_num_ll)
+        passportNationalityLl = findViewById(R.id.passport_nationality_ll)
 
         iccSimLl = findViewById(R.id.icc_sim_ll)
         mdnSimLl = findViewById(R.id.mdn_sim_ll)
@@ -91,6 +97,7 @@ class DataExtracted : AppCompatActivity() {
         passportNumIcon = findViewById(R.id.passport_num_icon)
         iccSimIcon = findViewById(R.id.icc_sim_icon)
         mdnSimIcon = findViewById(R.id.mdn_sim_icon)
+        passportNationalityIcon = findViewById(R.id.passport_nationality_icon)
 
         val hashMap: HashMap<String, String>
         val fromActivityValue: String
@@ -200,6 +207,9 @@ class DataExtracted : AppCompatActivity() {
         if (resultPassport["Passport"] != null)
             passportNumResult.text = resultPassport["Passport"].toString()
         else passportNumIcon.setImageResource(R.drawable.warning)
+        if (resultPassport["Nationality"] != null)
+            passportNationalityResult.text = resultPassport["Nationality"].toString()
+        else passportNationalityIcon.setImageResource(R.drawable.warning)
     }
 
     /*
@@ -209,6 +219,7 @@ class DataExtracted : AppCompatActivity() {
         showTextCin()
         adresseCinLl.visibility = View.GONE // Like Cin view without adress
         passportNumLl.visibility = View.VISIBLE
+        passportNationalityLl.visibility = View.VISIBLE
     }
 
     /**
