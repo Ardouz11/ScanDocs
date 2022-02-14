@@ -34,7 +34,8 @@ class SimScan : AppCompatActivity() {
     private lateinit var start: ImageView
     private lateinit var extractLabel: TextView
     private var tStart: Long? = null
-    private var tEnd: Long? = null
+    private var tEnd: Long? = 0
+    private var k = 0
     val hashMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,19 +60,15 @@ class SimScan : AppCompatActivity() {
             anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
-            tStart = System.currentTimeMillis()
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     mCameraSource.stop()
-                    tEnd = System.currentTimeMillis()
-                    val tDelta: Long = tEnd!! - tStart!!
-                    val elapsedSeconds = tDelta / 1000.0
-                    Log.d("elapsed_scan", elapsedSeconds.toString())
                     intent.putExtra("dataCIN", hashMap)
                     intent.putExtra("fromActivity", "sim")
                     startActivity(intent)
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
+                    tStart = System.currentTimeMillis()
                     val items = detections.detectedItems
                     if (items.size() <= 0) {
                         return
@@ -83,6 +80,14 @@ class SimScan : AppCompatActivity() {
                             processPhoneNumber(flagMatch, item)
                             processICCNumber(flagMatch, item)
                         }
+                        tEnd = System.currentTimeMillis()
+                        val tDelta: Long = tEnd!! - tStart!!
+                        val elapsedSeconds = tDelta / 1000.0
+                        if (k == 0) {
+                            k++
+                            Log.d("elapsed_scan", elapsedSeconds.toString())
+                        }
+
                         release()
                     }
                 }
