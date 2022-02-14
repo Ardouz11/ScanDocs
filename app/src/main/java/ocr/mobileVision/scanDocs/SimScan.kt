@@ -87,7 +87,6 @@ class SimScan : AppCompatActivity() {
                             k++
                             Log.d("elapsed_scan", elapsedSeconds.toString())
                         }
-
                         release()
                     }
                 }
