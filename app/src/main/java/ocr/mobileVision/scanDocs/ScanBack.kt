@@ -201,9 +201,9 @@ class ScanBack : AppCompatActivity() {
     private fun releaseCam(intent: Intent) {
         mCameraSource.stop()
         tEnd = System.currentTimeMillis()
-        val tDelta: Long? = this.tEnd!! - this.tStart!!
-        val elapsedSeconds = tDelta!! / 1000.0
-        Log.d("elpased_back", elapsedSeconds.toString())
+        val tDelta: Long = this.tEnd!! - this.tStart!!
+        val elapsedSeconds = tDelta / 1000.0
+        Log.d("elapsed_back", elapsedSeconds.toString())
         intent.putExtra("dataCIN", hashMap)
         intent.putExtra("fromActivity", "cin")
         startActivity(intent)

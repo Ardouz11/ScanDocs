@@ -64,9 +64,9 @@ class SimScan : AppCompatActivity() {
                 override fun release() {
                     mCameraSource.stop()
                     tEnd = System.currentTimeMillis()
-                    val tDelta: Long? = tEnd!! - tStart!!
-                    val elapsedSeconds = tDelta!! / 1000.0
-                    Log.d("elpased_scan", elapsedSeconds.toString())
+                    val tDelta: Long = tEnd!! - tStart!!
+                    val elapsedSeconds = tDelta / 1000.0
+                    Log.d("elapsed_scan", elapsedSeconds.toString())
                     intent.putExtra("dataCIN", hashMap)
                     intent.putExtra("fromActivity", "sim")
                     startActivity(intent)

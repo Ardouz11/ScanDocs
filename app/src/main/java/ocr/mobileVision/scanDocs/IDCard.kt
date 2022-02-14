@@ -90,9 +90,9 @@ class IDCard : AppCompatActivity() {
                 processFLName(item, flagMatchFLName)
             }
             tEnd = System.currentTimeMillis()
-            val tDelta: Long? = this.tEnd!! - this.tStart!!
-            val elapsedSeconds = tDelta!! / 1000.0
-            Log.d("elpased_front", elapsedSeconds.toString())
+            val tDelta: Long = this.tEnd!! - this.tStart!!
+            val elapsedSeconds = tDelta / 1000.0
+            Log.d("elapsed_front", elapsedSeconds.toString())
             releaseCam(intent)
         }
     }
