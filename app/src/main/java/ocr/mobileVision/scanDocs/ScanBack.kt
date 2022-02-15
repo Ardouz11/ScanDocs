@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -104,7 +105,8 @@ class ScanBack : AppCompatActivity() {
             val chunks = match.replace(" ", "").chunked(30)
             val pLineOne = Pattern.compile("[A-Z]+|\\d+")
             val pLineThree = Pattern.compile("[A-Z]+")
-            if (chunks.size==3) {
+            Log.d("size", chunks.toString())
+            if (chunks.size >= 3) {
                 val mLineOne: Matcher = pLineOne.matcher(chunks[0].replace(" ", "").drop(15))
                 val mLineTwo: Matcher = pLineOne.matcher(chunks[1].replace(" ", "").take(15))
                 val mLineThree: Matcher = pLineThree.matcher(chunks[2].replace(" ", ""))
