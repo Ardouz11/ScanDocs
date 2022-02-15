@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginBottom="10dp"
+        android:fontFamily="@font/basier_circle_medium"
         android:text="Choisissez le type du document"
         android:textColor="#3E3D3D"
         android:textSize="16sp"
