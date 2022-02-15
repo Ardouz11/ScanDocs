@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -29,7 +28,6 @@ import kotlin.collections.HashMap
 import kotlin.properties.Delegates
 
 class ScanBack : AppCompatActivity() {
-
     private var mCameraSource by Delegates.notNull<CameraSource>()
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
     private lateinit var tvResult: TextView
@@ -37,13 +35,10 @@ class ScanBack : AppCompatActivity() {
     private val permissionRequestCamera = 100
     private lateinit var start: ImageView
     private lateinit var extractLabel: TextView
-
     private var hashMap = HashMap<String, String>()
     private var extras: Bundle? = null
     private var size = 0
     private val date = 22
-    private var tStart: Long? = null
-    private var tEnd: Long? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
@@ -68,7 +63,6 @@ class ScanBack : AppCompatActivity() {
             anim.playAnimation()
 
             val intent = Intent(this, DataExtracted::class.java)
-            tStart = System.currentTimeMillis()
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     println("TODO")
@@ -97,7 +91,7 @@ class ScanBack : AppCompatActivity() {
                 processMRZ(flagMatchMRZ, item)
                 val flagMatchAddress = Pattern.matches("Adresse.*", item.value)
                 processAddress(item, flagMatchAddress)
-                val flagMatchSex = Pattern.matches("Sexe.*[MF]|[MF]", item.value)
+                val flagMatchSex = Pattern.matches("[MF]", item.value)
                 processSex(item, flagMatchSex)
             }
             releaseCam(intent)
@@ -137,7 +131,6 @@ class ScanBack : AppCompatActivity() {
         while (mLineTwo.find()) {
             allMatchesLineTwo.add(mLineTwo.group())
         }
-        Log.d("chunk", allMatchesLineTwo.toString())
         if (!hashMap.containsKey("Sexe")) {
             hashMap["Sexe"] = allMatchesLineTwo[1].takeLast(1)
         }
@@ -155,7 +148,6 @@ class ScanBack : AppCompatActivity() {
         while (mLineOne.find()) {
             allMatchesLineOne.add(mLineOne.group())
         }
-        Log.d("chunk", allMatchesLineOne.toString())
         val flagMatchCIN = hashMap["CIN"] != allMatchesLineOne[0] + allMatchesLineOne[1]
         processCIN(flagMatchCIN, allMatchesLineOne[0] + allMatchesLineOne[1])
     }
@@ -164,7 +156,6 @@ class ScanBack : AppCompatActivity() {
         while (allMatchesLineOne.remove("K")) {
             this.size = allMatchesLineOne.size
         }
-        Log.d("chunk", allMatchesLineOne.toString())
         if (flagMatchFirstname) {
             hashMap["FirstName"] = allMatchesLineOne.last()
         }
@@ -200,10 +191,6 @@ class ScanBack : AppCompatActivity() {
 
     private fun releaseCam(intent: Intent) {
         mCameraSource.stop()
-        tEnd = System.currentTimeMillis()
-        val tDelta: Long = this.tEnd!! - this.tStart!!
-        val elapsedSeconds = tDelta / 1000.0
-        Log.d("elapsed_back", elapsedSeconds.toString())
         intent.putExtra("dataCIN", hashMap)
         intent.putExtra("fromActivity", "cin")
         startActivity(intent)

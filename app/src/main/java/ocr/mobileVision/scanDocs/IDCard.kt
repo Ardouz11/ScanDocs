@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -34,8 +33,6 @@ class IDCard : AppCompatActivity() {
     private lateinit var start: ImageView
     private lateinit var extractLabel: TextView
     private var regex: String? = null
-    private var tStart: Long? = null
-    private var tEnd: Long? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -61,7 +58,6 @@ class IDCard : AppCompatActivity() {
             anim.playAnimation()
 
             val intent = Intent(this, ScanBack::class.java)
-            tStart = System.currentTimeMillis()
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     println("TODO")
@@ -91,10 +87,6 @@ class IDCard : AppCompatActivity() {
                 val flagMatchFLName = Pattern.matches("^[A-Z]+", item)
                 processFLName(item, flagMatchFLName)
             }
-            tEnd = System.currentTimeMillis()
-            val tDelta: Long = this.tEnd!! - this.tStart!!
-            val elapsedSeconds = tDelta / 1000.0
-            Log.d("elapsed_front", elapsedSeconds.toString())
             releaseCam(intent)
         }
     }
