@@ -134,8 +134,7 @@ class ScanBack : AppCompatActivity() {
         if (!hashMap.containsKey("Sexe")) {
             hashMap["Sexe"] = allMatchesLineTwo[1].takeLast(1)
         }
-        hashMap["DOB"] =
-            allMatchesLineTwo[0].take(6).takeLast(2) + "/" + allMatchesLineTwo[0].take(4).takeLast(2) + "/19" + allMatchesLineTwo[0].take(2)
+        hashMap["DOB"] = allMatchesLineTwo[0].take(6).takeLast(2) + "/" + allMatchesLineTwo[0].take(4).takeLast(2) + "/19" + allMatchesLineTwo[0].take(2)
     }
 
     private fun processLineOne(mLineOne: Matcher) {
