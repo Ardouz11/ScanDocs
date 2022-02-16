@@ -17,7 +17,6 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
-import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
@@ -33,6 +32,7 @@ class IDCard : AppCompatActivity() {
     private lateinit var start: ImageView
     private lateinit var extractLabel: TextView
     private var regex: String? = null
+    private var count = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -63,11 +63,14 @@ class IDCard : AppCompatActivity() {
                     println("TODO")
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
-                    val items = detections.detectedItems
-                    if (items.size() <= 0) {
-                        return
+                    if (count == 0) {
+                        count++
+                        val items = detections.detectedItems
+                        if (items.size() <= 0) {
+                            return
+                        }
+                        process(items, intent)
                     }
-                    process(items, intent)
                 }
             })
         }
@@ -106,7 +109,10 @@ class IDCard : AppCompatActivity() {
     }
 
     private fun processCIN(flagMatchCIN: Boolean, item: String) {
-        if (flagMatchCIN && !hashMap.containsKey("CIN")) {
+        if (flagMatchCIN) {
+            if (item.startsWith("N")) {
+                hashMap["CIN"] = item.drop(1)
+            }
             hashMap["CIN"] = item
         }
     }
@@ -139,7 +145,6 @@ class IDCard : AppCompatActivity() {
 
         if (!textRecognizer.isOperational) {
             toast("Dependencies are not loaded yet...please try after few moment!!")
-            Logger.d("Dependencies are downloading....try after few moment")
             return
         }
 

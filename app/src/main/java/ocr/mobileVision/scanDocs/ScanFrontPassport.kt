@@ -16,7 +16,6 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
-import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -34,6 +33,7 @@ class ScanFrontPassport : AppCompatActivity() {
     private lateinit var start: ImageView
     private var size = 0
     private lateinit var extractLabel: TextView
+    private var count = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,22 +63,25 @@ class ScanFrontPassport : AppCompatActivity() {
                 }
 
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
-                    val items = detections.detectedItems
-                    if (items.size() <= 0) {
-                        return
-                    }
-                    tvResult.post {
-                        for (i in 0 until items.size()) {
-                            val item = items.valueAt(i)
-                            val flagMatchMRZ = Pattern.matches("P<.*", item.value)
-                            if (flagMatchMRZ) {
-                                processMRZ(item, items.valueAt(i + 1).value)
-                            }
+                    if (count == 0) {
+                        count++
+                        val items = detections.detectedItems
+                        if (items.size() <= 0) {
+                            return
                         }
-                        mCameraSource.stop()
-                        intent.putExtra("dataCIN", hashMap)
-                        intent.putExtra("fromActivity", "passport")
-                        startActivity(intent)
+                        tvResult.post {
+                            for (i in 0 until items.size()) {
+                                val item = items.valueAt(i)
+                                val flagMatchMRZ = Pattern.matches("P<.*", item.value)
+                                if (flagMatchMRZ) {
+                                    processMRZ(item, items.valueAt(i + 1).value)
+                                }
+                            }
+                            mCameraSource.stop()
+                            intent.putExtra("dataCIN", hashMap)
+                            intent.putExtra("fromActivity", "passport")
+                            startActivity(intent)
+                        }
                     }
                 }
             })
@@ -147,7 +150,6 @@ class ScanFrontPassport : AppCompatActivity() {
 
         if (!textRecognizer.isOperational) {
             toast("Dependencies are not loaded yet...please try after few moment!!")
-            Logger.d("Dependencies are downloading....try after few moment")
             return
         }
 

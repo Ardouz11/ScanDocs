@@ -19,7 +19,6 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
-import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.Locale
 import java.util.regex.Matcher
@@ -40,6 +39,7 @@ class ScanBack : AppCompatActivity() {
     private var extras: Bundle? = null
     private var size = 0
     private val date = 22
+    private var count = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_back)
@@ -70,11 +70,16 @@ class ScanBack : AppCompatActivity() {
                 }
 
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
-                    val items = detections.detectedItems
-                    if (items.size() <= 0) {
-                        return
+                    if (count == 0) {
+                        count++
+                        val items = detections.detectedItems
+                        val metaData = detections.frameMetadata
+                        if (items.size() <= 0) {
+                            return
+                        }
+                        process(items, intent)
+                       // mCameraSource.takePicture(null,null)
                     }
-                    process(items, intent)
                 }
             }
             )
@@ -92,7 +97,7 @@ class ScanBack : AppCompatActivity() {
                 processMRZ(flagMatchMRZ, item)
                 val flagMatchAddress = Pattern.matches("Adresse.*", item.value)
                 processAddress(item, flagMatchAddress)
-                val flagMatchSex = Pattern.matches("Sexe.*[MF]|[MF]", item.value)
+                val flagMatchSex = Pattern.matches("Sexe.*[MF]|[MF]|Sexe [MF]", item.value)
                 processSex(item, flagMatchSex)
             }
             releaseCam(intent)
@@ -101,8 +106,9 @@ class ScanBack : AppCompatActivity() {
 
     private fun processMRZ(flagMatchMRZ: Boolean, item: TextBlock?) {
         if (flagMatchMRZ && item!!.value.length> 20) {
-            val match = item.value.replace(" ", "")
-            val chunks = match.replace(" ", "").chunked(30)
+            var match = item.value.replace(" ", "")
+            match = match.replace(" ", "")
+            val chunks = match.chunked(30)
             val pLineOne = Pattern.compile("[A-Z]+|\\d+")
             val pLineThree = Pattern.compile("[A-Z]+")
             Log.d("size", chunks.toString())
@@ -207,7 +213,6 @@ class ScanBack : AppCompatActivity() {
 
         if (!textRecognizer.isOperational) {
             toast("Dependencies are not loaded yet...please try after few moment!!")
-            Logger.d("Dependencies are downloading....try after few moment")
             return
         }
 

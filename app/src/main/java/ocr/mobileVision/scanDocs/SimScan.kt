@@ -17,7 +17,6 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
-import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
@@ -34,6 +33,7 @@ class SimScan : AppCompatActivity() {
     private lateinit var start: ImageView
     private lateinit var extractLabel: TextView
     val hashMap = HashMap<String, String>()
+    private var count=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sim_scan)
@@ -65,18 +65,23 @@ class SimScan : AppCompatActivity() {
                     startActivity(intent)
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
-                    val items = detections.detectedItems
-                    if (items.size() <= 0) {
-                        return
-                    }
-                    tvResult.post {
-                        for (i in 0 until items.size()) {
-                            val item = items.valueAt(i)
-                            val flagMatch = Pattern.matches("[0-9]+", item.value)
-                            processPhoneNumber(flagMatch, item)
-                            processICCNumber(flagMatch, item)
+                    if (count == 0) {
+                        count++
+                        val items = detections.detectedItems
+                        val format=detections.frameMetadata.format
+                        Log.d("format", format.toString())
+                        if (items.size() <= 0) {
+                            return
                         }
-                        release()
+                        tvResult.post {
+                            for (i in 0 until items.size()) {
+                                val item = items.valueAt(i)
+                                val flagMatch = Pattern.matches("[0-9]+", item.value)
+                                processPhoneNumber(flagMatch, item)
+                                processICCNumber(flagMatch, item)
+                            }
+                            release()
+                        }
                     }
                 }
             })
@@ -102,7 +107,6 @@ class SimScan : AppCompatActivity() {
 
         if (!textRecognizer.isOperational) {
             toast("Dependencies are not loaded yet...please try after few moment!!")
-            Logger.d("Dependencies are downloading....try after few moment")
             return
         }
 

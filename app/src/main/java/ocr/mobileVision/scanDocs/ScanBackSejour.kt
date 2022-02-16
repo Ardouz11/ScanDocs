@@ -18,7 +18,6 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
-import com.orhanobut.logger.Logger
 import org.jetbrains.anko.toast
 import java.util.Locale
 import java.util.regex.Matcher
@@ -186,7 +185,6 @@ class ScanBackSejour : AppCompatActivity() {
 
         if (!textRecognizer.isOperational) {
             toast("Dependencies are not loaded yet...please try after few moment!!")
-            Logger.d("Dependencies are downloading....try after few moment")
             return
         }
 
