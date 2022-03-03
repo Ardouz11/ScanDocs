@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
+import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import org.jetbrains.anko.toast
@@ -33,7 +34,8 @@ class SimScan : AppCompatActivity() {
     private lateinit var start: ImageView
     private lateinit var extractLabel: TextView
     val hashMap = HashMap<String, String>()
-    private var count=0
+    private var count = 0
+    private lateinit var format: Frame.Metadata
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sim_scan)
@@ -68,8 +70,8 @@ class SimScan : AppCompatActivity() {
                     if (count == 0) {
                         count++
                         val items = detections.detectedItems
-                        val format=detections.frameMetadata.format
-                        Log.d("format", format.toString())
+                        format = detections.frameMetadata
+                        Log.d("format", format.height.toString())
                         if (items.size() <= 0) {
                             return
                         }
