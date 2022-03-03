@@ -87,7 +87,7 @@ class IDCard : AppCompatActivity() {
                 processDOB(item, i, flagMatchDOB)
                 val flagMatchCIN = Pattern.matches("^[A-Z]+[0-9]+", item)
                 processCIN(flagMatchCIN, item)
-                val flagMatchFLName = Pattern.matches("^[A-Z]+", item)
+                val flagMatchFLName = Pattern.matches("^[A-Z ]+", item)
                 processFLName(item, flagMatchFLName)
             }
             releaseCam(intent)
