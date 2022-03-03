@@ -97,7 +97,7 @@ class ScanBack : AppCompatActivity() {
                 processMRZ(flagMatchMRZ, item)
                 val flagMatchAddress = Pattern.matches("Adresse.*", item.value)
                 processAddress(item, flagMatchAddress)
-                val flagMatchSex = Pattern.matches("Sexe.*[MF]|[MF]|Sexe [MF]", item.value)
+                val flagMatchSex = Pattern.matches("Sexe.*[MF]|[MF]|Sexe [MF]|[MF]", item.value)
                 processSex(item, flagMatchSex)
             }
             releaseCam(intent)
