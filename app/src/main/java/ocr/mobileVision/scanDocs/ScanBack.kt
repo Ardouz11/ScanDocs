@@ -78,7 +78,7 @@ class ScanBack : AppCompatActivity() {
                             return
                         }
                         process(items, intent)
-                       // mCameraSource.takePicture(null,null)
+                        // mCameraSource.takePicture(null,null)
                     }
                 }
             }
@@ -192,7 +192,6 @@ class ScanBack : AppCompatActivity() {
     }
 
     private fun releaseCam(intent: Intent) {
-        mCameraSource.stop()
         intent.putExtra("dataCIN", hashMap)
         intent.putExtra("fromActivity", "cin")
         startActivity(intent)

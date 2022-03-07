@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -61,7 +60,6 @@ class SimScan : AppCompatActivity() {
             val intent = Intent(this, DataExtracted::class.java)
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
-                    mCameraSource.stop()
                     intent.putExtra("dataCIN", hashMap)
                     intent.putExtra("fromActivity", "sim")
                     startActivity(intent)
@@ -70,8 +68,6 @@ class SimScan : AppCompatActivity() {
                     if (count == 0) {
                         count++
                         val items = detections.detectedItems
-                        format = detections.frameMetadata
-                        Log.d("format", format.height.toString())
                         if (items.size() <= 0) {
                             return
                         }
@@ -91,7 +87,7 @@ class SimScan : AppCompatActivity() {
     }
 
     private fun processICCNumber(flagMatch: Boolean, item: TextBlock?) {
-        if (item!!.value.length> 10 && flagMatch) {
+        if (item!!.value.length == 18 && flagMatch) {
             hashMap["iccNumber"] = item.value
         }
     }
