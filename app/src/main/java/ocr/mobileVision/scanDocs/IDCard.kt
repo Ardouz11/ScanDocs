@@ -124,7 +124,6 @@ class IDCard : AppCompatActivity() {
     }
 
     private fun releaseCam(intent: Intent) {
-        mCameraSource.stop()
         intent.putExtra("frontData", hashMap)
         startActivity(intent)
     }
