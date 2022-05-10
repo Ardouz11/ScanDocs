@@ -105,7 +105,7 @@ class ScanBack : AppCompatActivity() {
     }
 
     private fun processMRZ(flagMatchMRZ: Boolean, item: TextBlock?) {
-        if (flagMatchMRZ && item!!.value.length> 20) {
+        if (flagMatchMRZ && item!!.value.length > 20) {
             var match = item.value.replace(" ", "")
             match = match.replace(" ", "")
             val chunks = match.chunked(30)
