@@ -6,6 +6,19 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import ocr.mobileVision.scanDocs.Constant.Adresse
+import ocr.mobileVision.scanDocs.Constant.CIN
+import ocr.mobileVision.scanDocs.Constant.DOB
+import ocr.mobileVision.scanDocs.Constant.FirstName
+import ocr.mobileVision.scanDocs.Constant.LastName
+import ocr.mobileVision.scanDocs.Constant.Nationality
+import ocr.mobileVision.scanDocs.Constant.PASSPORT
+import ocr.mobileVision.scanDocs.Constant.Passport
+import ocr.mobileVision.scanDocs.Constant.SEJOUR
+import ocr.mobileVision.scanDocs.Constant.SIM
+import ocr.mobileVision.scanDocs.Constant.Sexe
+import ocr.mobileVision.scanDocs.Constant.iccNumber
+import ocr.mobileVision.scanDocs.Constant.phoneNumber
 
 class DataExtracted : AppCompatActivity() {
 
@@ -109,10 +122,10 @@ class DataExtracted : AppCompatActivity() {
 
             // we verify the last activity
             when (fromActivityValue) {
-                "cin" -> setCinView(hashMap)
-                "sejour" -> setSejourView(hashMap)
-                "passport" -> setPassportView(hashMap)
-                "sim" -> setSimView(hashMap)
+                CIN -> setCinView(hashMap)
+                SEJOUR -> setSejourView(hashMap)
+                PASSPORT -> setPassportView(hashMap)
+                SIM -> setSimView(hashMap)
             }
         }
 
@@ -128,28 +141,28 @@ class DataExtracted : AppCompatActivity() {
     private fun setCinView(resultCin: HashMap<String, String>) {
         showTextCin()
 
-        if (resultCin["FirstName"] != null)
-            prenomCinResult.text = resultCin["FirstName"].toString()
+        if (resultCin[FirstName] != null)
+            prenomCinResult.text = resultCin[FirstName].toString()
         else prenomCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultCin["LastName"] != null)
-            nomCinResult.text = resultCin["LastName"].toString()
+        if (resultCin[LastName] != null)
+            nomCinResult.text = resultCin[LastName].toString()
         else nomCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultCin["DOB"] != null)
-            dateCinResult.text = resultCin["DOB"].toString()
+        if (resultCin[DOB] != null)
+            dateCinResult.text = resultCin[DOB].toString()
         else dateCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultCin["CIN"] != null)
-            numberCinResult.text = resultCin["CIN"].toString()
+        if (resultCin[CIN] != null)
+            numberCinResult.text = resultCin[CIN].toString()
         else numberCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultCin["Sexe"] != null)
-            sexeCinResult.text = resultCin["Sexe"].toString()
+        if (resultCin[Sexe] != null)
+            sexeCinResult.text = resultCin[Sexe].toString()
         else sexeCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultCin["Adresse"] != null)
-            adresseCinResult.text = resultCin["Adresse"].toString()
+        if (resultCin[Adresse] != null)
+            adresseCinResult.text = resultCin[Adresse].toString()
         else adresseCinIcon.setImageResource(R.drawable.warning)
     }
 
@@ -170,12 +183,12 @@ class DataExtracted : AppCompatActivity() {
      */
     private fun setSejourView(resultSejour: HashMap<String, String>) {
         showTextCin() // same field like cin part
-        prenomCinResult.text = resultSejour["FirstName"].toString()
-        nomCinResult.text = resultSejour["LastName"].toString()
-        dateCinResult.text = resultSejour["DOB"].toString()
-        numberCinResult.text = resultSejour["CIN"].toString()
-        adresseCinResult.text = resultSejour["Adresse"].toString()
-        sexeCinResult.text = resultSejour["Sexe"].toString()
+        prenomCinResult.text = resultSejour[FirstName].toString()
+        nomCinResult.text = resultSejour[LastName].toString()
+        dateCinResult.text = resultSejour[DOB].toString()
+        numberCinResult.text = resultSejour[CIN].toString()
+        adresseCinResult.text = resultSejour[Adresse].toString()
+        sexeCinResult.text = resultSejour[Sexe].toString()
     }
 
     /**
@@ -183,31 +196,31 @@ class DataExtracted : AppCompatActivity() {
      */
     private fun setPassportView(resultPassport: HashMap<String, String>) {
         showTextPassport()
-        if (resultPassport["FirstName"] != null)
-            prenomCinResult.text = resultPassport["FirstName"].toString()
+        if (resultPassport[FirstName] != null)
+            prenomCinResult.text = resultPassport[FirstName].toString()
         else prenomCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultPassport["LastName"] != null)
-            nomCinResult.text = resultPassport["LastName"].toString()
+        if (resultPassport[LastName] != null)
+            nomCinResult.text = resultPassport[LastName].toString()
         else nomCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultPassport["DOB"] != null)
-            dateCinResult.text = resultPassport["DOB"].toString()
+        if (resultPassport[DOB] != null)
+            dateCinResult.text = resultPassport[DOB].toString()
         else dateCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultPassport["CIN"] != null)
-            numberCinResult.text = resultPassport["CIN"].toString()
+        if (resultPassport[CIN] != null)
+            numberCinResult.text = resultPassport[CIN].toString()
         else numberCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultPassport["Sexe"] != null)
-            sexeCinResult.text = resultPassport["Sexe"].toString()
+        if (resultPassport[Sexe] != null)
+            sexeCinResult.text = resultPassport[Sexe].toString()
         else sexeCinIcon.setImageResource(R.drawable.warning)
 
-        if (resultPassport["Passport"] != null)
-            passportNumResult.text = resultPassport["Passport"].toString()
+        if (resultPassport[Passport] != null)
+            passportNumResult.text = resultPassport[Passport].toString()
         else passportNumIcon.setImageResource(R.drawable.warning)
-        if (resultPassport["Nationality"] != null)
-            passportNationalityResult.text = resultPassport["Nationality"].toString()
+        if (resultPassport[Nationality] != null)
+            passportNationalityResult.text = resultPassport[Nationality].toString()
         else passportNationalityIcon.setImageResource(R.drawable.warning)
     }
 
@@ -226,12 +239,12 @@ class DataExtracted : AppCompatActivity() {
      */
     private fun setSimView(resultSim: HashMap<String, String>) {
         showTextSim()
-        if (resultSim["iccNumber"] != null)
-            iccSimResult.text = resultSim["iccNumber"].toString()
+        if (resultSim[iccNumber] != null)
+            iccSimResult.text = resultSim[iccNumber].toString()
         else iccSimIcon.setImageResource(R.drawable.warning)
 
-        if (resultSim["phoneNumber"] != null)
-            mdnSimResult.text = resultSim["phoneNumber"].toString()
+        if (resultSim[phoneNumber] != null)
+            mdnSimResult.text = resultSim[phoneNumber].toString()
         else mdnSimIcon.setImageResource(R.drawable.warning)
     }
 

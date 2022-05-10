@@ -18,6 +18,12 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
+import ocr.mobileVision.scanDocs.Constant.Adresse
+import ocr.mobileVision.scanDocs.Constant.CIN
+import ocr.mobileVision.scanDocs.Constant.DOB
+import ocr.mobileVision.scanDocs.Constant.FirstName
+import ocr.mobileVision.scanDocs.Constant.LastName
+import ocr.mobileVision.scanDocs.Constant.Sexe
 import org.jetbrains.anko.toast
 import java.util.Locale
 import java.util.regex.Matcher
@@ -106,9 +112,9 @@ class ScanBackSejour : AppCompatActivity() {
                 allMatchesLineOne.add(mLineOne.group())
             }
             this.size = allMatchesLineOne.size
-            val flagMatchCIN = hashMap["CIN"] != allMatchesLineOne[0] + allMatchesLineOne[1]
+            val flagMatchCIN = hashMap[CIN] != allMatchesLineOne[0] + allMatchesLineOne[1]
             processCIN(flagMatchCIN, allMatchesLineOne[0] + allMatchesLineOne[1])
-            val flagMatchFirstname = hashMap["FirstName"] != allMatchesLineOne.last()
+            val flagMatchFirstname = hashMap[FirstName] != allMatchesLineOne.last()
             processFirstName(flagMatchFirstname, allMatchesLineOne)
             val flagMatchLastName = allMatchesLineOne.size > 7
             processLastName(flagMatchLastName, allMatchesLineOne)
@@ -120,7 +126,7 @@ class ScanBackSejour : AppCompatActivity() {
             this.size = allMatchesLineOne.size
         }
         if (flagMatchFirstname && allMatchesLineOne.size > 7) {
-            hashMap["FirstName"] = allMatchesLineOne.last()
+            hashMap[FirstName] = allMatchesLineOne.last()
         }
     }
 
@@ -130,43 +136,43 @@ class ScanBackSejour : AppCompatActivity() {
             for (i in 7 until this.size - 1) {
                 string.append(allMatchesLineOne[i] + " ")
             }
-            if (!hashMap.containsKey("Sexe")) {
-                hashMap["Sexe"] = allMatchesLineOne[3].takeLast(1)
+            if (!hashMap.containsKey(Sexe)) {
+                hashMap[Sexe] = allMatchesLineOne[3].takeLast(1)
             }
-            if (hashMap["LastName"] != string.toString()) {
-                hashMap["LastName"] = string.toString()
+            if (hashMap[LastName] != string.toString()) {
+                hashMap[LastName] = string.toString()
             }
             if (allMatchesLineOne[2].take(2).toInt() < date) {
-                hashMap["DOB"] =
+                hashMap[DOB] =
                     allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2)
             } else {
-                hashMap["DOB"] =
+                hashMap[DOB] =
                     allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/19" + allMatchesLineOne[2].take(2)
             }
         }
     }
     private fun processCIN(flagMatchCIN: Boolean, s: String) {
         if (flagMatchCIN) {
-            hashMap["CIN"] = s
+            hashMap[CIN] = s
         }
     }
 
     private fun processSex(item: TextBlock?, flagMatchSex: Boolean) {
-        if (flagMatchSex && !hashMap.containsKey("Sexe")) {
-            hashMap["Sexe"] = item!!.value.replace("Sexe", "")
+        if (flagMatchSex && !hashMap.containsKey(Sexe)) {
+            hashMap[Sexe] = item!!.value.replace(Sexe, "")
         }
     }
 
     private fun processAddress(item: TextBlock?, flagMatchAddress: Boolean) {
         if (flagMatchAddress) {
-            hashMap["Adresse"] = item!!.value.toUpperCase(Locale.getDefault()).replace("ADRESSE", "")
+            hashMap[Adresse] = item!!.value.toUpperCase(Locale.getDefault()).replace("ADRESSE", "")
         }
     }
 
     private fun releaseCam(intent: Intent) {
         mCameraSource.stop()
         intent.putExtra("dataCIN", hashMap)
-        intent.putExtra("fromActivity", "cin")
+        intent.putExtra("fromActivity", CIN)
         startActivity(intent)
     }
     override fun onResume() {

@@ -16,6 +16,14 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
+import ocr.mobileVision.scanDocs.Constant.CIN
+import ocr.mobileVision.scanDocs.Constant.DOB
+import ocr.mobileVision.scanDocs.Constant.FirstName
+import ocr.mobileVision.scanDocs.Constant.LastName
+import ocr.mobileVision.scanDocs.Constant.Nationality
+import ocr.mobileVision.scanDocs.Constant.PASSPORT
+import ocr.mobileVision.scanDocs.Constant.Passport
+import ocr.mobileVision.scanDocs.Constant.Sexe
 import org.jetbrains.anko.toast
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -79,7 +87,7 @@ class ScanFrontPassport : AppCompatActivity() {
                             }
                             mCameraSource.stop()
                             intent.putExtra("dataCIN", hashMap)
-                            intent.putExtra("fromActivity", "passport")
+                            intent.putExtra("fromActivity", PASSPORT)
                             startActivity(intent)
                         }
                     }
@@ -102,18 +110,18 @@ class ScanFrontPassport : AppCompatActivity() {
         while (mLineTwo.find()) {
             allMatches.add(mLineTwo.group())
         }
-        hashMap["Passport"] = allMatches[0] + allMatches[1].dropLast(1)
-        hashMap["Nationality"] = allMatches[2]
+        hashMap[Passport] = allMatches[0] + allMatches[1].dropLast(1)
+        hashMap[Nationality] = allMatches[2]
         if (allMatches[3].take(2).toInt() < 40) {
-            hashMap["DOB"] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2)
+            hashMap[DOB] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2)
         } else {
-            hashMap["DOB"] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2)
+            hashMap[DOB] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2)
         }
-        hashMap["Sexe"] = allMatches[4].takeLast(1)
+        hashMap[Sexe] = allMatches[4].takeLast(1)
         hashMap["END Of Val"] =
             allMatches[5].take(6).takeLast(2) + "/" + allMatches[5].take(4).takeLast(2) + "/20" + allMatches[5].take(2)
         if (allMatches.size > 7) {
-            hashMap["CIN"] = allMatches[6] + allMatches[7]
+            hashMap[CIN] = allMatches[6] + allMatches[7]
         }
     }
 
@@ -133,14 +141,14 @@ class ScanFrontPassport : AppCompatActivity() {
         for (i in 1 until size - 1) {
             string.append(allMatchesLineOne[i] + " ")
         }
-        hashMap["LastName"] = string.toString()
+        hashMap[LastName] = string.toString()
     }
 
     private fun processFirstName(allMatchesLineOne: ArrayList<String>) {
         while (allMatchesLineOne.remove("K")) {
             size = allMatchesLineOne.size
         }
-        hashMap["FirstName"] = allMatchesLineOne[size - 1]
+        hashMap[FirstName] = allMatchesLineOne[size - 1]
     }
 
     private fun startCameraSource() {

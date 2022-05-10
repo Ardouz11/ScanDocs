@@ -17,6 +17,9 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
+import ocr.mobileVision.scanDocs.Constant.SIM
+import ocr.mobileVision.scanDocs.Constant.iccNumber
+import ocr.mobileVision.scanDocs.Constant.phoneNumber
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
@@ -61,7 +64,7 @@ class SimScan : AppCompatActivity() {
             textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
                 override fun release() {
                     intent.putExtra("dataCIN", hashMap)
-                    intent.putExtra("fromActivity", "sim")
+                    intent.putExtra("fromActivity", SIM)
                     startActivity(intent)
                 }
                 override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
@@ -88,13 +91,13 @@ class SimScan : AppCompatActivity() {
 
     private fun processICCNumber(flagMatch: Boolean, item: TextBlock?) {
         if (item!!.value.length == 18 && flagMatch) {
-            hashMap["iccNumber"] = item.value
+            hashMap[iccNumber] = item.value
         }
     }
 
     private fun processPhoneNumber(flagMatch: Boolean, item: TextBlock?) {
         if (item!!.value.length == 10 && flagMatch) {
-            hashMap["phoneNumber"] = item.value
+            hashMap[phoneNumber] = item.value
         }
     }
 

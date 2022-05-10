@@ -17,6 +17,10 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
+import ocr.mobileVision.scanDocs.Constant.CIN
+import ocr.mobileVision.scanDocs.Constant.DOB
+import ocr.mobileVision.scanDocs.Constant.FirstName
+import ocr.mobileVision.scanDocs.Constant.LastName
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
@@ -96,12 +100,12 @@ class IDCard : AppCompatActivity() {
 
     private fun processFLName(item: String, flagMatchFLName: Boolean) {
         if (flagMatchFLName && item.length > 2) {
-            if (this.flagName && !hashMap.containsKey("FirstName")) {
-                hashMap["FirstName"] = item
+            if (this.flagName && !hashMap.containsKey(FirstName)) {
+                hashMap[FirstName] = item
                 this.flagName = false
             } else {
-                if (!hashMap.containsKey("LastName")) {
-                    hashMap["LastName"] = item
+                if (!hashMap.containsKey(LastName)) {
+                    hashMap[LastName] = item
                     this.flagName = true
                 }
             }
@@ -111,15 +115,15 @@ class IDCard : AppCompatActivity() {
     private fun processCIN(flagMatchCIN: Boolean, item: String) {
         if (flagMatchCIN) {
             if (item.startsWith("N")) {
-                hashMap["CIN"] = item.drop(1)
+                hashMap[CIN] = item.drop(1)
             }
-            hashMap["CIN"] = item
+            hashMap[CIN] = item
         }
     }
 
     private fun processDOB(item: String, i: Int, flagMatchDOB: Boolean) {
-        if (flagMatchDOB && item.length > 5 && i < 5 && !hashMap.containsKey("DOB")) {
-            hashMap["DOB"] = item
+        if (flagMatchDOB && item.length > 5 && i < 5 && !hashMap.containsKey(DOB)) {
+            hashMap[DOB] = item
         }
     }
 

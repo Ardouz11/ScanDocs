@@ -19,6 +19,12 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
+import ocr.mobileVision.scanDocs.Constant.Adresse
+import ocr.mobileVision.scanDocs.Constant.CIN
+import ocr.mobileVision.scanDocs.Constant.DOB
+import ocr.mobileVision.scanDocs.Constant.FirstName
+import ocr.mobileVision.scanDocs.Constant.LastName
+import ocr.mobileVision.scanDocs.Constant.Sexe
 import org.jetbrains.anko.toast
 import java.util.Locale
 import java.util.regex.Matcher
@@ -137,10 +143,10 @@ class ScanBack : AppCompatActivity() {
         while (mLineTwo.find()) {
             allMatchesLineTwo.add(mLineTwo.group())
         }
-        if (!hashMap.containsKey("Sexe")) {
-            hashMap["Sexe"] = allMatchesLineTwo[1].takeLast(1)
+        if (!hashMap.containsKey(Sexe)) {
+            hashMap[Sexe] = allMatchesLineTwo[1].takeLast(1)
         }
-        hashMap["DOB"] = allMatchesLineTwo[0].take(6).takeLast(2) + "/" + allMatchesLineTwo[0].take(4).takeLast(2) + "/19" + allMatchesLineTwo[0].take(2)
+        hashMap[DOB] = allMatchesLineTwo[0].take(6).takeLast(2) + "/" + allMatchesLineTwo[0].take(4).takeLast(2) + "/19" + allMatchesLineTwo[0].take(2)
     }
 
     private fun processLineOne(mLineOne: Matcher) {
@@ -148,7 +154,7 @@ class ScanBack : AppCompatActivity() {
         while (mLineOne.find()) {
             allMatchesLineOne.add(mLineOne.group())
         }
-        val flagMatchCIN = hashMap["CIN"] != allMatchesLineOne[0] + allMatchesLineOne[1]
+        val flagMatchCIN = hashMap[CIN] != allMatchesLineOne[0] + allMatchesLineOne[1]
         processCIN(flagMatchCIN, allMatchesLineOne[0] + allMatchesLineOne[1])
     }
 
@@ -157,7 +163,7 @@ class ScanBack : AppCompatActivity() {
             this.size = allMatchesLineOne.size
         }
         if (flagMatchFirstname) {
-            hashMap["FirstName"] = allMatchesLineOne.last()
+            hashMap[FirstName] = allMatchesLineOne.last()
         }
     }
 
@@ -167,31 +173,31 @@ class ScanBack : AppCompatActivity() {
             string.append(allMatchesLineOne[i] + " ")
         }
 
-        if (hashMap["LastName"] != string.toString()) {
-            hashMap["LastName"] = string.toString()
+        if (hashMap[LastName] != string.toString()) {
+            hashMap[LastName] = string.toString()
         }
     }
     private fun processCIN(flagMatchCIN: Boolean, s: String) {
         if (flagMatchCIN) {
-            hashMap["CIN"] = s
+            hashMap[CIN] = s
         }
     }
 
     private fun processSex(item: TextBlock?, flagMatchSex: Boolean) {
-        if (flagMatchSex && !hashMap.containsKey("Sexe")) {
-            hashMap["Sexe"] = item!!.value.replace("Sexe", "")
+        if (flagMatchSex && !hashMap.containsKey(Sexe)) {
+            hashMap[Sexe] = item!!.value.replace(Sexe, "")
         }
     }
 
     private fun processAddress(item: TextBlock?, flagMatchAddress: Boolean) {
         if (flagMatchAddress) {
-            hashMap["Adresse"] = item!!.value.toUpperCase(Locale.getDefault()).replace("ADRESSE ", "")
+            hashMap[Adresse] = item!!.value.toUpperCase(Locale.getDefault()).replace("ADRESSE ", "")
         }
     }
 
     private fun releaseCam(intent: Intent) {
         intent.putExtra("dataCIN", hashMap)
-        intent.putExtra("fromActivity", "cin")
+        intent.putExtra("fromActivity", CIN)
         startActivity(intent)
     }
     override fun onResume() {

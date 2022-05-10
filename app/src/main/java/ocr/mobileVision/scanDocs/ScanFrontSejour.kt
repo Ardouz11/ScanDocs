@@ -17,6 +17,10 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
+import ocr.mobileVision.scanDocs.Constant.CIN
+import ocr.mobileVision.scanDocs.Constant.DOB
+import ocr.mobileVision.scanDocs.Constant.FirstName
+import ocr.mobileVision.scanDocs.Constant.LastName
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
@@ -94,12 +98,12 @@ class ScanFrontSejour : AppCompatActivity() {
 
     private fun processFLName(item: TextBlock?, flagMatchFLName: Boolean) {
         if (flagMatchFLName && item!!.value.toString().length > 2) {
-            if (this.flagName && !hashMap.containsKey("FirstName")) {
-                hashMap["FirstName"] = item.value
+            if (this.flagName && !hashMap.containsKey(FirstName)) {
+                hashMap[FirstName] = item.value
                 this.flagName = false
             } else {
-                if (!hashMap.containsKey("LastName")) {
-                    hashMap["LastName"] = item.value
+                if (!hashMap.containsKey(LastName)) {
+                    hashMap[LastName] = item.value
                     this.flagName = true
                 }
             }
@@ -107,14 +111,14 @@ class ScanFrontSejour : AppCompatActivity() {
     }
 
     private fun processCIN(flagMatchCIN: Boolean, item: TextBlock?) {
-        if (flagMatchCIN && !hashMap.containsKey("CIN")) {
-            hashMap["CIN"] = item!!.value
+        if (flagMatchCIN && !hashMap.containsKey(CIN)) {
+            hashMap[CIN] = item!!.value
         }
     }
 
     private fun processDOB(item: TextBlock?, i: Int, flagMatchDOB: Boolean) {
-        if (flagMatchDOB && item!!.value.length > 5 && i < 7 && !hashMap.containsKey("DOB")) {
-            hashMap["DOB"] = item.value
+        if (flagMatchDOB && item!!.value.length > 5 && i < 7 && !hashMap.containsKey(DOB)) {
+            hashMap[DOB] = item.value
         }
     }
 
