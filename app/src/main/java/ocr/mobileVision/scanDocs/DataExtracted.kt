@@ -47,7 +47,6 @@ class DataExtracted : AppCompatActivity() {
     private lateinit var passportNationalityResult: TextView
     private lateinit var passportNationalityLl: LinearLayout
 
-
     // Sim Card
     private lateinit var iccSimResult: TextView
     private lateinit var iccSimLl: LinearLayout

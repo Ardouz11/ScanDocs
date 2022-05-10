@@ -93,7 +93,7 @@ class ScanFrontSejour : AppCompatActivity() {
     }
 
     private fun processFLName(item: TextBlock?, flagMatchFLName: Boolean) {
-        if (flagMatchFLName && item!!.value.toString().length> 2) {
+        if (flagMatchFLName && item!!.value.toString().length > 2) {
             if (this.flagName && !hashMap.containsKey("FirstName")) {
                 hashMap["FirstName"] = item.value
                 this.flagName = false
@@ -113,7 +113,7 @@ class ScanFrontSejour : AppCompatActivity() {
     }
 
     private fun processDOB(item: TextBlock?, i: Int, flagMatchDOB: Boolean) {
-        if (flagMatchDOB && item!!.value.length> 5 && i <7 && !hashMap.containsKey("DOB")) {
+        if (flagMatchDOB && item!!.value.length > 5 && i < 7 && !hashMap.containsKey("DOB")) {
             hashMap["DOB"] = item.value
         }
     }

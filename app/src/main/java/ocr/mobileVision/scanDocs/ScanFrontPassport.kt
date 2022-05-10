@@ -104,7 +104,7 @@ class ScanFrontPassport : AppCompatActivity() {
         }
         hashMap["Passport"] = allMatches[0] + allMatches[1].dropLast(1)
         hashMap["Nationality"] = allMatches[2]
-        if (allMatches[3].take(2).toInt() <40) {
+        if (allMatches[3].take(2).toInt() < 40) {
             hashMap["DOB"] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/20" + allMatches[3].take(2)
         } else {
             hashMap["DOB"] = allMatches[3].take(6).takeLast(2) + "/" + allMatches[3].take(4).takeLast(2) + "/19" + allMatches[3].take(2)
@@ -112,7 +112,7 @@ class ScanFrontPassport : AppCompatActivity() {
         hashMap["Sexe"] = allMatches[4].takeLast(1)
         hashMap["END Of Val"] =
             allMatches[5].take(6).takeLast(2) + "/" + allMatches[5].take(4).takeLast(2) + "/20" + allMatches[5].take(2)
-        if (allMatches.size> 7) {
+        if (allMatches.size > 7) {
             hashMap["CIN"] = allMatches[6] + allMatches[7]
         }
     }

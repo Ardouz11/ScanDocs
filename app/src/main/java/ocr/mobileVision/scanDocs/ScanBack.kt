@@ -73,12 +73,10 @@ class ScanBack : AppCompatActivity() {
                     if (count == 0) {
                         count++
                         val items = detections.detectedItems
-                        val metaData = detections.frameMetadata
                         if (items.size() <= 0) {
                             return
                         }
                         process(items, intent)
-                        // mCameraSource.takePicture(null,null)
                     }
                 }
             }

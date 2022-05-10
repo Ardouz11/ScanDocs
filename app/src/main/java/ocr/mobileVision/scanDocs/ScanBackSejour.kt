@@ -97,7 +97,7 @@ class ScanBackSejour : AppCompatActivity() {
     }
 
     private fun processMRZ(flagMatchMRZ: Boolean, item: TextBlock?) {
-        if (flagMatchMRZ && item!!.value.length> 20) {
+        if (flagMatchMRZ && item!!.value.length > 20) {
             val match = item.value.replace(" ", "").drop(15)
             val pLineOne = Pattern.compile("[A-Z]+|\\d+")
             val mLineOne: Matcher = pLineOne.matcher(match)
@@ -110,7 +110,7 @@ class ScanBackSejour : AppCompatActivity() {
             processCIN(flagMatchCIN, allMatchesLineOne[0] + allMatchesLineOne[1])
             val flagMatchFirstname = hashMap["FirstName"] != allMatchesLineOne.last()
             processFirstName(flagMatchFirstname, allMatchesLineOne)
-            val flagMatchLastName = allMatchesLineOne.size> 7
+            val flagMatchLastName = allMatchesLineOne.size > 7
             processLastName(flagMatchLastName, allMatchesLineOne)
         }
     }
@@ -119,7 +119,7 @@ class ScanBackSejour : AppCompatActivity() {
         if (allMatchesLineOne.remove("K")) {
             this.size = allMatchesLineOne.size
         }
-        if (flagMatchFirstname && allMatchesLineOne.size> 7) {
+        if (flagMatchFirstname && allMatchesLineOne.size > 7) {
             hashMap["FirstName"] = allMatchesLineOne.last()
         }
     }
@@ -136,7 +136,7 @@ class ScanBackSejour : AppCompatActivity() {
             if (hashMap["LastName"] != string.toString()) {
                 hashMap["LastName"] = string.toString()
             }
-            if (allMatchesLineOne[2].take(2).toInt() <date) {
+            if (allMatchesLineOne[2].take(2).toInt() < date) {
                 hashMap["DOB"] =
                     allMatchesLineOne[2].take(6).takeLast(2) + "/" + allMatchesLineOne[2].take(4).takeLast(2) + "/20" + allMatchesLineOne[2].take(2)
             } else {

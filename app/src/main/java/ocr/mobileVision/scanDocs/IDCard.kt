@@ -95,7 +95,7 @@ class IDCard : AppCompatActivity() {
     }
 
     private fun processFLName(item: String, flagMatchFLName: Boolean) {
-        if (flagMatchFLName && item.length> 2) {
+        if (flagMatchFLName && item.length > 2) {
             if (this.flagName && !hashMap.containsKey("FirstName")) {
                 hashMap["FirstName"] = item
                 this.flagName = false
@@ -118,7 +118,7 @@ class IDCard : AppCompatActivity() {
     }
 
     private fun processDOB(item: String, i: Int, flagMatchDOB: Boolean) {
-        if (flagMatchDOB && item.length> 5 && i <5 && !hashMap.containsKey("DOB")) {
+        if (flagMatchDOB && item.length > 5 && i < 5 && !hashMap.containsKey("DOB")) {
             hashMap["DOB"] = item
         }
     }
